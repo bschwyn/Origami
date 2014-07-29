@@ -1,0 +1,8 @@
+""" origami notes
+
+Ok, how the hell do I make a large program work? What am I doing? What should I be doing?
+
+I should do something small and start with an 'embryonic level of design.
+
+I think that my first goal should be----write a program that represents the creases on a square.
+I need points, lines, and a square 
