@@ -1,11 +1,20 @@
+#Origami program
+#inspired by Robert J. Lang's TreeMaker program
+#used algorithms from Origami Design Secrets: http://www.langorigami.com/books/ODS1e_Algorithms.pdf
+
+
+# *** libraries***
 import networkx as nx
 import numpy as np
 from scipy.optimize import minimize
 import math
-
 import matplotlib.pyplot as plt
 import unittest
 import itertools
+
+
+
+# useless?
 
 class Node:
     def __init__(self,key,x,y):
@@ -13,10 +22,12 @@ class Node:
         self.x = x
         self.y = y
 
-#class rectangle:
-#   def __init__(self,width,height):
-#        self.width = width
-#        self.height = height
+#unecessecary
+
+class Rectangle:
+   def __init__(self,width,height):
+        self.width = width
+        self.height = height
 
 class Model:
     #initialize the piece of paper, dimensions, and additional properties
@@ -34,26 +45,30 @@ class Model:
         #self.paths = {}
         #self.leaf_vertices
     
-    
+#add_node_to
+#if there are no nodes in the graph, adds a new node w/ coordinates.
+#if there are nodes in the graph, a source_node must be specified, and data is added to the new node and the new edge.
+#must throw errors if: graph would not be a tree, source_node doesn't exist    
     
     def add_node_to(self, source_node = None, x = 0.0, y = 0.0, length = 1.0, strain = 0.0):
         #This makes it so that there is not needed a source node for the first time. If there is a source node for the first node, it should be ignored.
-        if len(self.G)==0 and source_node == None: #doing the "and source_node == None increased the speed by .001 to .008
+        if len(self.G)==0 and source_node == None: #empty graphdoing the "and source_node == None increased the speed by .001 to .008
             self.G.add_node(self.node_counter,x = x, y = y)
             self.node_counter +=1
-        elif source_node in self.G.nodes():
             
-        #when there is already an existing node
+        elif source_node in self.G.nodes(): #adding to existing graph
             new_node = self.node_counter
             self.G.add_node(new_node,x=x,y=y)
             self.G.add_edge(new_node,source_node,length = length, strain = strain)
             self.node_counter +=1
+            
         else:
             print "error"
-            #check if leaf node
+
+#deletes a specified node and edge
             
     def delete_node(self, node):
-        if self.node_counter == 2:
+        if len(self.G)==1:
             self.G.delete_node(1)
         elif self.is_leaf_node(node):
             self.G.remove_node(node)
@@ -285,44 +300,12 @@ print(six[2][4]['length'])
 
 x =six.degree(3)
 print x
+
 #correct connections?
 #nx.draw(six)
 #plt.show()
 
-#def find_leaf_vertices(graph):
-    #for each node in the graph
-    #test if the number of edges is == 1
-    #if edge ==1
-    #put that node into an array
-    #return the array of all leaf vertices
-    
-def find_leaf_vertices(graph):
-    leaf_nodes = []
-    for node in graph:
-        if graph.degree(node) == 1:
-            leaf_nodes.append(node)
-    return leaf_nodes
-    
-shortest_path = nx.shortest_path(six,6,4)
 
-
-def sum_of_strained_lengths(graph,source, target):
-    shortest_path = nx.shortest_path(graph,source, target)
-    i = 0
-    sum_of_strained_length = 0
-    while i < len(shortest_path)-1:
-        node1 = shortest_path[i]
-        node2 = shortest_path[i+1]
-        edge_length = graph[node1][node2]['length']
-        edge_strain = graph[node1][node2]['strain']
-        strained_length = (1+edge_strain) * edge_length        
-        sum_of_strained_length += strained_length
-        i+=1
-    return sum_of_strained_length
-    
-test = sum_of_strained_lengths(six,6,4)
-print "sum_of_strained_lengts"
-print test
 '''
 def scale_optimization(graph,width,height):
 
@@ -372,21 +355,3 @@ def edge_opimization(graph):
         graph[node]['y'] <= height ##############
     sigma * scale
 '''
-#main class---create a new origami figure
-
-#make a pallate/square
-
-#create graph
-
-#def leaf_vertices(G):
-
-#add node
-#def add_node(G):
-  # G.add_node
-
-
-#def scale_optimization(rectangle,leaf_vertices):
-
-
-
-#class TestOrigamiGraph(unittest.TestCase):
