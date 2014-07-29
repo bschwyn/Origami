@@ -20,7 +20,7 @@ class Node:
 
 class Model:
     #initialize the piece of paper, dimensions, and additional properties
-    def __init__(self,width = 1.0, height = 1.0):
+    def __init__(self, width = 1.0, height = 1.0):
         self.width = width
         self.height = height
         self.scale = 1.0
@@ -36,18 +36,20 @@ class Model:
     
     
     
-    def add_node_to(self, source_node = None, x = .5, y = self.height/2, length = 1.0, strain = 1.0):
+    def add_node_to(self, source_node = None, x = 0.0, y = 0.0, length = 1.0, strain = 0.0):
         #This makes it so that there is not needed a source node for the first time. If there is a source node for the first node, it should be ignored.
-        if len(self.G)==0:
-            self.G.add_node(self.node_counter)
+        if len(self.G)==0 and source_node == None: #doing the "and source_node == None increased the speed by .001 to .008
+            self.G.add_node(self.node_counter,x = x, y = y)
             self.node_counter +=1
-        else:
+        elif source_node in self.G.nodes():
             
         #when there is already an existing node
             new_node = self.node_counter
-            self.G.add_node(new_node)
+            self.G.add_node(new_node,x=x,y=y)
             self.G.add_edge(new_node,source_node,length = length, strain = strain)
             self.node_counter +=1
+        else:
+            print "error"
             #check if leaf node
             
     def delete_node(self, node):
@@ -106,11 +108,14 @@ class Model:
     def construct_bounds(self):
         bnd1 = (0,self.width)
         bnd2 = (0,self.height)
-        bnds = ()
+        bnds = []
         leaf_nodes = self.all_leaf_nodes()
         for vertex in leaf_nodes:
-            bnds += bnd1
-            bnds += bnd2
+            bnds.append(bnd1)
+            bnds.append(bnd2)
+        #THING TO LEARN: Why cannot I append tuples to arrays [], or tuples (), like bnds = bnds + bnd1? 
+        #if a = (), b = (x,y)
+        #a = a + b = (x,y), rather than ((x,y))
         return bnds
         
     def construct_constraints(self):
@@ -129,12 +134,19 @@ class Model:
             constraint_dict = {"type": "ineq", "fun": constraint}
             constraints2.append(constraint_dict)
         return constraints2
+        
+    def initial_guess(self):
+        leaf_nodes = self.all_leaf_nodes(self.G)
+        pre_array = []
+        for node in leaf_nodes:
+            elem = [node['x'],node['y']]
+            pre_array.append(elem)            
+        x0 = np.array(pre_array)
+        return x0 #array of vertex coordinates
             
     def scale_optimization(self):
-        leaf_nodes = self.all_leaf_nodes(self.G)
-        
         fun = self.objective_function()
-        x0 = [] #array of vertex coordinates
+        x0 = self.initial_guess()
         bounds = self.calculate_bounds()
         constraints = self.calculate_contraints()
         
@@ -154,8 +166,8 @@ class TestOrigami(unittest.TestCase):
         self.emu.add_node_to(3)
         self.emu.delete_node(4)
     
-    #def test_draw(self):
-    #    self.emu.draw()
+    def test_draw(self):
+        self.emu.draw()
         
     def test_all_leaf_nodes(self):
         leaf_nodes = self.emu.all_leaf_nodes()
@@ -168,14 +180,16 @@ class TestOrigami(unittest.TestCase):
         self.assertEqual(self.emu.is_leaf_node(4),True)
     
     def test_all_shortest_paths(self):
+        
         return None
     
     def test_all_leaf_paths(self):
         return None
     
     def test_sum_of_strained_lengths(self):
-        return None
-    
+        self.assertEqual(self.emu.sum_of_strained_lengths(1,3),2.0)
+        self.assertEqual(self.emu.sum_of_strained_lengths(4,2),1.0)
+            
     def test_objective_function(self):
         return None
     
@@ -183,7 +197,11 @@ class TestOrigami(unittest.TestCase):
         return None
     
     def test_construct_bounds(self):
-        return None
+        bnds = self.emu.construct_bounds()
+        self.assertEqual(len(bnds),6)
+        for i in range(0,len(bnds),2):
+            self.assertEqual(bnds[i][1],self.emu.width)
+            self.assertEqual(bnds[i+1][1],self.emu.height)
     
     def test_scale_optimization(self):
         return None
