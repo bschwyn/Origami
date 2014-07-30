@@ -13,7 +13,6 @@ import unittest
 import itertools
 
 
-
 # useless?
 
 class Node:
@@ -54,14 +53,12 @@ class Model:
         #This makes it so that there is not needed a source node for the first time. If there is a source node for the first node, it should be ignored.
         if len(self.G)==0 and source_node == None: #empty graphdoing the "and source_node == None increased the speed by .001 to .008
             self.G.add_node(self.node_counter,x = x, y = y)
-            self.node_counter +=1
-            
+            self.node_counter +=1            
         elif source_node in self.G.nodes(): #adding to existing graph
             new_node = self.node_counter
             self.G.add_node(new_node,x=x,y=y)
             self.G.add_edge(new_node,source_node,length = length, strain = strain)
-            self.node_counter +=1
-            
+            self.node_counter +=1            
         else:
             print "error"
 
@@ -69,15 +66,18 @@ class Model:
             
     def delete_node(self, node):
         if len(self.G)==1:
-            self.G.delete_node(1)
+            self.G.delete_node(1)            
         elif self.is_leaf_node(node):
-            self.G.remove_node(node)
+            self.G.remove_node(node)            
         else:
             raise "Error: cannot delete connected node"
+
+#draws graph
                 
     def draw(self):
         nx.draw(self.G)
         plt.show()
+
          
     def all_leaf_nodes(self):
         leaf_nodes = set()
@@ -100,7 +100,10 @@ class Model:
         #filter dictionary for all sources that are 
         leaf_paths = {leaf_node: all_paths[leaf_node] for node in leaf_nodes}
         return leaf_paths  
-        
+
+# ***sub fucntions for optimization***
+
+#returns strained length of a path      
         
     def sum_of_strained_lengths(self,source, target):
         graph = self.G
@@ -116,10 +119,13 @@ class Model:
             sum_of_strained_length += strained_length
             i+=1
         return sum_of_strained_length
+
+# ***functions for scalar optimization***
     
     def objective_function():
         return -m
-    
+
+#constrains all leaf node x and y coordinates to stay within the paper boundaries.
     def construct_bounds(self):
         bnd1 = (0,self.width)
         bnd2 = (0,self.height)
@@ -150,6 +156,8 @@ class Model:
             constraints2.append(constraint_dict)
         return constraints2
         
+#returns a 2d array of the coordinates of all of the leaf vertices
+        
     def initial_guess(self):
         leaf_nodes = self.all_leaf_nodes(self.G)
         pre_array = []
@@ -158,6 +166,8 @@ class Model:
             pre_array.append(elem)            
         x0 = np.array(pre_array)
         return x0 #array of vertex coordinates
+        
+# ***scale optimization***
             
     def scale_optimization(self):
         fun = self.objective_function()
@@ -166,6 +176,12 @@ class Model:
         constraints = self.calculate_contraints()
         
         scipy.optmize.minimize(fun,x0,args=(),method=SLSQP,jac=None,hess=None,hessp=None,bounds=None,constraints=(),tol=None,callback=None,options=None)
+        
+        
+
+# ***///***/// TESTING ***///***///***        
+        
+        
         
 class TestOrigami(unittest.TestCase):
     #run these tests by placing "unittest.main()" in my file
@@ -220,9 +236,16 @@ class TestOrigami(unittest.TestCase):
     
     def test_scale_optimization(self):
         return None
+        
+# RUN TESTS        
+        
     
 if __name__ == '__main__':
-    unittest.main()        
+    unittest.main()
+    
+
+# everything below this is mostly crap----aka one time tests to try and figure stuff out.
+            
        
 emu = Model (1.0,1.0)
 emu.draw()
