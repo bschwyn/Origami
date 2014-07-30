@@ -80,10 +80,10 @@ class Model:
 
          
     def all_leaf_nodes(self):
-        leaf_nodes = set()
+        leaf_nodes = []
         for node in self.G:
             if self.G.degree(node) == 1:
-                leaf_nodes.add(node)
+                leaf_nodes.append(node)
         return leaf_nodes
     
     def is_leaf_node(self,node):
@@ -155,18 +155,18 @@ class Model:
                 B = math.sqrt((x[source_index * 2]-x[(source_index+1) * 2])**2 +(x[target_index * 2] - x[(target_index + 1) * 2])**2)
                 return x[-1] - B/A
 
-            constraints.append({"type": "ineq", "fun": cons}))
+            constraints.append({"type": "ineq", "fun": cons})
         return constraints
         
 #returns a 2d array of the coordinates of all of the leaf vertices
 
 #currently retarded----unnecessary to make an array from an array        
     def initial_guess(self):
-        leaf_nodes = self.all_leaf_nodes(self.G)
+        leaf_nodes = self.all_leaf_nodes()
         pre_array = []
         for node in leaf_nodes:
-            pre_array.append(node['x'])
-            pre_array.append(node['y'])
+            pre_array.append(self.G.node[node]['x'])
+            pre_array.append(self.G.node[node]['y'])
         pre_array.append(self.scale)            
         
         x0 = np.array(pre_array)
@@ -177,12 +177,12 @@ class Model:
 # ***scale optimization***
             
     def scale_optimization(self):
-        fun = self.objective_function()
+        fun = self.objective_function
         x0 = self.initial_guess()
         bounds = self.calculate_bounds()
         constraints = self.calculate_contraints()
         
-        scipy.optmize.minimize(fun,x0,args=(),method=SLSQP,jac=None,hess=None,hessp=None,bounds=None,constraints=(),tol=None,callback=None,options=None)
+        scipy.optmize.minimize(fun,x0,args=(),method='SLSQP',jac=None,hess=None,hessp=None,bounds=None,constraints=(),tol=None,callback=None,options=None)
         
         
 
@@ -194,7 +194,7 @@ class TestOrigami(unittest.TestCase):
     #run these tests by placing "unittest.main()" in my file
     
     def setUp(self): #create EMU graph
-        self.emu = Model (1.0,1.0)
+        self.emu = Model(1.0,1.0)
         self.emu.add_node_to() #creates node 1
         self.emu.add_node_to(1) #creates node 2 attached to node1
         self.emu.add_node_to(2) #creates node 3 attached to node 2
@@ -209,7 +209,7 @@ class TestOrigami(unittest.TestCase):
         
     def test_all_leaf_nodes(self):
         leaf_nodes = self.emu.all_leaf_nodes()
-        self.assertEqual(leaf_nodes,set([1,3,4]))       
+        self.assertEqual(leaf_nodes,[1,3,4])       
         
     def test_is_leaf_node(self):
         self.assertEqual(self.emu.is_leaf_node(1),True)
@@ -230,9 +230,18 @@ class TestOrigami(unittest.TestCase):
             
     def test_objective_function(self):
         return None
+        
+    def test_constraints_function_index(self):
+        ln = [1,2,3]
+        ln2 = [1,2,8]
+        ln3 = [1,2,4,6,7,8,9,10,15,18,19,20,21,29]
+        ln4 = [4,5,6]
+        ln5 = [4,9,10]
+            
     
     def test_construct_constraints(self):
-        return None
+        self.emu.construct_constraints()
+    
     
     def test_construct_bounds(self):
         bnds = self.emu.construct_bounds()
@@ -247,8 +256,8 @@ class TestOrigami(unittest.TestCase):
 # RUN TESTS        
         
     
-if __name__ == '__main__':
-    unittest.main()
+#if __name__ == '__main__':
+#    unittest.main()
     
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
@@ -256,16 +265,17 @@ if __name__ == '__main__':
        
 emu = Model (1.0,1.0)
 emu.draw()
-emu.add_node() #creates node 1
+emu.add_node_to(source_node = None, x = 0.5, y = 0.5,) #creates node 1
 emu.draw()
-emu.add_node(1) #creates node 2 attached to node1
+emu.add_node_to(1,.25,.75) #creates node 2 attached to node1
 emu.draw()
-emu.add_node(2) #creates node 3 attached to node 2
+emu.add_node_to(1,.5,.25) #creates node 3 attached to node 2
 emu.draw()
-emu.add_node(2)
-emu.draw()     
+emu.add_node_to(1,.75,.75)
+emu.draw()
+big_thing = emu.scale_optimization()
 
-       
+"""       
 G = nx.Graph()
 
 G.add_node(1)
@@ -285,7 +295,6 @@ G.add_edge(1,6)
 
 G[1][6]['color'] = 'blue'
 print( G[1][6]['color'])
-
 
 #crane
 
@@ -330,7 +339,7 @@ print(six[2][4]['length'])
 
 x =six.degree(3)
 print x
-
+"""
 #correct connections?
 #nx.draw(six)
 #plt.show()
