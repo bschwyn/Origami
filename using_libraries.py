@@ -127,16 +127,17 @@ class Model:
 
 #constrains all leaf node x and y coordinates to stay within the paper boundaries.
     def construct_bounds(self):
-        bnd1 = (0,self.width)
-        bnd2 = (0,self.height)
+        x_bnd = (0,self.width)
+        y_bnd = (0,self.height)
         bnds = []
         leaf_nodes = self.all_leaf_nodes()
         for vertex in leaf_nodes:
-            bnds.append(bnd1)
-            bnds.append(bnd2)
-        #THING TO LEARN: Why cannot I append tuples to arrays [], or tuples (), like bnds = bnds + bnd1? 
-        #if a = (), b = (x,y)
-        #a = a + b = (x,y), rather than ((x,y))
+            bnds.append(x_bnd)
+            bnds.append(y_bnd)
+        #scale represents the length of a flap of width 1.0 on the actual paper.
+        theoretical_max_scale = min(self.width, self.height)
+        scale_bnd = (0,theoretical_max_scale)
+        bnds.append(scale_bnd)
         return bnds
         
     def construct_constraints(self):
@@ -177,12 +178,13 @@ class Model:
 # ***scale optimization***
             
     def scale_optimization(self):
-        fun = self.objective_function
+        #fun_old = self.objective_function
+        fun = lambda x: -x[-1]
         x0 = self.initial_guess()
         bounds = self.construct_bounds()
         constraints = self.construct_constraints()
         
-        minimize(fun,x0,args=(),method='SLSQP',jac=None,hess=None,hessp=None,bounds=None,constraints=(),tol=None,callback=None,options=None)
+        return minimize(fun,x0,args=(),method='SLSQP',jac=None,hess=None,hessp=None,bounds=None,constraints=(),tol=None,callback=None,options=None)
         
         
 
@@ -251,13 +253,16 @@ class TestOrigami(unittest.TestCase):
     
     def test_construct_bounds(self):
         bnds = self.emu.construct_bounds()
-        self.assertEqual(len(bnds),6)
-        for i in range(0,len(bnds),2):
-            self.assertEqual(bnds[i][1],self.emu.width)
+        x0 = self.initial_guess()
+        self.assertEqual(len(bnds),len(x0))
+        for i in range(0,len(bnds)-1,2):
+            self.assertEqual(bnds[i][0],self.emu.width)
             self.assertEqual(bnds[i+1][1],self.emu.height)
+        self.assertEqual(bnds[-1][0],0)
+        self.assertEqual(bnds[-1][1],None)
     
     def test_scale_optimization(self):
-        return None
+        self.emu.scale_optimization()
         
 # RUN TESTS        
         
@@ -280,6 +285,8 @@ emu.draw()
 emu.add_node_to(1,.75,.75)
 emu.draw()
 big_thing = emu.scale_optimization()
+print big_thing
+print big_thing.message
 
 """       
 G = nx.Graph()
