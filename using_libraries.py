@@ -237,6 +237,12 @@ class TestOrigami(unittest.TestCase):
         ln3 = [1,2,4,6,7,8,9,10,15,18,19,20,21,29]
         ln4 = [4,5,6]
         ln5 = [4,9,10]
+    
+    #this test passes if I have initial guess pass pre array---before it converts it to a numpy array.    
+    def test_initial_guess(self):
+        x0 = self.emu.initial_guess()
+        truth_value = np.array_equal(x0,[.5,.25,.75,.75,.25,.75,1.0])   
+        self.assertTrue(truth_value)
             
     
     def test_construct_constraints(self):
