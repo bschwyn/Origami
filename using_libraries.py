@@ -195,10 +195,10 @@ class TestOrigami(unittest.TestCase):
     
     def setUp(self): #create EMU graph
         self.emu = Model(1.0,1.0)
-        self.emu.add_node_to() #creates node 1
-        self.emu.add_node_to(1) #creates node 2 attached to node1
-        self.emu.add_node_to(2) #creates node 3 attached to node 2
-        self.emu.add_node_to(2) #creates node 4 attached to node 2
+        self.emu.add_node_to(source_node = None, x = 0.5, y = 0.25) #creates node 1
+        self.emu.add_node_to(1,.5,.5) #creates node 2 attached to node1
+        self.emu.add_node_to(2,.75,.75) #creates node 3 attached to node 2
+        self.emu.add_node_to(2,.25,.75) #creates node 4 attached to node 2
     
     def test_add_delete(self):
         self.emu.add_node_to(3)
@@ -256,8 +256,8 @@ class TestOrigami(unittest.TestCase):
 # RUN TESTS        
         
     
-#if __name__ == '__main__':
-#    unittest.main()
+if __name__ == '__main__':
+    unittest.main()
     
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
