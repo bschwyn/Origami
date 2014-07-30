@@ -121,9 +121,9 @@ class Model:
         return sum_of_strained_length
 
 # ***functions for scalar optimization***
-    
-    def objective_function():
-        return -m
+
+    def objective_function(x):
+        return -x[-1]
 
 #constrains all leaf node x and y coordinates to stay within the paper boundaries.
     def construct_bounds(self):
@@ -146,26 +146,29 @@ class Model:
             source = combo[0]
             target = combo[1]
             A = self.sum_of_strained_lengths(source,target)
-            B = math.sqrt((source.x-target.x)**2 +(source.y - target.y)**2)
-            C = B/A
-            fun = self.scale - C
-            constraints.append(fun)
-        constraints2 = []
-        for constraint in constraints:
-            constraint_dict = {"type": "ineq", "fun": constraint}
-            constraints2.append(constraint_dict)
-        return constraints2
+            #converting node # in combination to array index in x
+            def cons(x):
+                B = math.sqrt((x[source-1][0]-x[source-1][0])**2 +(x[target-1][1] - x[target-1][1])**2)
+                return x[-1] - B/A
+
+            constraints.append({"type": "ineq", "fun": cons}))
+        return constraints
         
 #returns a 2d array of the coordinates of all of the leaf vertices
-        
+
+#currently retarded----unnecessary to make an array from an array        
     def initial_guess(self):
         leaf_nodes = self.all_leaf_nodes(self.G)
         pre_array = []
         for node in leaf_nodes:
-            elem = [node['x'],node['y']]
-            pre_array.append(elem)            
+            pre_array.append(node['x'])
+            pre_array.append(node['y'])
+        pre_array.append(self.scale)            
+        
         x0 = np.array(pre_array)
         return x0 #array of vertex coordinates
+        
+        
         
 # ***scale optimization***
             
@@ -197,8 +200,8 @@ class TestOrigami(unittest.TestCase):
         self.emu.add_node_to(3)
         self.emu.delete_node(4)
     
-    def test_draw(self):
-        self.emu.draw()
+    #def test_draw(self):
+     #   self.emu.draw()
         
     def test_all_leaf_nodes(self):
         leaf_nodes = self.emu.all_leaf_nodes()
