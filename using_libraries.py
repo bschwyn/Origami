@@ -147,8 +147,12 @@ class Model:
             target = combo[1]
             A = self.sum_of_strained_lengths(source,target)
             #converting node # in combination to array index in x
+            
+            source_index = leaf_nodes.index(source)
+            target_index = leaf_nodes.index(target)
+            
             def cons(x):
-                B = math.sqrt((x[source-1][0]-x[source-1][0])**2 +(x[target-1][1] - x[target-1][1])**2)
+                B = math.sqrt((x[source_index * 2]-x[(source_index+1) * 2])**2 +(x[target_index * 2] - x[(target_index + 1) * 2])**2)
                 return x[-1] - B/A
 
             constraints.append({"type": "ineq", "fun": cons}))
