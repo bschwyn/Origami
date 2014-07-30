@@ -179,10 +179,10 @@ class Model:
     def scale_optimization(self):
         fun = self.objective_function
         x0 = self.initial_guess()
-        bounds = self.calculate_bounds()
-        constraints = self.calculate_contraints()
+        bounds = self.construct_bounds()
+        constraints = self.construct_constraints()
         
-        scipy.optmize.minimize(fun,x0,args=(),method='SLSQP',jac=None,hess=None,hessp=None,bounds=None,constraints=(),tol=None,callback=None,options=None)
+        minimize(fun,x0,args=(),method='SLSQP',jac=None,hess=None,hessp=None,bounds=None,constraints=(),tol=None,callback=None,options=None)
         
         
 
@@ -238,7 +238,7 @@ class TestOrigami(unittest.TestCase):
         ln4 = [4,5,6]
         ln5 = [4,9,10]
     
-    #this test passes if I have initial guess pass pre array---before it converts it to a numpy array.    
+     
     def test_initial_guess(self):
         x0 = self.emu.initial_guess()
         truth_value = np.array_equal(x0,[.5,.25,.75,.75,.25,.75,1.0])   
@@ -262,8 +262,8 @@ class TestOrigami(unittest.TestCase):
 # RUN TESTS        
         
     
-if __name__ == '__main__':
-    unittest.main()
+#if __name__ == '__main__':
+#    unittest.main()
     
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
