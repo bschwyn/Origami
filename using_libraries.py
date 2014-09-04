@@ -2,6 +2,7 @@
 #inspired by Robert J. Lang's TreeMaker program
 #used algorithms from Origami Design Secrets: http://www.langorigami.com/books/ODS1e_Algorithms.pdf
 
+#9;11
 
 # *** libraries***
 import networkx as nx
@@ -122,7 +123,7 @@ class Model:
 
 # ***functions for scalar optimization***
 
-    def objective_function(x):
+    def objective_function(self,x):
         return -x[-1]
 
 #constrains all leaf node x and y coordinates to stay within the paper boundaries.
@@ -154,7 +155,7 @@ class Model:
             
             def cons(x):
                 B = math.sqrt((x[source_index * 2]-x[(source_index+1) * 2])**2 +(x[target_index * 2] - x[(target_index + 1) * 2])**2)
-                return x[-1] - B/A
+                return -x[-1] + B/A
 
             constraints.append({"type": "ineq", "fun": cons})
         return constraints
@@ -172,19 +173,19 @@ class Model:
         
         x0 = np.array(pre_array)
         return x0 #array of vertex coordinates
-        
-        
-        
+                
 # ***scale optimization***
             
     def scale_optimization(self):
         #fun_old = self.objective_function
-        fun = lambda x: -x[-1]
+        fun = self.objective_function
         x0 = self.initial_guess()
-        bounds = self.construct_bounds()
-        constraints = self.construct_constraints()
+        bnds = self.construct_bounds()
+        cons = self.construct_constraints()
         
-        return minimize(fun,x0,args=(),method='SLSQP',jac=None,hess=None,hessp=None,bounds=None,constraints=(),tol=None,callback=None,options=None)
+        return minimize(fun,x0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
+    
+    
         
         
 
@@ -253,13 +254,13 @@ class TestOrigami(unittest.TestCase):
     
     def test_construct_bounds(self):
         bnds = self.emu.construct_bounds()
-        x0 = self.initial_guess()
+        x0 = self.emu.initial_guess()
         self.assertEqual(len(bnds),len(x0))
         for i in range(0,len(bnds)-1,2):
-            self.assertEqual(bnds[i][0],self.emu.width)
+            self.assertEqual(bnds[i][1],self.emu.width)
             self.assertEqual(bnds[i+1][1],self.emu.height)
         self.assertEqual(bnds[-1][0],0)
-        self.assertEqual(bnds[-1][1],None)
+        self.assertEqual(bnds[-1][1],min(self.emu.width,self.emu.height))
     
     def test_scale_optimization(self):
         self.emu.scale_optimization()
@@ -273,7 +274,7 @@ class TestOrigami(unittest.TestCase):
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
             
-       
+      
 emu = Model (1.0,1.0)
 emu.draw()
 emu.add_node_to(source_node = None, x = 0.5, y = 0.5,) #creates node 1
@@ -284,9 +285,18 @@ emu.add_node_to(1,.5,.25) #creates node 3 attached to node 2
 emu.draw()
 emu.add_node_to(1,.75,.75)
 emu.draw()
+print "objective function:"
+print "-x[-1]"
+print "initial guess"
+print emu.initial_guess()
+
 big_thing = emu.scale_optimization()
 print big_thing
 print big_thing.message
+
+#there are 4 posible sets of coordinates that are correct
+#(x = .7321, y = 0, x = 0, y = .7321, x = 1, y = 1, scale = .5176)
+
 
 """       
 G = nx.Graph()
