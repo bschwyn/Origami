@@ -184,7 +184,37 @@ class Model:
         cons = self.construct_constraints()
         
         return minimize(fun,x0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
+        
+    def edge_function(self,????):
     
+    def edge_initial_guess()
+    
+    def edge_bounds(self):
+    
+    def edge_constraints(self):
+        leaf_edges = self.all_leaf_edges()
+        selected_edges
+        constraints = []
+        sum_selected_lengths
+        for edge in (leaf_edges and selected_edges):
+            sum_selected_lengths += edge['length']
+        sum_deselected_strained_lengths
+        for edge in leaf_edges and not in selected_edges:
+            edge_length = 
+            edge_strain =
+            sum_deselected_strained_lengths += (1+edge_strain)*edge_length
+        
+            
+            
+    
+    
+    def edge_optimization(self):
+        fun  = self.edge_function
+        x0 = self.edge_initial_guess()
+        bnds = self.edge_bounds()
+        cons = self.edge_constraints()
+        return minimize(fun,x0,method= 'SLSQP', bounds = bnds,
+        constrains = cons, options = {"eps":0001})
     
         
         
@@ -264,6 +294,8 @@ class TestOrigami(unittest.TestCase):
     
     def test_scale_optimization(self):
         self.emu.scale_optimization()
+   
+    
         
 # RUN TESTS        
         

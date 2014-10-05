@@ -4,7 +4,7 @@
         <title>Ben Schwyn Origami</title>
     </head>
     </body>
-        <h1>
+    <h1>
             Origami
         </h1>
         <h2>
@@ -15,24 +15,63 @@
             <li>About Me</li>
         </ul>
  
- About me:
+ <h2>About me:</h2>
  
- I have been folding origami since I was three years old, beginning with paper airplanes and other simple folds. Ever since then it has surfaced in my life in various ways. For my 6th birthday I recieved Origami Sea Life, a joint venture by artists John Montroll and Robert J. Lang, which was my first venture into complex origami beyond library books. Starting in elementary I sold my models for pocket change, which eventually worked into selling origami roses for school dances.
+<p>
+I have been folding origami since I was three years old, beginning with paper airplanes and other simple folds. Ever since then it has surfaced in my life in various ways. For my 6th birthday I recieved Origami Sea Life, a joint venture by artists John Montroll and Robert J. Lang, which was my first venture into complex origami beyond library books. Starting in elementary I sold my models for pocket change, which eventually worked into selling origami roses for school dances.
+<p>
+<p>For my "Culminating Project" during senior year, I downloaded Robert J. Lang's TreeMaker program, and used that and the information in Origami Design Secrets to design my own origami models.
+<p>
+<p>Now, after getting a physics degree from the University of Washington, I wanted to learn to program. The only project that I was interested in making was an extension of TreeMaker for designing models through a technique called "Box Pleating." Doing something this novel was initially beyond my ability, and I plan to recreate Robert Lang's TreeMaker program based off of the papers he has written. Eventually, I would like to extend this to include ox leated models.
+<p>
 
-For my "Culminating Project" during senior year, I downloaded Robert J. Lang's TreeMaker program, and used that and the information in Origami Design Secrets to design my own origami models.
+<p> Other hobbies and interests of mine include running, piano, particle physics, psychology, go (the board game), and dancing.</p>
+<h2>About Robert J. Lang</h2>
 
-Now, after getting a physics degree from the University of Washington, I wanted to learn to program. The only project that I was interested in making was an extension of TreeMaker for designing models through a technique called "Box Pleating." Doing something this novel was initially beyond my ability, and I backed off to creating a TreeMaker clone in Python. Eventually, I would like to extend this to include Box Pleated models.
+<p>Robert J. Lang is one of the origami masters who has been leading innovation in the art for the past 35 years. He has advanced the art by publishing a large number of books of largely anitomically correct models, and has done a large portion of the formalization of origami design through mathematical methods. He has also applied his knowledge in the engineering world as a consultant, helping to design telescopes, airbags, and medical devices.</p> 
 
-About Robert J. Lang
-Robert J. Lang is one of the origami masters who has been leading innovation in the art for the past 35 years. He has advanced the art by publishing a large number of books of largely anitomically correct models, and has done a large portion of the formalization of origami design through mathematical methods. He has also applied his knowledge in the engineering world as a consultant, helping to design telescopes, airbags, and medical devices. 
+<p>He is the author of the computational origami design program TreeMaker, and several other computer programs. TreeMaker, now in version 5.01, is a program which allows the user to construct complete origami models for certain design styles, and compute the necessary folds to for the underlying structure.</p>
 
-He is the author of the computational origami design program TreeMaker, and several other computer programs. TreeMaker, now in version 5.01, is a program which allows the user to construct complete origami models for certain design styles, and compute the necessary folds to for the underlying structure.
+<p>He also has over 500 models models, 13 books, and multiple museum exhibitions.</p>
 
-He also has over 500 models models, 13 books, and multiple museum exhibitions.
+<h2>TreeMaker and Circle/River Packing Theory Summary</h2>
 
-TreeMaker and Circle/River Packing Theory
+<p>Origami Structures
+-Introduction</p>
 
-It's been more than five years since I read Origami Design Secrets, in full, so I need to remind myself of some of the core concepts.
+<p>Origami has a long history, beginning with the invention of paper a thousand or few years ago in China. Many traditional models such as the crane, frog, and boat are quite simple.</p>
+
+<p>In the 1950s, Akira Yoshizawa started the modern origami revolution by folding tens of thousands of new models, and publishing the diagrams in books. Origami continued, largely in Japan and the English speaking West. In the 1990s, physicist Robert J. Lang and others made significant advances in the complexity of origami models. One memorable aspect of this was the "Bug Wars" as origami authors one-upped each other by creating anatomically accurate insects with more and more limbs, horns, and wings, all out of a single uncut sheet of paper.</p>
+
+<p>The diversity of origami art has continued, as the technical advances have made it possible for many different artistic movements to be occuring at the same time. Some authors are building expressionist or abstract sculptures, while others continue to push the boundaries of realism.</p>
+
+<h3>-circle packing</h3>
+
+<p>The advances in the complexity and diversity of origami models was largely do to a design technique named "circle packing" after it's mathematical underpinnings.</p>
+
+<p>In circle packing, the geometric structure of the model is first made clear, and then this is converted into the fundamental folds, which can then be made into the base for the origami model.</p>
+
+<h3>base</h3>
+
+<p>The base, is "a regular geometric shape that has a structure similar to that of the subject." A folded base is a starting point before any detail is added to the origami model. It has the correct number of flaps, in the right locations, but does not have any of folds that shape those flaps into the necessary legs, wings, beaks, pockets, or other parts that make recognizable pieces of the final sculpture.</p>
+
+<P>If you are familiar, the origami crane can be an example. The final model has two wings, a head, and a tail. Midway during the folding there is a 4 pointed diamond structure. This is the eponymous "Bird base". The two top flaps become wings, and the two bottom flaps get narrowed and folded upwards to become the head and the tail. The same base has no resemblence to a crane, and is actually the starting point for a great many other origami models that have a similar structure of 4 equal length flaps coming out of a central point.</p>
+
+
+<h3>process</h3>
+
+<p>The process of circle packing involves a number of abstractions of the origami model. This is in addition to the abstraction of origami as an art form, which often only captures the general shape of the subject. Circle packing is only useful for a certain type of origami design, specifically finding the structure, location, and relationship between points. Pure circle packing does not give any insight into detail folds or textures, and is completely removed from the design of modular origami, tesselations, and other types of origami. It is most helpful for designing models with many long thin points, especially insects or crustaceans.</p>
+
+<p>The first step is to make a stick figure of the creature, where each appendage is a line with an appropriate length. This stick figure forms a tree data structure, where limbs and appendages are *leaf nodes* with *leaf edges*. Internal space, such as the body in-between the legs and arms, will also be a line.</p>
+
+<p>The purpose of the circle packing, TreeMaker, and this origami design program, is to calculate the location of nodes and the connecting creases so that a base can be made which has the same structure as the tree, when looked at *on edge*. There may be extra paper, but with thinning techniques, an origami model can be made to approximate the stick figure structure. For many insect models, this thinning process works well for the legs, but the body must have additional shaping using the paper that would be thinned.</p>
+
+<p>Each flap, represented as a stick/line when folded and thinned arbitrarily, takes up an angular section of paper when unfolded. A flap with the point resting on the corner, unfolded is roughly a quarter circle. A semi circle if on the edge. If a middle flap was cut off, the paper that made it up would be a full circle. In between the circles and their corresponding leaf nodes, are the "rivers" of paper which separate different clusters of flaps. The problem of how to put these circles and rivers on a piece of paper such that the properties of the tree are valid is a mathematical optimization problem, not always with a single solution. (Does it always have a solution??)</p>
+
+
+<h3>TreeMaker and Circle/River Packing Theory</h3>
+
+<p>It's been more than five years since I read Origami Design Secrets, in full, so I need to remind myself of some of the core concepts.
 
 Chapter 8: Tiling
 There are a number of traditional bases in origami, such as the four pointed bird base (the starting point of the crane model),, the waterbomb base, the frog base, and others. These bases can be modified in a way called "grafting" where "extra" paper is put in between different sections of the base. Tiling is a way to look at the base and the grafting as two subsets of a unified strcture.
@@ -41,10 +80,16 @@ Uniaxial bases are bases where the edge of the paper lies upon a central axis. A
 
 With a graft of paper in between the flaps on either side, a uniaxial base can be transformed into a dual axis base. Grafts can be viewed as a certain type of axial polygon.
 
-Base design can be expanded by merging any axial polygons (or tiles) along their creases.
-        
+Base design can be expanded by merging any axial polygons (or tiles) along their creases. The creases that define flap lengths much match along the edge.
+
+The creases that defined flaps can have a circular arc on the that denotes the amount of paper used in a flap. The river denotes area in between flaps. A simple visual rule for tiling is that rivers and circlular arcs must match to rivers and circular arcs of the same size.
+
+Stick figures
+Represent each flap in the folded form by a line segment whose length is equal to the length of the flap.
+
+Chapter 9 Circle Packing
+</p>
+
+
 </html>
 
-About me:
-
-After gett
