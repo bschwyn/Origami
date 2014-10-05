@@ -222,9 +222,50 @@ class Model:
         return sum_of_strained_lengthv    
     
     def edge_constraints(self):
+        #for all nodes
+        leaf_nodes = self.all_leaf_nodes()
+        constraints = []
+        #fixed lengths are between edges between nodes.
+        #iterate through all leaf paths, calculate distance, and fixed section.
+        #fixed variable
+        #I could cal
+        leaf_nodes = self.all_leaf_nodes()
+        constraints = []
+        for combo in itertools.combinations(leaf_nodes,2):
+            source = combo[0]
+            target = combo[1]
+            
+            def sum_of_strained_lengths(self,source, target):
+                graph = self.G
+                shortest_path = nx.shortest_path(graph ,source, target)
+                i = 0
+                sum_of_strained_length = 0
+                while i < len(shortest_path)-1:
+                    node1 = shortest_path[i]
+                    node2 = shortest_path[i+1]
+                    edge_length = graph[node1][node2]['length']
+                    edge_strain = graph[node1][node2]['strain']
+                    strained_length = (1+edge_strain) * edge_length        
+                    sum_of_strained_length += strained_length
+                    i+=1
+                return sum_of_strained_length
+            
+            A = self.sum_of_strained_lengths(source,target)
+            #converting node # in combination to array index in x
+            
+            source_index = leaf_nodes.index(source)
+            target_index = leaf_nodes.index(target)
+            
+            def cons(x):
+                B = math.sqrt((x[source_index * 2]-x[(source_index+1) * 2])**2 +(x[target_index * 2] - x[(target_index + 1) * 2])**2)
+                return -x[-1] + B/A
+
+            constraints.append({"type": "ineq", "fun": cons})
+        
+        
+        
         leaf_edges = self.all_leaf_edges()
         selected_edges
-        constraints = []
         sum_selected_lengths
         for edge in (leaf_edges and selected_edges):
             sum_selected_lengths += edge['length']
