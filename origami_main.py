@@ -99,7 +99,14 @@ class Model:
         leaf_nodes = all_leaf_nodes(self.G)
         all_paths = all_pairs_shortest_path(self.G) #returns {source : {target1 : [path1] , ... , targetn:[pathn]}, ... }
         #filter dictionary for all sources that are 
-        leaf_paths = {leaf_node: all_paths[leaf_node] for node in leaf_nodes}
+        #leaf_paths = {leaf_node: all_paths[leaf_node] for leaf_node in leaf_nodes}
+        leaf_paths = {}
+        for source in all_paths:
+            if source in leaf_nodes:
+                leaf_paths[source] = all_paths[source]
+            target = get the target
+            if target in leaf_nodes:
+                leaf_paths[target] = the path
         return leaf_paths  
 
 # ***sub fucntions for optimization***
@@ -184,12 +191,35 @@ class Model:
         cons = self.construct_constraints()
         
         return minimize(fun,x0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
+    
+    def all_leaf_edges(self):
+        leaf_edges = []
+        for node in self.G:
+            if self.G.degree(node) == 1:
+                leaf_edge = G.edges(node)[0]
+                leaf_edges.append(leaf_edge)
+        return leaf_edges
         
     def edge_function(self,????):
     
     def edge_initial_guess()
     
     def edge_bounds(self):
+    
+    def fixed_lengths(self,source, target):
+        graph = self.G
+        shortest_path = nx.shortest_path(graph ,source, target)
+        i = 0
+        sum_of_strained_length = 0
+        while i < len(shortest_path)-1:
+            node1 = shortest_path[i]
+            node2 = shortest_path[i+1]
+            edge_length = graph[node1][node2]['length']
+            edge_strain = graph[node1][node2]['strain']
+            strained_length = (1+edge_strain) * edge_length        
+            sum_of_strained_length += strained_length
+            i+=1
+        return sum_of_strained_lengthv    
     
     def edge_constraints(self):
         leaf_edges = self.all_leaf_edges()
@@ -202,7 +232,13 @@ class Model:
         for edge in leaf_edges and not in selected_edges:
             edge_length = 
             edge_strain =
-            sum_deselected_strained_lengths += (1+edge_strain)*edge_length
+            sum_deselected_strained_lengths += (1+edge_strain)*edge_length  
+        #sum (1+sigma_k)*l_k for all edges in leaf_paths except the selected edges
+        leaf_nodes = self.all_leaf_nodes()
+        for combo in itertools.combinations(leaf_nodes,2) and not in select:
+            source = combo[0]
+            target = combo[1]
+            A = self.sum_of_strained_lengths(source,target)
         
             
             
