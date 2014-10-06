@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 import unittest
 import itertools
 
-
 # useless?
 
 class Node:
@@ -111,9 +110,9 @@ class Model:
         for source in all_paths:
             if source in leaf_nodes:
                 leaf_paths[source] = all_paths[source]
-            target = get the target
+            target = getthetarget
             if target in leaf_nodes:
-                leaf_paths[target] = the path
+                leaf_paths[target] = thepath
         return leaf_paths  
 
 # ***sub fucntions for optimization***
@@ -228,26 +227,21 @@ class Model:
                 leaf_edges.append(leaf_edge)
         return leaf_edges
         
-    def edge_function(self,????):
+    def edge_function(self,x):
+        return -x[-1]
     
-    def edge_initial_guess()
+    def edge_initial_guess(self):
+        leaf_nodes = self.all_leaf_nodes()
+        pre_array = []
+        strain_factor = 1.0 #strain factor is just given a number
+        for node in leaf_nodes:
+            pre_array.append(self.G.node[node]['x'])
+            pre_array.append(self.G.node[node]['y'])
+        pre_array.append(strain_factor)
+        
+        x0 = np.array(pre_array)
+        return x0
     
-    def edge_bounds(self):
-    
-    def fixed_lengths(self,source, target):
-        graph = self.G
-        shortest_path = nx.shortest_path(graph ,source, target)
-        i = 0
-        sum_of_strained_length = 0
-        while i < len(shortest_path)-1:
-            node1 = shortest_path[i]
-            node2 = shortest_path[i+1]
-            edge_length = graph[node1][node2]['length']
-            edge_strain = graph[node1][node2]['strain']
-            strained_length = (1+edge_strain) * edge_length        
-            sum_of_strained_length += strained_length
-            i+=1
-        return sum_of_strained_lengthv    
     
     def edge_constraints(self,selected_edges):
         leaf_nodes = self.all_leaf_nodes()
@@ -256,10 +250,35 @@ class Model:
         for combo in itertools.combinations(leaf_nodes,2):
             source = combo[0]
             target = combo[1]
-            
-            selected_edge_length = m * (self.sum_of_strained_lengths(source,target) for (source,target) not in selected_edges) #selected_edges is a list of touples
+            #################################################
+            ##################################
+            #######################
+            if (source,target) not in selected_edges:
+                strained_edge_length = m * (self.sum_of_strained_lengths(source,target)
+            else:
+                strained_edge_length = 0
+             if (source,target) not in selected_edges) #selected_edges is a list of touples
             fixed_strain_edge_length = m * (self.sum_of_lengths(source,target) for (source,target) in selected_edges)
             #converting node # in combination to array index in x
+            
+            #modification of sum_of_strained_lengths
+            graph = self.G
+            shortest_path = nx.shortest_path(graph, source, target)
+            i = 0
+            sum_of_strained_length = 0
+            while i < len(shortest_path)-1:
+                node1 = shortest_path[i]
+                node2 = shortest_path[i+1]
+                edge_length = graph[node1][node2]['length']
+                edge_strain = graph[node1][node2]['strain']
+                if (node1,node2) in selected_edges:
+                    selected_edge_length += edge_length
+                else:
+                    strained_length = (1+edge_strain) * edge_length        
+                    sum_of_strained_length += strained_length
+                i+=1
+            
+            
             
             source_index = leaf_nodes.index(source)
             target_index = leaf_nodes.index(target)
@@ -271,7 +290,7 @@ class Model:
             
             def cons(x):
                 coord_distance = self.dist(x[src_x],x[src_y],x[trg_x],x[trg_y])
-                return -x[-1] + (coord_distance - fixed_strain_edge_length)/selected_edge_lengths
+                return -x[-1] + (coord_distance - fixed_strained_edge_length)/selected_edge_lengths
 
             constraints.append({"type": "ineq", "fun": cons})
         return  constraints   
@@ -282,7 +301,7 @@ class Model:
     def edge_optimization(self):
         fun  = self.edge_function
         x0 = self.edge_initial_guess()
-        bnds = self.edge_bounds()
+        bnds = self.construct_bounds() #same bounds as scale optimize
         cons = self.edge_constraints()
         return minimize(fun,x0,method= 'SLSQP', bounds = bnds,
         constrains = cons, options = {"eps":0001})
