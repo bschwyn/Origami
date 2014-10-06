@@ -161,6 +161,10 @@ class Model:
         bnds.append(scale_bnd)
         return bnds
         
+    def dist(x1,x2,y1,y2):
+        dist = math.sqrt( (x2 - x1)**2 + (y2 - y1)**2 )
+        return dist
+        
     def construct_constraints(self):
         leaf_nodes = self.all_leaf_nodes()
         constraints = []
@@ -173,7 +177,13 @@ class Model:
             source_index = leaf_nodes.index(source)
             target_index = leaf_nodes.index(target)
             
+            src_x = source_index * 2
+            src_y = (source_index + 1) * 2
+            trg_x = target_index * 2
+            trg_y = (target_index + 1) * 2
+            
             def cons(x):
+                coord_distance = self.dist(x[src_x],x[src_y],x[trg_x],x[trg_y])
                 coord_distance = math.sqrt((x[source_index * 2]-x[(source_index+1) * 2])**2 +(x[target_index * 2] - x[(target_index + 1) * 2])**2)
                 return -x[-1] + coord_distance/sum_of_strained_lengths
 
@@ -235,19 +245,15 @@ class Model:
         return sum_of_strained_lengthv    
     
     def edge_constraints(self,selected_edges):
-        #for all nodes
-        #fixed lengths are between edges between nodes.
-        #iterate through all leaf paths, calculate distance, and fixed section.
-        #fixed variable
-        #I could cal
         leaf_nodes = self.all_leaf_nodes()
         constraints = []
+        m = self.scale
         for combo in itertools.combinations(leaf_nodes,2):
             source = combo[0]
             target = combo[1]
             
-            selected_edge_length = self.scale * (self.sum_of_strained_lengths(source,target) for (source,target) not in selected_edges) #selected_edges is a list of touples
-            fixed_strain_edge_length = self.scale * (self.sum_of_lengths(source,target) for (source,target) in selected_edges)
+            selected_edge_length = m * (self.sum_of_strained_lengths(source,target) for (source,target) not in selected_edges) #selected_edges is a list of touples
+            fixed_strain_edge_length = m * (self.sum_of_lengths(source,target) for (source,target) in selected_edges)
             #converting node # in combination to array index in x
             
             source_index = leaf_nodes.index(source)
@@ -258,26 +264,7 @@ class Model:
                 return -x[-1] + (node_distance - fixed_strain_edge_length)/selected_edge_length
 
             constraints.append({"type": "ineq", "fun": cons})
-        
-        
-        
-        leaf_edges = self.all_leaf_edges()
-        selected_edges
-        sum_selected_lengths
-        for edge in (leaf_edges and selected_edges):
-            sum_selected_lengths += edge['length']
-        sum_deselected_strained_lengths
-        for edge in leaf_edges and not in selected_edges:
-            edge_length = 
-            edge_strain =
-            sum_deselected_strained_lengths += (1+edge_strain)*edge_length  
-        #sum (1+sigma_k)*l_k for all edges in leaf_paths except the selected edges
-        leaf_nodes = self.all_leaf_nodes()
-        for combo in itertools.combinations(leaf_nodes,2) and not in select:
-            source = combo[0]
-            target = combo[1]
-            A = self.sum_of_strained_lengths(source,target)
-        
+        return  constraints   
             
             
     
