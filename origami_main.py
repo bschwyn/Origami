@@ -246,9 +246,9 @@ class Model:
             source = combo[0]
             target = combo[1]
             
-            A1 = self.scale * (self.sum_of_strained_lengths(source,target) for (source,target) not in selected_edges) #selected_edges is a list of touples
-            A2 = self.scale * (self.sum_of_lengths(source,target) for (source,target) in selected_edges)
-            A = A1 + A2
+            selected_edge_length = self.scale * (self.sum_of_strained_lengths(source,target) for (source,target) not in selected_edges) #selected_edges is a list of touples
+            fixed_strain_edge_length = self.scale * (self.sum_of_lengths(source,target) for (source,target) in selected_edges)
+            fixed_length = selected_edge_length + fixed_strain_edge_length
             #converting node # in combination to array index in x
             
             source_index = leaf_nodes.index(source)
