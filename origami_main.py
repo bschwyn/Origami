@@ -248,15 +248,14 @@ class Model:
             
             selected_edge_length = self.scale * (self.sum_of_strained_lengths(source,target) for (source,target) not in selected_edges) #selected_edges is a list of touples
             fixed_strain_edge_length = self.scale * (self.sum_of_lengths(source,target) for (source,target) in selected_edges)
-            fixed_length = selected_edge_length + fixed_strain_edge_length
             #converting node # in combination to array index in x
             
             source_index = leaf_nodes.index(source)
             target_index = leaf_nodes.index(target)
             
             def cons(x):
-                B = math.sqrt((x[source_index * 2]-x[(source_index+1) * 2])**2 +(x[target_index * 2] - x[(target_index + 1) * 2])**2)
-                return -x[-1] + (B/A
+                node_distance = math.sqrt((x[source_index * 2]-x[(source_index+1) * 2])**2 +(x[target_index * 2] - x[(target_index + 1) * 2])**2)
+                return -x[-1] + (node_distance - fixed_strain_edge_length)/selected_edge_length
 
             constraints.append({"type": "ineq", "fun": cons})
         
