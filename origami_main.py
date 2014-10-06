@@ -250,16 +250,6 @@ class Model:
         for combo in itertools.combinations(leaf_nodes,2):
             source = combo[0]
             target = combo[1]
-            #################################################
-            ##################################
-            #######################
-            if (source,target) not in selected_edges:
-                strained_edge_length = m * (self.sum_of_strained_lengths(source,target)
-            else:
-                strained_edge_length = 0
-             if (source,target) not in selected_edges) #selected_edges is a list of touples
-            fixed_strain_edge_length = m * (self.sum_of_lengths(source,target) for (source,target) in selected_edges)
-            #converting node # in combination to array index in x
             
             #modification of sum_of_strained_lengths
             graph = self.G
