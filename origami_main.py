@@ -96,9 +96,9 @@ class Model:
     def all_shortest_paths(self):
         return all_pairs_shortest_path(self.G)
 
-    def dist(x1,x2,y1,y2):
-        dist = math.sqrt( (x2 - x1)**2 + (y2 - y1)**2 )
-        return dist
+    def dist(self, x1, x2, y1, y2):
+        dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        return dist 
         
 #possibly full of errors        
     def all_leaf_paths(self):
@@ -187,7 +187,7 @@ class Model:
             trg_y = (target_index + 1) * 2
             
             def cons(x):
-                coord_distance = self.dist(x[src_x],x[src_y],x[trg_x],x[trg_y])
+                coord_distance = self.dist(x[src_x], x[src_y], x[trg_x], x[trg_y])
                 
                 return -x[-1] + coord_distance/sum_of_strained_lengths
 
@@ -319,6 +319,10 @@ class TestOrigami(unittest.TestCase):
     
     #def test_draw(self):
      #   self.emu.draw()
+    
+    def test_dist(self):
+        hyp = self.emu.dist(3,0,4,0)
+        self.assertEqual(hyp,5.0)
         
     def test_all_leaf_nodes(self):
         leaf_nodes = self.emu.all_leaf_nodes()
@@ -380,13 +384,13 @@ class TestOrigami(unittest.TestCase):
 # RUN TESTS        
         
     
-#if __name__ == '__main__':
-#    unittest.main()
+if __name__ == '__main__':
+    unittest.main()
     
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
             
-      
+"""      
 emu = Model (1.0,1.0)
 emu.draw()
 emu.add_node_to(source_node = None, x = 0.5, y = 0.5,) #creates node 1
@@ -405,7 +409,7 @@ print emu.initial_guess()
 big_thing = emu.scale_optimization()
 print big_thing
 print big_thing.message
-
+"""
 #there are 4 posible sets of coordinates that are correct
 #(x = .7321, y = 0, x = 0, y = .7321, x = 1, y = 1, scale = .5176)
 
