@@ -52,10 +52,12 @@ class Model:
     
     def add_node_to(self, source_node = None, x = 0.0, y = 0.0, length = 1.0, strain = 0.0):
         #This makes it so that there is not needed a source node for the first time. If there is a source node for the first node, it should be ignored.
-        if len(self.G)==0 and source_node == None: #empty graphdoing the "and source_node == None increased the speed by .001 to .008
+        #empty graph doing the "and source_node == None increased the speed by .001 to .008
+        if len(self.G)==0 and source_node == None:
             self.G.add_node(self.node_counter,x = x, y = y)
-            self.node_counter +=1            
-        elif source_node in self.G.nodes(): #adding to existing graph
+            self.node_counter +=1         
+        #adding to existing graph   
+        elif source_node in self.G.nodes(): 
             new_node = self.node_counter
             self.G.add_node(new_node,x=x,y=y)
             self.G.add_edge(new_node,source_node,length = length, strain = strain)
@@ -79,6 +81,7 @@ class Model:
         nx.draw(self.G)
         plt.show()
 
+#*** helper functions ***
          
     def all_leaf_nodes(self):
         leaf_nodes = []
@@ -93,8 +96,12 @@ class Model:
     
     def all_shortest_paths(self):
         return all_pairs_shortest_path(self.G)
+
+    def dist(x1,x2,y1,y2):
+        dist = math.sqrt( (x2 - x1)**2 + (y2 - y1)**2 )
+        return dist
         
-        
+#possibly full of errors        
     def all_leaf_paths(self):
         leaf_nodes = all_leaf_nodes(self.G)
         all_paths = all_pairs_shortest_path(self.G) #returns {source : {target1 : [path1] , ... , targetn:[pathn]}, ... }
@@ -139,10 +146,10 @@ class Model:
             edge_length = graph[node1][node2]['length']      
             sum_of_length += edge_length
             i+=1
-        return sum_of_slength
+        return sum_of_length
 
 # ***functions for scalar optimization***
-
+#x is a vector of the variables [node1_x, node1_y, node2_x, node2_y....noden_x, noden_y, scale]
     def objective_function(self,x):
         return -x[-1]
 
@@ -161,9 +168,7 @@ class Model:
         bnds.append(scale_bnd)
         return bnds
         
-    def dist(x1,x2,y1,y2):
-        dist = math.sqrt( (x2 - x1)**2 + (y2 - y1)**2 )
-        return dist
+
         
     def construct_constraints(self):
         leaf_nodes = self.all_leaf_nodes()
@@ -184,7 +189,7 @@ class Model:
             
             def cons(x):
                 coord_distance = self.dist(x[src_x],x[src_y],x[trg_x],x[trg_y])
-                coord_distance = math.sqrt((x[source_index * 2]-x[(source_index+1) * 2])**2 +(x[target_index * 2] - x[(target_index + 1) * 2])**2)
+                
                 return -x[-1] + coord_distance/sum_of_strained_lengths
 
             constraints.append({"type": "ineq", "fun": cons})
@@ -259,9 +264,14 @@ class Model:
             source_index = leaf_nodes.index(source)
             target_index = leaf_nodes.index(target)
             
+            src_x = source_index * 2
+            src_y = (source_index + 1) * 2
+            trg_x = target_index * 2
+            trg_y = (target_index + 1) * 2
+            
             def cons(x):
-                node_distance = math.sqrt((x[source_index * 2]-x[(source_index+1) * 2])**2 +(x[target_index * 2] - x[(target_index + 1) * 2])**2)
-                return -x[-1] + (node_distance - fixed_strain_edge_length)/selected_edge_length
+                coord_distance = self.dist(x[src_x],x[src_y],x[trg_x],x[trg_y])
+                return -x[-1] + (coord_distance - fixed_strain_edge_length)/selected_edge_lengths
 
             constraints.append({"type": "ineq", "fun": cons})
         return  constraints   
