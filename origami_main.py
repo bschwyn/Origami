@@ -317,7 +317,7 @@ class Gui:
         
         #at the bottom of the image
         #create new
-        self.button = Tk.Button(frame, text = "new model", command= lambda: MyDialog(master,data,())
+        self.button = Tk.Button(frame, text = "new model", command= lambda: MyDialog(master, data,()
         #draw rectangle/square
         #give rectangle a label
         
@@ -353,7 +353,7 @@ class Gui:
         
 class MyDialog:
     
-    def __init__(self,parent, data, dict_key=None):
+    def __init__(self,parent, msg, dict_key=None):
         
         top = self.top = Tk.Toplevel(parent)
         
@@ -379,12 +379,7 @@ class MyDialog:
             b_submit.grid(columnspan = 2)
         
         
-        #what happens when OK is pressed?
-    def ok(self):
-        self.dimensions = (self.e1.get(),self.e2.get())
-        print "dimensions are", self.e1.get(), "by", self.e2.get()
-        
-        self.top.destroy()
+
     
     def entry_to_dict(self, dict_key):
         data = (self.e1.get(), self.e2.get())
