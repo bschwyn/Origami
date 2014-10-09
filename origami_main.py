@@ -74,7 +74,7 @@ class Model:
         else:
             raise "Error: cannot delete connected node"
 
-#draws graph
+#draws graph using matplotlib
                 
     def draw(self):
         nx.draw(self.G)
@@ -100,7 +100,7 @@ class Model:
         dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
         return dist 
         
-#possibly full of errors        
+#full of errors        
     def all_leaf_paths(self):
         leaf_nodes = all_leaf_nodes(self.G)
         all_paths = all_pairs_shortest_path(self.G) #returns {source : {target1 : [path1] , ... , targetn:[pathn]}, ... }
@@ -197,6 +197,7 @@ class Model:
 #returns a 2d array of the coordinates of all of the leaf vertices
 
 #currently retarded----unnecessary to make an array from an array        
+#x =(u1x,u1y,u3x,u3y,u4x,u4y,m) format
     def initial_guess(self):
         leaf_nodes = self.all_leaf_nodes()
         pre_array = []
@@ -296,7 +297,89 @@ class Model:
         return minimize(fun,x0,method= 'SLSQP', bounds = bnds,
         constrains = cons, options = {"eps":0001})
     
+import Tkinter as Tk
+#from Tkinter import *
+
+class Gui:
+    
+    def __init__(self, master): #The master is the main instance of Tkinter that is called
         
+        frame = Tk.Frame(master)
+        frame.pack()
+        
+        pwidth = 500
+        pheight = 500
+        w = Tk.Canvas(master, width = pwidth, height = pheight)
+        w.pack()
+        
+        #image = cool_image_from_file
+        #image.place location
+        
+        #at the bottom of the image
+        #create new
+        self.button = Tk.Button(frame, text = "new model", command = self.create_model)
+        #draw rectangle/square
+        #give rectangle a label
+        
+        #
+        
+        #w.create_line(0,0,200,100)
+        #w.create_line(0,100,200,0, fill = "red", dash = (4,4))
+        
+        #w.create_rectangle(50,50,450,450, fill = "white")
+        #w.create_oval(100,100,200,200)
+        
+        self.button = Tk.Button(frame, text = 'QUIT', fg = "red", command = frame.quit)
+        self.button.pack(side=Tk.LEFT)
+        
+        self.hi_there = Tk.Button(frame,text = "Hello", command = self.say_hi)
+        self.hi_there.pack(side=Tk.LEFT)
+        
+    def create_model(self):
+        
+        pass
+    
+    def add_node(self,x,y,length,strain,source_node):
+        w.create_oval(x-length,y-length,x+length,y+length)
+        
+    def scale_optimization():
+        pass    
+    
+    def say_hi(self):
+        print "hi there, everyone!"
+        
+class MyDialog:
+    
+    def __init__(self,parent):
+        
+        top = self.top = Tk.Toplevel(parent)
+        
+        w1 = Tk.Label(top, text = "Height:")    
+        w2 = Tk.Label(top, text = "Width:")
+        w1.grid(row = 0)
+        w2.grid(row = 1)
+        
+        self.e1 = Tk.Entry(top)
+        self.e2 = Tk.Entry(top)
+        self.e1.grid(row = 0, column = 1)
+        self.e2.grid(row = 1, column = 1)
+        #self.e1.pack(padx = 5)
+        #self.e2.pack()
+        
+        b = Tk.Button(top, text = "OK", command = self.ok)
+        b.grid(columnspan = 2)
+        #b.pack(pady = 5)
+        
+        #what happens when OK is pressed?
+    def ok(self):
+        print "dimensions are", self.e1.get(), "by", self.e2.get()
+        
+        self.top.destroy()
+   
+#root = Tk()
+#gui = Gui(roo)
+#root.mainloop()
+#root.destroy()    
         
 
 # ***///***/// TESTING ***///***///***        
@@ -390,8 +473,8 @@ if __name__ == '__main__':
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
             
-"""      
-emu = Model (1.0,1.0)
+     
+emu = Model(1.0,1.0)
 emu.draw()
 emu.add_node_to(source_node = None, x = 0.5, y = 0.5,) #creates node 1
 emu.draw()
@@ -409,7 +492,8 @@ print emu.initial_guess()
 big_thing = emu.scale_optimization()
 print big_thing
 print big_thing.message
-"""
+
+
 #there are 4 posible sets of coordinates that are correct
 #(x = .7321, y = 0, x = 0, y = .7321, x = 1, y = 1, scale = .5176)
 
