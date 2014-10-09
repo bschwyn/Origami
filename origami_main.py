@@ -317,7 +317,7 @@ class Gui:
         
         #at the bottom of the image
         #create new
-        self.button = Tk.Button(frame, text = "new model", command = self.create_model)
+        self.button = Tk.Button(frame, text = "new model", command= lambda: MyDialog(master,data,())
         #draw rectangle/square
         #give rectangle a label
         
@@ -336,8 +336,9 @@ class Gui:
         self.hi_there.pack(side=Tk.LEFT)
         
     def create_model(self):
-        
-        pass
+        inputDialog = MyDialog(master)
+        master.wait_window(inputDialog.top)
+        return {'dimensions', inputDialog.dimension}
     
     def add_node(self,x,y,length,strain,source_node):
         w.create_oval(x-length,y-length,x+length,y+length)
@@ -348,33 +349,49 @@ class Gui:
     def say_hi(self):
         print "hi there, everyone!"
         
+    def     
+        
 class MyDialog:
     
-    def __init__(self,parent):
+    def __init__(self,parent, data, dict_key=None):
         
         top = self.top = Tk.Toplevel(parent)
         
-        w1 = Tk.Label(top, text = "Height:")    
-        w2 = Tk.Label(top, text = "Width:")
-        w1.grid(row = 0)
-        w2.grid(row = 1)
+        #this may need to be moved, because I don't care about a second dialog box showing up
         
-        self.e1 = Tk.Entry(top)
-        self.e2 = Tk.Entry(top)
-        self.e1.grid(row = 0, column = 1)
-        self.e2.grid(row = 1, column = 1)
-        #self.e1.pack(padx = 5)
-        #self.e2.pack()
         
-        b = Tk.Button(top, text = "OK", command = self.ok)
-        b.grid(columnspan = 2)
-        #b.pack(pady = 5)
+        #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
+        #if false, then the dictionary will be accessed and a neew dialog box will not be created.
+        caller_wants_an-entry = dict_key is not None
+        if caller_wants_an_entry:
+            w1 = Tk.Label(top, text = "Height:")    
+            w2 = Tk.Label(top, text = "Width:")
+            w1.grid(row = 0)
+            w2.grid(row = 1)
+        
+            self.e1 = Tk.Entry(top)
+            self.e2 = Tk.Entry(top)
+            self.e1.grid(row = 0, column = 1)
+            self.e2.grid(row = 1, column = 1)
+        
+        
+            b_submit = Tk.Button(top, text = "OK", command = self.ok)
+            b_submit.grid(columnspan = 2)
+        
         
         #what happens when OK is pressed?
     def ok(self):
+        self.dimensions = (self.e1.get(),self.e2.get())
         print "dimensions are", self.e1.get(), "by", self.e2.get()
         
         self.top.destroy()
+    
+    def entry_to_dict(self, dict_key):
+        data = (self.e1.get(), self.e2.get())
+        if data:
+            d, key = dict_key
+            d[key] = data
+            self.top.destroy()
    
 #root = Tk()
 #gui = Gui(roo)
