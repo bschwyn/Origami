@@ -342,6 +342,16 @@ import Tkinter as Tk
 class Application(Tk.Frame):
     def say_hi(self):
         print"hi there, everyone!"
+    
+    def create_frame(self):
+        pixel_scale = 500
+        pixel_width = pixel_scale
+        pixel_height = pixel_scale
+        w = Tk.Canvas(self, width = pixel_width, height = pixel_height)
+        w.pack()
+        
+        #image = cool_image_from_file
+        #image.place location
         
     def create_widgets(self):
         self.QUIT = Tk.Button(self)
@@ -360,6 +370,7 @@ class Application(Tk.Frame):
     def __init__(self, master = None):
         Tk.Frame.__init__(self,master)
         self.pack()
+        self.create_frame()
         self.create_widgets()
     
     #def __init__(self, master): #The master is the main instance of Tkinter that is called
@@ -469,26 +480,28 @@ class TestOrigami(unittest.TestCase):
     
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
-            
-     
-emu = Model(1.0,1.0)
-emu.draw()
-emu.add_node_to(source_node = None, x = 0.5, y = 0.5,) #creates node 1
-emu.draw()
-emu.add_node_to(1,.25,.75) #creates node 2 attached to node1
-emu.draw()
-emu.add_node_to(1,.5,.25) #creates node 3 attached to node 2
-emu.draw()
-emu.add_node_to(1,.75,.75)
-emu.draw()
-print "objective function:"
-print "-x[-1]"
-print "initial guess"
-print emu._scale_initial_guess()
+  
+run_example = False:            
+if run_example:
+    
+    emu = Model(1.0,1.0)
+    emu.draw()
+    emu.add_node_to(source_node = None, x = 0.5, y = 0.5,) #creates node 1
+    emu.draw()
+    emu.add_node_to(1,.25,.75) #creates node 2 attached to node1
+    emu.draw()
+    emu.add_node_to(1,.5,.25) #creates node 3 attached to node 2
+    emu.draw()
+    emu.add_node_to(1,.75,.75)
+    emu.draw()
+    print "objective function:"
+    print "-x[-1]"
+    print "initial guess"
+    print emu._scale_initial_guess()
 
-big_thing = emu.scale_optimization()
-print big_thing
-print big_thing.message
+    big_thing = emu.scale_optimization()
+    print big_thing
+    print big_thing.message
 
 
 #there are 4 posible sets of coordinates that are correct
