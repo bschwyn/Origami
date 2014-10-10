@@ -306,9 +306,9 @@ class Gui:
         
         frame = Tk.Frame(master)
         frame.pack()
-        
-        pwidth = 500
-        pheight = 500
+        pixel_scale = 500
+        pixel_width = pixel_scale
+        pixel_height = pixel_scale
         w = Tk.Canvas(master, width = pwidth, height = pheight)
         w.pack()
         
@@ -317,7 +317,9 @@ class Gui:
         
         #at the bottom of the image
         #create new
-        self.button = Tk.Button(frame, text = "new model", command= lambda: MyDialog(master, data,()
+        self.button = Tk.Button(frame, text = "new model", command= lambda: MyDialog(master, access_value, dict_key)
+        
+        dimensions = ????
         #draw rectangle/square
         #give rectangle a label
         
@@ -334,6 +336,18 @@ class Gui:
         
         self.hi_there = Tk.Button(frame,text = "Hello", command = self.say_hi)
         self.hi_there.pack(side=Tk.LEFT)
+        
+    def draw_new_node(self,source,x,y,length,strain)
+        w.create_oval(
+    
+    def draw_square(self,pixel_scale,width,height):
+        p_scale = 400
+        square_width = p_scale*width
+        square_height = p_scale*height
+        
+        p_gap = 50
+        
+        w.create_rectangle(p_gap, p_gap, square_height)
         
     def create_model(self):
         inputDialog = MyDialog(master)
