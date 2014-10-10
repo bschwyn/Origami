@@ -28,8 +28,10 @@ class Rectangle:
         self.width = width
         self.height = height
 
+#contains data structure for origami model, modifying its structure, properties of the medium (paper size) that affects the design
+
 class Model:
-    #initialize the piece of paper, dimensions, and additional properties
+    #initialize the properties of the medium (paper) that the origami model will use.
     def __init__(self, width = 1.0, height = 1.0):
         self.width = width
         self.height = height
@@ -43,19 +45,18 @@ class Model:
         #self.nodes = {}
         #self.paths = {}
         #self.leaf_vertices
-    
-#add_node_to
-#if there are no nodes in the graph, adds a new node w/ coordinates.
-#if there are nodes in the graph, a source_node must be specified, and data is added to the new node and the new edge.
-#must throw errors if: graph would not be a tree, source_node doesn't exist    
+
+
+#addes a node to the graph structure representing the origami model
     
     def add_node_to(self, source_node = None, x = 0.0, y = 0.0, length = 1.0, strain = 0.0):
-        #This makes it so that there is not needed a source node for the first time. If there is a source node for the first node, it should be ignored.
-        #empty graph doing the "and source_node == None increased the speed by .001 to .008
+
+        #if this is the first node
         if len(self.G)==0 and source_node == None:
             self.G.add_node(self.node_counter,x = x, y = y)
-            self.node_counter +=1         
-        #adding to existing graph   
+            self.node_counter +=1  
+                   
+        #adding attional nodes 
         elif source_node in self.G.nodes(): 
             new_node = self.node_counter
             self.G.add_node(new_node,x=x,y=y)
@@ -64,9 +65,10 @@ class Model:
         else:
             print "error"
 
-#deletes a specified node and edge
+#deletes a  node and any related edges from the graph structure
             
     def delete_node(self, node):
+        
         if len(self.G)==1:
             self.G.delete_node(1)            
         elif self.is_leaf_node(node):
@@ -81,7 +83,8 @@ class Model:
         plt.show()
 
 #*** helper functions ***
-         
+
+# leaf nodes are nodes with only one edge         
     def all_leaf_nodes(self):
         leaf_nodes = []
         for node in self.G:
@@ -92,15 +95,26 @@ class Model:
     def is_leaf_node(self,node):
         leaf_nodes = self.all_leaf_nodes()
         return node in leaf_nodes
-    
+        
     def all_shortest_paths(self):
         return all_pairs_shortest_path(self.G)
 
+    def all_leaf_edges(self):
+        leaf_edges = []
+        for node in self.G:
+            if self.G.degree(node) == 1:
+                leaf_edge = G.edges(node)[0]
+                leaf_edges.append(leaf_edge)
+        return leaf_edges
+    
+
+#pythagorean theorem to find distance between two points
     def dist(self, x1, x2, y1, y2):
         dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
         return dist 
         
-#full of errors        
+#full of errors
+#returns array of dictionaries that are all paths between different leaf nodes        
     def all_leaf_paths(self):
         leaf_nodes = all_leaf_nodes(self.G)
         all_paths = all_pairs_shortest_path(self.G) #returns {source : {target1 : [path1] , ... , targetn:[pathn]}, ... }
@@ -117,8 +131,9 @@ class Model:
 
 # ***sub fucntions for optimization***
 
-#returns strained length of a path      
-        
+#returns strained length of a path  
+#every edge has associated strain and length    
+#= Sum(1+strain_k)*length_k for all edges k in path
     def sum_of_strained_lengths(self,source, target):
         graph = self.G
         shortest_path = nx.shortest_path(graph ,source, target)
@@ -133,7 +148,8 @@ class Model:
             sum_of_strained_length += strained_length
             i+=1
         return sum_of_strained_length
-        
+
+#=sum(length_k) for all edges k in a path
     def sum_of_lengths(self,source, target):
         graph = self.G
         shortest_path = nx.shortest_path(graph ,source, target)
@@ -148,48 +164,58 @@ class Model:
         return sum_of_length
 
 # ***functions for scalar optimization***
-#x is a vector of the variables [node1_x, node1_y, node2_x, node2_y....noden_x, noden_y, scale]
-    def objective_function(self,x):
-        return -x[-1]
+# http://www.langorigami.com/books/ODS1e_Algorithms.pdf
+# Section A.3. Scalar Optimization
+
+
+#s_vector is a vector of the variables [node1_x, node1_y, node2_x, node2_y....noden_x, noden_y, scale]
+#returns scale note negative
+    def _scale_objective_function(self,s_vector):
+        return -s_vector[-1]
 
 #constrains all leaf node x and y coordinates to stay within the paper boundaries.
-    def construct_bounds(self):
+    def _scale_construct_bounds(self):
         x_bnd = (0,self.width)
         y_bnd = (0,self.height)
         bnds = []
         leaf_nodes = self.all_leaf_nodes()
+        #create list of bounds
         for vertex in leaf_nodes:
             bnds.append(x_bnd)
             bnds.append(y_bnd)
         #scale represents the length of a flap of width 1.0 on the actual paper.
+        #create boundaries for possible scale size
         theoretical_max_scale = min(self.width, self.height)
         scale_bnd = (0,theoretical_max_scale)
         bnds.append(scale_bnd)
         return bnds
         
 
-        
-    def construct_constraints(self):
+# {scale * Sum[(1+strain_k)*length_k] for edge in all leaf paths - euclidian distance between nodes <= 0 } for all leaf paths
+# creates a list of inequalities in the correct format for numpy.optimize.minimize
+    def _scale_construct_constraints(self):
         leaf_nodes = self.all_leaf_nodes()
         constraints = []
+        #all possible paths between two leaf nodes
         for combo in itertools.combinations(leaf_nodes,2):
             source = combo[0]
             target = combo[1]
             sum_of_strained_lengths = self.sum_of_strained_lengths(source,target)
-            #converting node # in combination to array index in x
             
             source_index = leaf_nodes.index(source)
             target_index = leaf_nodes.index(target)
             
+            #create a corresponding x and y index for each source and target index
             src_x = source_index * 2
             src_y = (source_index + 1) * 2
             trg_x = target_index * 2
             trg_y = (target_index + 1) * 2
             
-            def cons(x):
-                coord_distance = self.dist(x[src_x], x[src_y], x[trg_x], x[trg_y])
+            #constraint function in form where cons >=0
+            def cons(s_vector):
+                coord_distance = self.dist(s_vector[src_x], s_vector[src_y], s_vector[trg_x], s_vector[trg_y])
                 
-                return -x[-1] + coord_distance/sum_of_strained_lengths
+                return -s_vector[-1] + coord_distance/sum_of_strained_lengths
 
             constraints.append({"type": "ineq", "fun": cons})
         return constraints
@@ -197,8 +223,8 @@ class Model:
 #returns a 2d array of the coordinates of all of the leaf vertices
 
 #currently retarded----unnecessary to make an array from an array        
-#x =(u1x,u1y,u3x,u3y,u4x,u4y,m) format
-    def initial_guess(self):
+#s_vector =(u1x,u1y,u3x,u3y,u4x,u4y,m) format
+    def _scale_initial_guess(self):
         leaf_nodes = self.all_leaf_nodes()
         pre_array = []
         for node in leaf_nodes:
@@ -206,82 +232,92 @@ class Model:
             pre_array.append(self.G.node[node]['y'])
         pre_array.append(self.scale)            
         
-        x0 = np.array(pre_array)
-        return x0 #array of vertex coordinates
+        s_vector0 = np.array(pre_array)
+        return s_vector0 #array of vertex coordinates
                 
-# ***scale optimization***
-            
+
+#finds the x,y coordinates of nodes such that scale is minimized
     def scale_optimization(self):
-        #fun_old = self.objective_function
-        fun = self.objective_function
-        x0 = self.initial_guess()
-        bnds = self.construct_bounds()
-        cons = self.construct_constraints()
+        fun = self._scale_objective_function
+        s_vector0 = self._scale_initial_guess()
+        bnds = self._scale_construct_bounds()
+        cons = self._scale_construct_constraints()
         
-        return minimize(fun,x0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
+        return minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
     
-    def all_leaf_edges(self):
-        leaf_edges = []
-        for node in self.G:
-            if self.G.degree(node) == 1:
-                leaf_edge = G.edges(node)[0]
-                leaf_edges.append(leaf_edge)
-        return leaf_edges
-        
-    def edge_function(self,x):
-        return -x[-1]
+# ***functions for edge optimization***
+# http://www.langorigami.com/books/ODS1e_Algorithms.pdf
+# Section A.4. Edge Optimization
     
-    def edge_initial_guess(self):
+    
+#returns strain    
+    def _edge_objective_function(self,e_vector):
+        return -e_vector[-1]
+    
+#create array of node coordinates and strain factor
+#e_vector =(u1x,u1y,u3x,u3y,u4x,u4y,strain) format
+    def _edge_initial_guess(self):
         leaf_nodes = self.all_leaf_nodes()
         pre_array = []
-        strain_factor = 1.0 #strain factor is just given a number
+        strain_factor = 1.0
         for node in leaf_nodes:
             pre_array.append(self.G.node[node]['x'])
             pre_array.append(self.G.node[node]['y'])
         pre_array.append(strain_factor)
         
-        x0 = np.array(pre_array)
-        return x0
+        e_vector0 = np.array(pre_array)
+        return e_vector0
     
-    
-    def edge_constraints(self,selected_edges):
+# create inequality for each leaf path to adjust selected edges according to a variable strain factor
+# see Lang for details
+
+    def _edge_constraints(self,selected_edges):
         leaf_nodes = self.all_leaf_nodes()
         constraints = []
-        m = self.scale
+        scale = self.scale
+        #for all leaf paths
         for combo in itertools.combinations(leaf_nodes,2):
             source = combo[0]
             target = combo[1]
             
             #modification of sum_of_strained_lengths
+            
+            
             graph = self.G
             shortest_path = nx.shortest_path(graph, source, target)
             i = 0
             sum_of_strained_length = 0
+            #for all edges in a leaf path
             while i < len(shortest_path)-1:
                 node1 = shortest_path[i]
                 node2 = shortest_path[i+1]
                 edge_length = graph[node1][node2]['length']
                 edge_strain = graph[node1][node2]['strain']
-                if (node1,node2) in selected_edges:
+                
+                edge = (node1, node2)
+                #compute two different sums
+                if edge in selected_edges:
                     selected_edge_length += edge_length
                 else:
                     strained_length = (1+edge_strain) * edge_length        
                     sum_of_strained_length += strained_length
                 i+=1
             
-            
-            
+           
             source_index = leaf_nodes.index(source)
             target_index = leaf_nodes.index(target)
+            
+            #create a corresponding x and y index for each source and target index
             
             src_x = source_index * 2
             src_y = (source_index + 1) * 2
             trg_x = target_index * 2
             trg_y = (target_index + 1) * 2
             
-            def cons(x):
-                coord_distance = self.dist(x[src_x],x[src_y],x[trg_x],x[trg_y])
-                return -x[-1] + (coord_distance - fixed_strained_edge_length)/selected_edge_lengths
+            #constraint function in form where cons >=0
+            def cons(e_vector):
+                coord_distance = self.dist(e_vector[src_x],e_vector[src_y],e_vector[trg_x],e_vector[trg_y])
+                return -e_vector[-1] + (coord_distance - fixed_strained_edge_length)/selected_edge_lengths
 
             constraints.append({"type": "ineq", "fun": cons})
         return  constraints   
@@ -290,12 +326,15 @@ class Model:
     
     
     def edge_optimization(self):
-        fun  = self.edge_function
-        x0 = self.edge_initial_guess()
-        bnds = self.construct_bounds() #same bounds as scale optimize
-        cons = self.edge_constraints()
-        return minimize(fun,x0,method= 'SLSQP', bounds = bnds,
+        fun  = self._edge_objective_function
+        e_vector0 = self._edge_initial_guess()
+        bnds = self._edge_construct_bounds() #same bounds as scale optimize
+        cons = self._edge_constraints()
+        return minimize(fun,e_vector0,method= 'SLSQP', bounds = bnds,
         constrains = cons, options = {"eps":0001})
+
+
+
     
 import Tkinter as Tk
 #from Tkinter import *
