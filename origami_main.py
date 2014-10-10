@@ -248,7 +248,7 @@ class Model:
 # ***functions for edge optimization***
 # http://www.langorigami.com/books/ODS1e_Algorithms.pdf
 # Section A.4. Edge Optimization
-    
+   
     
 #returns strain    
     def _edge_objective_function(self,e_vector):
@@ -334,118 +334,50 @@ class Model:
         constrains = cons, options = {"eps":0001})
 
 
-"""
+
     
 import Tkinter as Tk
 #from Tkinter import *
 
-class Gui:
-    
-    def __init__(self, master): #The master is the main instance of Tkinter that is called
-        
-        frame = Tk.Frame(master)
-        frame.pack()
-        pixel_scale = 500
-        pixel_width = pixel_scale
-        pixel_height = pixel_scale
-        w = Tk.Canvas(master, width = pwidth, height = pheight)
-        w.pack()
-        
-        #image = cool_image_from_file
-        #image.place location
-        
-        #at the bottom of the image
-        #create new
-        self.button = Tk.Button(frame, text = "new model", command= lambda: MyDialog(master, access_value, dict_key)
-        
-        dimensions = ????
-        #draw rectangle/square
-        #give rectangle a label
-        
-        #
-        
-        #w.create_line(0,0,200,100)
-        #w.create_line(0,100,200,0, fill = "red", dash = (4,4))
-        
-        #w.create_rectangle(50,50,450,450, fill = "white")
-        #w.create_oval(100,100,200,200)
-        
-        self.button = Tk.Button(frame, text = 'QUIT', fg = "red", command = frame.quit)
-        self.button.pack(side=Tk.LEFT)
-        
-        self.hi_there = Tk.Button(frame,text = "Hello", command = self.say_hi)
-        self.hi_there.pack(side=Tk.LEFT)
-        
-    def draw_new_node(self,source,x,y,length,strain)
-        w.create_oval(
-    
-    def draw_square(self,pixel_scale,width,height):
-        p_scale = 400
-        square_width = p_scale*width
-        square_height = p_scale*height
-        
-        p_gap = 50
-        
-        w.create_rectangle(p_gap, p_gap, square_height)
-        
-    def create_model(self):
-        inputDialog = MyDialog(master)
-        master.wait_window(inputDialog.top)
-        return {'dimensions', inputDialog.dimension}
-    
-    def add_node(self,x,y,length,strain,source_node):
-        w.create_oval(x-length,y-length,x+length,y+length)
-        
-    def scale_optimization():
-        pass    
-    
+class Application(Tk.Frame):
     def say_hi(self):
-        print "hi there, everyone!"
+        print"hi there, everyone!"
         
-    def     
+    def create_widgets(self):
+        self.QUIT = Tk.Button(self)
+        self.QUIT["text"] = "QUIT"
+        self.QUIT["fg"] = "red"
+        self.QUIT["command"] = self.quit
         
-class MyDialog:
+        self.QUIT.pack({"side": "left"})
+        
+        self.hi_there = Tk.Button(self)
+        self.hi_there["text"] = "Hello",
+        self.hi_there["command"] = self.say_hi
+        
+        self.hi_there.pack({"side": "left"})
     
-    def __init__(self,parent, msg, dict_key=None):
-        
-        top = self.top = Tk.Toplevel(parent)
-        
-        #this may need to be moved, because I don't care about a second dialog box showing up
-        
-        
-        #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
-        #if false, then the dictionary will be accessed and a neew dialog box will not be created.
-        caller_wants_an-entry = dict_key is not None
-        if caller_wants_an_entry:
-            w1 = Tk.Label(top, text = "Height:")    
-            w2 = Tk.Label(top, text = "Width:")
-            w1.grid(row = 0)
-            w2.grid(row = 1)
-        
-            self.e1 = Tk.Entry(top)
-            self.e2 = Tk.Entry(top)
-            self.e1.grid(row = 0, column = 1)
-            self.e2.grid(row = 1, column = 1)
-        
-        
-            b_submit = Tk.Button(top, text = "OK", command = self.ok)
-            b_submit.grid(columnspan = 2)
-        
-        
-
+    def __init__(self, master = None):
+        Tk.Frame.__init__(self,master)
+        self.pack()
+        self.create_widgets()
     
-    def entry_to_dict(self, dict_key):
-        data = (self.e1.get(), self.e2.get())
-        if data:
-            d, key = dict_key
-            d[key] = data
-            self.top.destroy()
-   
-#root = Tk()
-#gui = Gui(roo)
-#root.mainloop()
-#root.destroy()    
-"""        
+    #def __init__(self, master): #The master is the main instance of Tkinter that is called
+        
+      #  frame = Tk.Frame(master)
+     #   frame.pack()
+    #    pixel_scale = 500
+   #     pixel_width = pixel_scale
+  #      pixel_height = pixel_scale
+ #       w = Tk.Canvas(master, width = pwidth, height = pheight)
+#        w.pack()
+        
+#'''
+root = Tk.Tk()
+gui = Application(master = root)
+root.mainloop()
+root.destroy()    
+#'''        
 
 # ***///***/// TESTING ***///***///***        
         
@@ -682,3 +614,103 @@ def edge_opimization(graph):
         graph[node]['y'] <= height ##############
     sigma * scale
 '''
+"""
+class Gui:
+    
+    def __init__(self, master): #The master is the main instance of Tkinter that is called
+        
+        frame = Tk.Frame(master)
+        frame.pack()
+        pixel_scale = 500
+        pixel_width = pixel_scale
+        pixel_height = pixel_scale
+        w = Tk.Canvas(master, width = pwidth, height = pheight)
+        w.pack()
+        
+        #image = cool_image_from_file
+        #image.place location
+        
+        #at the bottom of the image
+        #create new
+        #self.button = Tk.Button(frame, text = "new model", command= lambda: MyDialog(master, access_value, dict_key))
+        
+        #dimensions = ????
+        #draw rectangle/square
+        #give rectangle a label
+        
+        #
+        
+        #w.create_line(0,0,200,100)
+        #w.create_line(0,100,200,0, fill = "red", dash = (4,4))
+        
+        #w.create_rectangle(50,50,450,450, fill = "white")
+        #w.create_oval(100,100,200,200)
+        
+        self.button = Tk.Button(frame, text = 'QUIT', fg = "red", command = frame.quit)
+        self.button.pack(side=Tk.LEFT)
+        
+        self.hi_there = Tk.Button(frame,text = "Hello", command = self.say_hi)
+        self.hi_there.pack(side=Tk.LEFT)
+        
+    def draw_new_node(self,source,x,y,length,strain):
+        #w.create_oval(
+    
+    def draw_square(self,pixel_scale,width,height):
+        p_scale = 400
+        square_width = p_scale*width
+        square_height = p_scale*height
+        
+        p_gap = 50
+        
+        w.create_rectangle(p_gap, p_gap, square_height)
+        
+    def create_model(self):
+        inputDialog = MyDialog(master)
+        master.wait_window(inputDialog.top)
+        return {'dimensions', inputDialog.dimension}
+    
+    def add_node(self,x,y,length,strain,source_node):
+        w.create_oval(x-length,y-length,x+length,y+length)
+        
+    def scale_optimization():
+        pass    
+    
+    def say_hi(self):
+        print "hi there, everyone!"
+"""          
+        
+"""
+class MyDialog:
+    
+    def __init__(self,parent, msg, dict_key=None):
+        
+        top = self.top = Tk.Toplevel(parent)
+        
+        #this may need to be moved, because I don't care about a second dialog box showing up
+        
+        
+        #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
+        #if false, then the dictionary will be accessed and a neew dialog box will not be created.
+        caller_wants_an-entry = dict_key is not None
+        if caller_wants_an_entry:
+            w1 = Tk.Label(top, text = "Height:")    
+            w2 = Tk.Label(top, text = "Width:")
+            w1.grid(row = 0)
+            w2.grid(row = 1)
+        
+            self.e1 = Tk.Entry(top)
+            self.e2 = Tk.Entry(top)
+            self.e1.grid(row = 0, column = 1)
+            self.e2.grid(row = 1, column = 1)
+        
+        
+            b_submit = Tk.Button(top, text = "OK", command = self.ok)
+            b_submit.grid(columnspan = 2)            
+    
+    def entry_to_dict(self, dict_key):
+        data = (self.e1.get(), self.e2.get())
+        if data:
+            d, key = dict_key
+            d[key] = data
+            self.top.destroy()
+"""
