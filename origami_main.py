@@ -334,7 +334,7 @@ class Model:
         constrains = cons, options = {"eps":0001})
 
 
-
+"""
     
 import Tkinter as Tk
 #from Tkinter import *
@@ -445,7 +445,7 @@ class MyDialog:
 #gui = Gui(roo)
 #root.mainloop()
 #root.destroy()    
-        
+"""        
 
 # ***///***/// TESTING ***///***///***        
         
@@ -465,8 +465,8 @@ class TestOrigami(unittest.TestCase):
         self.emu.add_node_to(3)
         self.emu.delete_node(4)
     
-    #def test_draw(self):
-     #   self.emu.draw()
+    def test_draw(self):
+        self.emu.draw()
     
     def test_dist(self):
         hyp = self.emu.dist(3,0,4,0)
@@ -505,18 +505,18 @@ class TestOrigami(unittest.TestCase):
     
      
     def test_initial_guess(self):
-        x0 = self.emu.initial_guess()
+        x0 = self.emu._scale_initial_guess()
         truth_value = np.array_equal(x0,[.5,.25,.75,.75,.25,.75,1.0])   
         self.assertTrue(truth_value)
             
     
     def test_construct_constraints(self):
-        self.emu.construct_constraints()
+        self.emu._scale_construct_constraints()
     
     
     def test_construct_bounds(self):
-        bnds = self.emu.construct_bounds()
-        x0 = self.emu.initial_guess()
+        bnds = self.emu._scale_construct_bounds()
+        x0 = self.emu._scale_initial_guess()
         self.assertEqual(len(bnds),len(x0))
         for i in range(0,len(bnds)-1,2):
             self.assertEqual(bnds[i][1],self.emu.width)
@@ -532,8 +532,8 @@ class TestOrigami(unittest.TestCase):
 # RUN TESTS        
         
     
-if __name__ == '__main__':
-    unittest.main()
+#if __name__ == '__main__':
+#    unittest.main()
     
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
@@ -552,7 +552,7 @@ emu.draw()
 print "objective function:"
 print "-x[-1]"
 print "initial guess"
-print emu.initial_guess()
+print emu._scale_initial_guess()
 
 big_thing = emu.scale_optimization()
 print big_thing
