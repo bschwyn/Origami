@@ -391,14 +391,22 @@ class Application(Tk.Frame):
 
         D = {'user':'Bob'}
         #create some buttons 
-        self.b_login = Tk.Button(root, text='Log in')
-        self.b_login['command'] = lambda: Mbox('Name?', (D, 'user'))
-        self.b_login.pack()
+        self.b_new = Tk.Button(root, text='New Model')
+        self.b_new['command'] = lambda: Mbox('Name?', (D, 'user'))
+        self.b_new.pack()
+        
+        self.b_get_new_data = Tk.Button(root)
+        self.b_get_new_data['text'] = 'Get height/width'
+        self.b_get_new_data['command'] = lambda: self.do_stuff(Mbox)
+        self.b_get_new_data.pack()
 
         self.b_loggedin = Tk.Button(root, text='Current User')
         self.b_loggedin['command'] = lambda: Mbox(D['user'])
         self.b_loggedin.pack()
-
+        
+    def do_stuff(self,dialog):
+        print dialog.get_value()
+        
       
         
         #return dictionary_for_new_model_information
@@ -430,18 +438,19 @@ class Mbox(object):
         dict_key = <sequence> (dictionary, key) to associate with user input
         (providing a sequence for dict_key creates an entry for user input)
         """
+        
+        #create top level box
         self.top = Tk.Toplevel(Mbox.root)
 
         frm = Tk.Frame(self.top)
         frm.grid()
 
-        label = Tk.Label(frm, text=msg)
-        label.grid()
-
+        
         caller_wants_an_entry = dict_key is not None
 
         if caller_wants_an_entry:
             
+            #height and width entry fieds
             self.l_height = Tk.Label(frm)
             self.l_height["text"] = "Height:"
             self.l_width = Tk.Label(frm)
@@ -464,11 +473,18 @@ class Mbox(object):
         b_cancel.grid()
 
     def entry_to_dict(self, dict_key):
-        data = self.entry.get()
+        height_data = self.e_height.get()
+        width_data = self.e_width.get()
+        data = (height_data, width_data)
+        #can only destroy top level w/ a submit if both fields have data
         if data:
             d, key = dict_key
             d[key] = data
-            self.top.destroy()        
+            self.dict_value = data
+            self.top.destroy()
+            
+    def get_value(self):
+        return self.dict_value
 
 class MyDialog:
     
