@@ -385,16 +385,18 @@ class Application(Tk.Frame):
         #instead of calling a third function with new_dialog_box, let's try just doing what it is supposed to be doing right here.
         
         #create new instance of my_dialog class
-        Mbox = MyDialog
+        
+        #Mbox = MyDialog
+        Mbox.root = root
 
         D = {'user':'Bob'}
         #create some buttons 
         self.b_login = Tk.Button(root, text='Log in')
-        self.b_login['command'] = lambda: Mbox(self,'Name?', (D, 'user'))
+        self.b_login['command'] = lambda: Mbox('Name?', (D, 'user'))
         self.b_login.pack()
 
         self.b_loggedin = Tk.Button(root, text='Current User')
-        self.b_loggedin['command'] = lambda: Mbox(self,D['user'])
+        self.b_loggedin['command'] = lambda: Mbox(D['user'])
         self.b_loggedin.pack()
 
       
@@ -416,6 +418,59 @@ class Application(Tk.Frame):
         self.pack()
         self.create_frame()
         self.basic_widgets()
+        
+        
+class Mbox(object):
+
+    root = None
+
+    def __init__(self, msg, dict_key=None):
+        """
+        msg = <str> the message to be displayed
+        dict_key = <sequence> (dictionary, key) to associate with user input
+        (providing a sequence for dict_key creates an entry for user input)
+        """
+        self.top = Tk.Toplevel(Mbox.root)
+
+        frm = Tk.Frame(self.top)
+        frm.pack(fill='both', expand=True)
+
+        label = Tk.Label(frm, text=msg)
+        label.pack(padx=4, pady=4)
+
+        caller_wants_an_entry = dict_key is not None
+
+        if caller_wants_an_entry:
+            self.entry = Tk.Entry(frm)
+            #self.entry.pack(pady=4)
+
+            b_submit = Tk.Button(frm, text='Submit')
+            b_submit['command'] = lambda: self.entry_to_dict(dict_key)
+            #b_submit.pack()
+            
+            l_height = Tk.Label(frm)
+            l_height["text"] = "Height:"
+            l_width = Tk.Label(frm)
+            l_width["text"] = "Width:"
+            
+            self.l_height.grid(row = 0)
+            self.l_width.grid(row = 1)
+                    
+            self.e_height = Tk.Entry(frm)
+            self.e_width = Tk.Entry(frm)
+            self.e_height.grid(row = 0, column = 1)
+            self.e_width.grid(row = 1, column = 1)
+                
+        b_cancel = Tk.Button(frm, text='Cancel')
+        b_cancel['command'] = self.top.destroy
+        b_cancel.pack(padx=4, pady=4)
+
+    def entry_to_dict(self, dict_key):
+        data = self.entry.get()
+        if data:
+            d, key = dict_key
+            d[key] = data
+            self.top.destroy()        
 
 class MyDialog:
     
@@ -424,30 +479,51 @@ class MyDialog:
         top = self.top = Tk.Toplevel(parent)        
         #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
         #if false, then the dictionary will be accessed and a neew dialog box will not be created.
+        
+        self.top = Tk.Toplevel(Mbox.root)
+
+        frm = Tk.Frame(self.top, borderwidth=4, relief='ridge')
+        frm.pack(fill='both', expand=True)
+
+        label = Tk.Label(frm, text=msg)
+        label.pack(padx=4, pady=4)
+     
         caller_wants_an_entry = dict_key is not None
+
         if caller_wants_an_entry:
-            self.l_height = Tk.Label(self)
-            self.l_height["text"] = "Height:"
-            self.l_width = Tk.Label(self)
-            self.l_width["text"] = "Width:"
+            
+            l_height = Tk.Label(frm)
+            l_height["text"] = "Height:"
+            l_width = Tk.Label(frm)
+            l_width["text"] = "Width:"
             
             self.l_height.grid(row = 0)
             self.l_width.grid(row = 1)
                     
-            self.e_height = Tk.Entry(self)
-            self.e_width = Tk.Entry(self)
+            self.e_height = Tk.Entry(frm)
+            self.e_width = Tk.Entry(frm)
             self.e_height.grid(row = 0, column = 1)
             self.e_width.grid(row = 1, column = 1)
         
         
-            self.b_submit = Tk.Button(self)
+            self.b_submit = Tk.Button(frm)
             self.b_submit["text"] = "OK"
             self.b_submit["command"] = self.ok
             self.b_submit.grid(columnspan = 2)
             
-            self.b_cancel = Tk.Button(self)
-            self.b_cancel["text"] = "Cancel"
-            self.b_cancel["command"] = self.quit
+            ####
+            self.entry = tki.Entry(frm)
+            self.entry.pack(pady=4)
+
+            b_submit = tki.Button(frm, text='Submit')
+            b_submit['command'] = lambda: self.entry_to_dict(dict_key)
+            b_submit.pack()
+            #####
+            
+        self.b_cancel = Tk.Button(self)
+        self.b_cancel["text"] = "Cancel"
+        self.b_cancel["command"] = self.top.destroy
+        self.b_cancel.pack()
                 
     
     def entry_to_dict(self, dict_key):
