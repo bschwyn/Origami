@@ -374,9 +374,11 @@ class Application(Tk.Frame):
         
         #opens a box for putting in new model information
     def new_model_button(self):
+    
+    
         self.create_new = Tk.Button(self)
         self.create_new["text"] = "New Model"
-        self.create_new["command"] = self.new_dialog_box
+        self.create_new["command"] = self.new_dialog_box ####edit this
         self.create_new.pack()
         dictionary_for_new_model_information
         
@@ -418,11 +420,19 @@ class Application(Tk.Frame):
         self.pack()
         self.create_frame()
         self.basic_widgets()
-'''
-class MyDialog2:
+
+class MyDialog:
     
-        #caller_wants_an-entry = dict_key is not None
-        caller_wants_an_entry = True
+    def __init__(self,parent, msg, dict_key=None):
+        
+        top = self.top = Tk.Toplevel(parent)
+        
+        #this may need to be moved, because I don't care about a second dialog box showing up
+        
+        
+        #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
+        #if false, then the dictionary will be accessed and a neew dialog box will not be created.
+        caller_wants_an_entry = dict_key is not None
         if caller_wants_an_entry:
             self.l_height = Tk.Label(self)
             self.l_height["text"] = "Height:"
@@ -446,33 +456,7 @@ class MyDialog2:
             self.b_cancel = Tk.Button(self)
             self.b_cancel["text"] = "Cancel"
             self.b_cancel["command"] = self.quit
-'''    
-class MyDialog:
-    
-    def __init__(self,parent, msg, dict_key=None):
-        
-        top = self.top = Tk.Toplevel(parent)
-        
-        #this may need to be moved, because I don't care about a second dialog box showing up
-        
-        
-        #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
-        #if false, then the dictionary will be accessed and a neew dialog box will not be created.
-        caller_wants_an_entry = dict_key is not None
-        if caller_wants_an_entry:
-            w1 = Tk.Label(top, text = "Height:")    
-            w2 = Tk.Label(top, text = "Width:")
-            w1.grid(row = 0)
-            w2.grid(row = 1)
-        
-            self.e1 = Tk.Entry(top)
-            self.e2 = Tk.Entry(top)
-            self.e1.grid(row = 0, column = 1)
-            self.e2.grid(row = 1, column = 1)
-        
-        
-            b_submit = Tk.Button(top, text = "OK", command = self.ok)
-            b_submit.grid(columnspan = 2)            
+                
     
     def entry_to_dict(self, dict_key):
         data = (self.e1.get(), self.e2.get())
