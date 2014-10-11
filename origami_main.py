@@ -394,8 +394,7 @@ class Application(Tk.Frame):
         b_loggedin = tkinter.Button(root, text='Current User')
         b_loggedin['command'] = lambda: Mbox(D['user'])
         b_loggedin.pack()
-        
-        
+       
         
         
         return dictionary_for_new_model_information
@@ -410,20 +409,7 @@ class Application(Tk.Frame):
         self.node_button = Tk.Button(self)
         self.node_button["text"] = 'enter new info'
         
-    def new_dialog_box(self):
-        #create new instance of my_dialog class
-        Mbox = mbox.Mbox
-        Mbox.root = root
 
-        D = {'user':'Bob'}
-        #create some buttons 
-        b_login = tkinter.Button(root, text='Log in')
-        b_login['command'] = lambda: Mbox('Name?', (D, 'user'))
-        b_login.pack()
-
-        b_loggedin = tkinter.Button(root, text='Current User')
-        b_loggedin['command'] = lambda: Mbox(D['user'])
-        b_loggedin.pack()
 
 
             
