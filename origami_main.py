@@ -566,8 +566,8 @@ class TestOrigami(unittest.TestCase):
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
   
-run_example = False            
-if run_example:
+run_emu_example = False            
+if run_emu_example:
     
     emu = Model(1.0,1.0)
     emu.draw()
