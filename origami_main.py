@@ -441,12 +441,6 @@ class Mbox(object):
         caller_wants_an_entry = dict_key is not None
 
         if caller_wants_an_entry:
-            self.entry = Tk.Entry(frm)
-            #self.entry.pack(pady=4)
-
-            b_submit = Tk.Button(frm, text='Submit')
-            b_submit['command'] = lambda: self.entry_to_dict(dict_key)
-            #b_submit.pack()
             
             self.l_height = Tk.Label(frm)
             self.l_height["text"] = "Height:"
@@ -460,9 +454,6 @@ class Mbox(object):
             self.e_width = Tk.Entry(frm)
             self.e_height.grid(row = 0, column = 1)
             self.e_width.grid(row = 1, column = 1)
-            
-            self.entry = Tk.Entry(frm)
-            self.entry.grid()
 
             b_submit = Tk.Button(frm, text='Submit')
             b_submit['command'] = lambda: self.entry_to_dict(dict_key)
@@ -470,7 +461,7 @@ class Mbox(object):
                 
         b_cancel = Tk.Button(frm, text='Cancel')
         b_cancel['command'] = self.top.destroy
-        b_cancel.pack(padx=4, pady=4)
+        b_cancel.grid()
 
     def entry_to_dict(self, dict_key):
         data = self.entry.get()
