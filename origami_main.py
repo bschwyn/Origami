@@ -354,7 +354,7 @@ class Application(Tk.Frame):
         #image.place location
     
     #creates the basic widgets for starting a new model, quit    
-    def create_widgets(self):
+    def basic_widgets(self):
         #quits the program
         self.QUIT = Tk.Button(self)
         self.QUIT["text"] = "QUIT"
@@ -366,16 +366,41 @@ class Application(Tk.Frame):
         self.hi_there = Tk.Button(self)
         self.hi_there["text"] = "Hello",
         self.hi_there["command"] = self.say_hi
-  
+        
         self.hi_there.pack()
+        
+        self.new_model_data = self.new_model_button
+        
+        
         #opens a box for putting in new model information
+    def new_model_button(self):
         self.create_new = Tk.Button(self)
         self.create_new["text"] = "New Model"
         self.create_new["command"] = self.new_dialog_box
-        
         self.create_new.pack()
+        dictionary_for_new_model_information
         
-    def create_model_widgets(self)    
+        #instead of calling a third function with new_dialog_box, let's try just doing what it is supposed to be doing right here.
+        
+        #create new instance of my_dialog class
+        Mbox = mbox.Mbox
+
+        D = {'user':'Bob'}
+        #create some buttons 
+        b_login = tkinter.Button(root, text='Log in')
+        b_login['command'] = lambda: Mbox('Name?', (D, 'user'))
+        b_login.pack()
+
+        b_loggedin = tkinter.Button(root, text='Current User')
+        b_loggedin['command'] = lambda: Mbox(D['user'])
+        b_loggedin.pack()
+        
+        
+        
+        
+        return dictionary_for_new_model_information
+        
+    def model_widgets(self):
         self.new_node_l = Tk.Label(self)
         self.new_node_l['text'] = 'new node information'
         
@@ -386,7 +411,32 @@ class Application(Tk.Frame):
         self.node_button["text"] = 'enter new info'
         
     def new_dialog_box(self):
-        caller_wants_an-entry = dict_key is not None
+        #create new instance of my_dialog class
+        Mbox = mbox.Mbox
+        Mbox.root = root
+
+        D = {'user':'Bob'}
+        #create some buttons 
+        b_login = tkinter.Button(root, text='Log in')
+        b_login['command'] = lambda: Mbox('Name?', (D, 'user'))
+        b_login.pack()
+
+        b_loggedin = tkinter.Button(root, text='Current User')
+        b_loggedin['command'] = lambda: Mbox(D['user'])
+        b_loggedin.pack()
+
+
+            
+    def __init__(self, master = None):
+        Tk.Frame.__init__(self,master)
+        self.pack()
+        self.create_frame()
+        self.create_widgets()
+
+class MyDialog2:
+    
+        #caller_wants_an-entry = dict_key is not None
+        caller_wants_an_entry = True
         if caller_wants_an_entry:
             self.l_height = Tk.Label(self)
             self.l_height["text"] = "Height:"
@@ -403,27 +453,48 @@ class Application(Tk.Frame):
         
         
             self.b_submit = Tk.Button(self)
-            self.b_submit["text] = "OK"
+            self.b_submit["text"] = "OK"
             self.b_submit["command"] = self.ok
-            self.b_submit.grid(columnspan = 2)            
-      
+            self.b_submit.grid(columnspan = 2)
             
-    def __init__(self, master = None):
-        Tk.Frame.__init__(self,master)
-        self.pack()
-        self.create_frame()
-        self.create_widgets()
+            self.b_cancel = Tk.Button(self)
+            self.b_cancel["text"] = "Cancel"
+            self.b_cancel["command"] = self.quit
     
-    #def __init__(self, master): #The master is the main instance of Tkinter that is called
+class MyDialog:
+    
+    def __init__(self,parent, msg, dict_key=None):
         
-      #  frame = Tk.Frame(master)
-     #   frame.pack()
-    #    pixel_scale = 500
-   #     pixel_width = pixel_scale
-  #      pixel_height = pixel_scale
- #       w = Tk.Canvas(master, width = pwidth, height = pheight)
-#        w.pack()
+        top = self.top = Tk.Toplevel(parent)
         
+        #this may need to be moved, because I don't care about a second dialog box showing up
+        
+        
+        #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
+        #if false, then the dictionary will be accessed and a neew dialog box will not be created.
+        caller_wants_an-entry = dict_key is not None
+        if caller_wants_an_entry:
+            w1 = Tk.Label(top, text = "Height:")    
+            w2 = Tk.Label(top, text = "Width:")
+            w1.grid(row = 0)
+            w2.grid(row = 1)
+        
+            self.e1 = Tk.Entry(top)
+            self.e2 = Tk.Entry(top)
+            self.e1.grid(row = 0, column = 1)
+            self.e2.grid(row = 1, column = 1)
+        
+        
+            b_submit = Tk.Button(top, text = "OK", command = self.ok)
+            b_submit.grid(columnspan = 2)            
+    
+    def entry_to_dict(self, dict_key):
+        data = (self.e1.get(), self.e2.get())
+        if data:
+            d, key = dict_key
+            d[key] = data
+            self.top.destroy()
+            
 #'''
 root = Tk.Tk()
 gui = Application(master = root)
