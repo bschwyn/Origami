@@ -431,8 +431,8 @@ class Application(Tk.Frame):
         Tk.Frame.__init__(self,master)
         self.pack()
         self.create_frame()
-        self.create_widgets()
-
+        self.basic_widgets()
+'''
 class MyDialog2:
     
         #caller_wants_an-entry = dict_key is not None
@@ -460,7 +460,7 @@ class MyDialog2:
             self.b_cancel = Tk.Button(self)
             self.b_cancel["text"] = "Cancel"
             self.b_cancel["command"] = self.quit
-    
+'''    
 class MyDialog:
     
     def __init__(self,parent, msg, dict_key=None):
@@ -472,7 +472,7 @@ class MyDialog:
         
         #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
         #if false, then the dictionary will be accessed and a neew dialog box will not be created.
-        caller_wants_an-entry = dict_key is not None
+        caller_wants_an_entry = dict_key is not None
         if caller_wants_an_entry:
             w1 = Tk.Label(top, text = "Height:")    
             w2 = Tk.Label(top, text = "Width:")
