@@ -433,10 +433,10 @@ class Mbox(object):
         self.top = Tk.Toplevel(Mbox.root)
 
         frm = Tk.Frame(self.top)
-        frm.pack(fill='both', expand=True)
+        frm.grid()
 
         label = Tk.Label(frm, text=msg)
-        label.pack(padx=4, pady=4)
+        label.grid()
 
         caller_wants_an_entry = dict_key is not None
 
@@ -448,10 +448,10 @@ class Mbox(object):
             b_submit['command'] = lambda: self.entry_to_dict(dict_key)
             #b_submit.pack()
             
-            l_height = Tk.Label(frm)
-            l_height["text"] = "Height:"
-            l_width = Tk.Label(frm)
-            l_width["text"] = "Width:"
+            self.l_height = Tk.Label(frm)
+            self.l_height["text"] = "Height:"
+            self.l_width = Tk.Label(frm)
+            self.l_width["text"] = "Width:"
             
             self.l_height.grid(row = 0)
             self.l_width.grid(row = 1)
@@ -460,6 +460,13 @@ class Mbox(object):
             self.e_width = Tk.Entry(frm)
             self.e_height.grid(row = 0, column = 1)
             self.e_width.grid(row = 1, column = 1)
+            
+            self.entry = Tk.Entry(frm)
+            self.entry.grid()
+
+            b_submit = Tk.Button(frm, text='Submit')
+            b_submit['command'] = lambda: self.entry_to_dict(dict_key)
+            b_submit.grid()
                 
         b_cancel = Tk.Button(frm, text='Cancel')
         b_cancel['command'] = self.top.destroy
