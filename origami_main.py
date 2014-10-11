@@ -352,21 +352,62 @@ class Application(Tk.Frame):
         
         #image = cool_image_from_file
         #image.place location
-        
+    
+    #creates the basic widgets for starting a new model, quit    
     def create_widgets(self):
+        #quits the program
         self.QUIT = Tk.Button(self)
         self.QUIT["text"] = "QUIT"
         self.QUIT["fg"] = "red"
         self.QUIT["command"] = self.quit
-        
-        self.QUIT.pack({"side": "left"})
-        
+  
+        self.QUIT.pack()
+        #test: says hello
         self.hi_there = Tk.Button(self)
         self.hi_there["text"] = "Hello",
         self.hi_there["command"] = self.say_hi
+  
+        self.hi_there.pack()
+        #opens a box for putting in new model information
+        self.create_new = Tk.Button(self)
+        self.create_new["text"] = "New Model"
+        self.create_new["command"] = self.new_dialog_box
         
-        self.hi_there.pack({"side": "left"})
-    
+        self.create_new.pack()
+        
+    def create_model_widgets(self)    
+        self.new_node_l = Tk.Label(self)
+        self.new_node_l['text'] = 'new node information'
+        
+        self.node_entry = Tk.Entry(self)
+        self.node_entry["command"]
+        
+        self.node_button = Tk.Button(self)
+        self.node_button["text"] = 'enter new info'
+        
+    def new_dialog_box(self):
+        caller_wants_an-entry = dict_key is not None
+        if caller_wants_an_entry:
+            self.l_height = Tk.Label(self)
+            self.l_height["text"] = "Height:"
+            self.l_width = Tk.Label(self)
+            self.l_width["text"] = "Width:"
+            
+            self.l_height.grid(row = 0)
+            self.l_width.grid(row = 1)
+                    
+            self.e_height = Tk.Entry(self)
+            self.e_width = Tk.Entry(self)
+            self.e_height.grid(row = 0, column = 1)
+            self.e_width.grid(row = 1, column = 1)
+        
+        
+            self.b_submit = Tk.Button(self)
+            self.b_submit["text] = "OK"
+            self.b_submit["command"] = self.ok
+            self.b_submit.grid(columnspan = 2)            
+      
+            
     def __init__(self, master = None):
         Tk.Frame.__init__(self,master)
         self.pack()
@@ -481,7 +522,7 @@ class TestOrigami(unittest.TestCase):
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
   
-run_example = False:            
+run_example = False            
 if run_example:
     
     emu = Model(1.0,1.0)
