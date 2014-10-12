@@ -386,6 +386,18 @@ class Application(Tk.Frame):
         
         #create new instance of my_dialog class
         
+        
+        ##create button that calls hw submission box
+        #pass it the current instance of this class (self)
+        #within that class, have entry fields and a submission button for submitting height and width
+        #upon submission, call a function which modifies the dimensions variable of this top class
+        
+        self.b_new = Tk.Button(root)
+        self.b_new['text'] = 'New Model'
+        self.b_new['command'] = lambda: DimSubmissionBox(root,self)
+        self.b_new.pack()
+        
+        """
         #Mbox = MyDialog
         Mbox.root = root
 
@@ -397,13 +409,13 @@ class Application(Tk.Frame):
         
         self.b_get_new_data = Tk.Button(root)
         self.b_get_new_data['text'] = 'Get height/width'
-        self.b_get_new_data['command'] = lambda: self.do_stuff(Mbox)
+        self.b_get_new_data['command'] = lambda: self.do_stuff()
         self.b_get_new_data.pack()
 
         self.b_loggedin = Tk.Button(root, text='Current User')
         self.b_loggedin['command'] = lambda: Mbox(D['user'])
         self.b_loggedin.pack()
-        
+        """
     def do_stuff(self,dialog):
         print dialog.get_value()
         
@@ -412,7 +424,7 @@ class Application(Tk.Frame):
         #return dictionary_for_new_model_information
         
     def model_widgets(self):
-        self.new_node_l = Tk.Label(self)
+        self.new_node_l = Tk.Label(root, self)
         self.new_node_l['text'] = 'new node information'
         
         self.node_entry = Tk.Entry(self)
@@ -428,16 +440,28 @@ class Application(Tk.Frame):
         self.basic_widgets()
         
         
+        #after height and width data are returned in a touple from the dialog box
+        #save the data to this class.
+        
+        #make a square
+        #input (h,w) touple
+        #use the draw function to draw a rectangle
+        #size should depend on the frame size
+        
+        #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
+                
+"""        
+        
 class Mbox(object):
 
     root = None
 
     def __init__(self, msg, dict_key=None):
-        """
-        msg = <str> the message to be displayed
-        dict_key = <sequence> (dictionary, key) to associate with user input
-        (providing a sequence for dict_key creates an entry for user input)
-        """
+        
+        #msg = <str> the message to be displayed
+        #dict_key = <sequence> (dictionary, key) to associate with user input
+        #(providing a sequence for dict_key creates an entry for user input)
+        
         
         #create top level box
         self.top = Tk.Toplevel(Mbox.root)
@@ -485,70 +509,47 @@ class Mbox(object):
             
     def get_value(self):
         return self.dict_value
-
-class MyDialog:
+"""
+class DimSubmissionBox:
     
-    def __init__(self,parent, msg, dict_key=None):
+    def __init__(self,parent, application):
         
         top = self.top = Tk.Toplevel(parent)        
         #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
         #if false, then the dictionary will be accessed and a neew dialog box will not be created.
         
-        self.top = Tk.Toplevel(Mbox.root)
-
-        frm = Tk.Frame(self.top, borderwidth=4, relief='ridge')
-        frm.pack(fill='both', expand=True)
-
-        label = Tk.Label(frm, text=msg)
-        label.pack(padx=4, pady=4)
-     
-        caller_wants_an_entry = dict_key is not None
-
-        if caller_wants_an_entry:
+        frm = Tk.Frame(self.top)
+        frm.grid()
+        
+        self.l_height = Tk.Label(frm)
+        self.l_height["text"] = "Height:"
+        self.l_width = Tk.Label(frm)
+        self.l_width["text"] = "Width:"
             
-            l_height = Tk.Label(frm)
-            l_height["text"] = "Height:"
-            l_width = Tk.Label(frm)
-            l_width["text"] = "Width:"
-            
-            self.l_height.grid(row = 0)
-            self.l_width.grid(row = 1)
+        self.l_height.grid(row = 0)
+        self.l_width.grid(row = 1)
                     
-            self.e_height = Tk.Entry(frm)
-            self.e_width = Tk.Entry(frm)
-            self.e_height.grid(row = 0, column = 1)
-            self.e_width.grid(row = 1, column = 1)
+        self.e_height = Tk.Entry(frm)
+        self.e_width = Tk.Entry(frm)
+        self.e_height.grid(row = 0, column = 1)
+        self.e_width.grid(row = 1, column = 1)
         
-        
-            self.b_submit = Tk.Button(frm)
-            self.b_submit["text"] = "OK"
-            self.b_submit["command"] = self.ok
-            self.b_submit.grid(columnspan = 2)
-            
-            ####
-            self.entry = tki.Entry(frm)
-            self.entry.pack(pady=4)
+        self.b_submit = Tk.Button(frm)
+        self.b_submit["text"] = "Submit"
+        self.b_submit["command"] = self.submit_data
+        self.b_submit.grid(columnspan = 2)
 
-            b_submit = tki.Button(frm, text='Submit')
-            b_submit['command'] = lambda: self.entry_to_dict(dict_key)
-            b_submit.pack()
-            #####
             
         self.b_cancel = Tk.Button(self)
         self.b_cancel["text"] = "Cancel"
         self.b_cancel["command"] = self.top.destroy
-        self.b_cancel.pack()
-                
-    
-    def entry_to_dict(self, dict_key):
-        data = (self.e1.get(), self.e2.get())
-        if data:
-            d, key = dict_key
-            d[key] = data
-            self.top.destroy()
-            
-    def get_dict(self):
-        pass
+                        
+    def submit_data(self,application):
+        height_data = self.e_height.get()
+        width_data = self.e_width.get()
+        data = (height_data, width_data)
+        application.data = data
+        self.top.destroy
         
             
 #'''
