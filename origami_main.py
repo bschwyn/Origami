@@ -432,7 +432,7 @@ class Application(Tk.Frame):
         
         #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
 
-class DimSubmissionBox:
+class DimSubmissionBox(object):
     
     def __init__(self,parent, application):
         
@@ -458,20 +458,22 @@ class DimSubmissionBox:
         
         self.b_submit = Tk.Button(frm)
         self.b_submit["text"] = "Submit"
-        self.b_submit["command"] = self.submit_data
-        self.b_submit.grid(columnspan = 2)
+        self.b_submit["command"] = lambda: self.submit_data(application)
+        self.b_submit.grid(row =2, columnspan = 2)
 
             
-        self.b_cancel = Tk.Button(self)
+        self.b_cancel = Tk.Button(frm)
         self.b_cancel["text"] = "Cancel"
         self.b_cancel["command"] = self.top.destroy
+        self.b_cancel.grid(row = 3,columnspan = 2)
                         
     def submit_data(self,application):
         height_data = self.e_height.get()
         width_data = self.e_width.get()
         data = (height_data, width_data)
-        application.data = data
-        self.top.destroy
+        if data:
+            application.data = data
+            self.top.destroy()
         
             
 #'''
