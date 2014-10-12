@@ -397,25 +397,7 @@ class Application(Tk.Frame):
         self.b_new['command'] = lambda: DimSubmissionBox(root,self)
         self.b_new.pack()
         
-        """
-        #Mbox = MyDialog
-        Mbox.root = root
 
-        D = {'user':'Bob'}
-        #create some buttons 
-        self.b_new = Tk.Button(root, text='New Model')
-        self.b_new['command'] = lambda: Mbox('Name?', (D, 'user'))
-        self.b_new.pack()
-        
-        self.b_get_new_data = Tk.Button(root)
-        self.b_get_new_data['text'] = 'Get height/width'
-        self.b_get_new_data['command'] = lambda: self.do_stuff()
-        self.b_get_new_data.pack()
-
-        self.b_loggedin = Tk.Button(root, text='Current User')
-        self.b_loggedin['command'] = lambda: Mbox(D['user'])
-        self.b_loggedin.pack()
-        """
     def do_stuff(self,dialog):
         print dialog.get_value()
         
@@ -449,67 +431,7 @@ class Application(Tk.Frame):
         #size should depend on the frame size
         
         #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
-                
-"""        
-        
-class Mbox(object):
 
-    root = None
-
-    def __init__(self, msg, dict_key=None):
-        
-        #msg = <str> the message to be displayed
-        #dict_key = <sequence> (dictionary, key) to associate with user input
-        #(providing a sequence for dict_key creates an entry for user input)
-        
-        
-        #create top level box
-        self.top = Tk.Toplevel(Mbox.root)
-
-        frm = Tk.Frame(self.top)
-        frm.grid()
-
-        
-        caller_wants_an_entry = dict_key is not None
-
-        if caller_wants_an_entry:
-            
-            #height and width entry fieds
-            self.l_height = Tk.Label(frm)
-            self.l_height["text"] = "Height:"
-            self.l_width = Tk.Label(frm)
-            self.l_width["text"] = "Width:"
-            
-            self.l_height.grid(row = 0)
-            self.l_width.grid(row = 1)
-                    
-            self.e_height = Tk.Entry(frm)
-            self.e_width = Tk.Entry(frm)
-            self.e_height.grid(row = 0, column = 1)
-            self.e_width.grid(row = 1, column = 1)
-
-            b_submit = Tk.Button(frm, text='Submit')
-            b_submit['command'] = lambda: self.entry_to_dict(dict_key)
-            b_submit.grid()
-                
-        b_cancel = Tk.Button(frm, text='Cancel')
-        b_cancel['command'] = self.top.destroy
-        b_cancel.grid()
-
-    def entry_to_dict(self, dict_key):
-        height_data = self.e_height.get()
-        width_data = self.e_width.get()
-        data = (height_data, width_data)
-        #can only destroy top level w/ a submit if both fields have data
-        if data:
-            d, key = dict_key
-            d[key] = data
-            self.dict_value = data
-            self.top.destroy()
-            
-    def get_value(self):
-        return self.dict_value
-"""
 class DimSubmissionBox:
     
     def __init__(self,parent, application):
@@ -796,69 +718,6 @@ def edge_opimization(graph):
         graph[node]['y'] <= height ##############
     sigma * scale
 '''
-"""
-class Gui:
-    
-    def __init__(self, master): #The master is the main instance of Tkinter that is called
-        
-        frame = Tk.Frame(master)
-        frame.pack()
-        pixel_scale = 500
-        pixel_width = pixel_scale
-        pixel_height = pixel_scale
-        w = Tk.Canvas(master, width = pwidth, height = pheight)
-        w.pack()
-        
-        #image = cool_image_from_file
-        #image.place location
-        
-        #at the bottom of the image
-        #create new
-        #self.button = Tk.Button(frame, text = "new model", command= lambda: MyDialog(master, access_value, dict_key))
-        
-        #dimensions = ????
-        #draw rectangle/square
-        #give rectangle a label
-        
-        #
-        
-        #w.create_line(0,0,200,100)
-        #w.create_line(0,100,200,0, fill = "red", dash = (4,4))
-        
-        #w.create_rectangle(50,50,450,450, fill = "white")
-        #w.create_oval(100,100,200,200)
-        
-        self.button = Tk.Button(frame, text = 'QUIT', fg = "red", command = frame.quit)
-        self.button.pack(side=Tk.LEFT)
-        
-        self.hi_there = Tk.Button(frame,text = "Hello", command = self.say_hi)
-        self.hi_there.pack(side=Tk.LEFT)
-        
-    def draw_new_node(self,source,x,y,length,strain):
-        #w.create_oval(
-    
-    def draw_square(self,pixel_scale,width,height):
-        p_scale = 400
-        square_width = p_scale*width
-        square_height = p_scale*height
-        
-        p_gap = 50
-        
-        w.create_rectangle(p_gap, p_gap, square_height)
-        
-    def create_model(self):
-        inputDialog = MyDialog(master)
-        master.wait_window(inputDialog.top)
-        return {'dimensions', inputDialog.dimension}
-    
-    def add_node(self,x,y,length,strain,source_node):
-        w.create_oval(x-length,y-length,x+length,y+length)
-        
-    def scale_optimization():
-        pass    
-    
-    def say_hi(self):
-        print "hi there, everyone!"
-"""          
+     
         
 
