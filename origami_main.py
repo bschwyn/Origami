@@ -375,19 +375,7 @@ class Application(Tk.Frame):
         #opens a box for putting in new model information
     def new_model_button(self):
     
-    
-        #self.create_new = Tk.Button(self)
-        #self.create_new["text"] = "New Model"
-        #self.create_new["command"] = self.new_dialog_box ####edit this
-        #self.create_new.pack()
-        #dictionary_for_new_model_information
-        
-        #instead of calling a third function with new_dialog_box, let's try just doing what it is supposed to be doing right here.
-        
-        #create new instance of my_dialog class
-        
-        
-        ##create button that calls hw submission box
+        ##create button that calls submission box
         #pass it the current instance of this class (self)
         #within that class, have entry fields and a submission button for submitting height and width
         #upon submission, call a function which modifies the dimensions variable of this top class
