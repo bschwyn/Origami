@@ -345,10 +345,10 @@ class Application(Tk.Frame):
     
     def create_frame(self):
         pixel_scale = 500
-        pixel_width = pixel_scale
-        pixel_height = pixel_scale
-        w = Tk.Canvas(self, width = pixel_width, height = pixel_height)
-        w.pack()
+        self.frame_width = pixel_scale
+        self.frame_height = pixel_scale
+        self.frame = Tk.Canvas(self, width = self.frame_width, height = self.frame_height)
+        self.frame.pack()
         
         #image = cool_image_from_file
         #image.place location
@@ -397,13 +397,23 @@ class Application(Tk.Frame):
         self.b_new['command'] = lambda: DimSubmissionBox(root,self)
         self.b_new.pack()
         
-
-    def do_stuff(self,dialog):
-        print dialog.get_value()
+    def draw_rectangle(self):
+        frame_width = self.frame_width
+        frame_height = self.frame_height
+        paper_height = self.dimensions[0]
+        paper_width = self.dimensions[1]
         
-      
+        paper 
         
-        #return dictionary_for_new_model_information
+        
+        #input dimensions
+        #find the largest value width or height
+        
+        #if height is largest, then scale based on this
+            #base paper height off of frame height
+            #calculate paper width off of paper height
+        #if width is largest, then scale paper off of this
+            #do the same as height
         
     def model_widgets(self):
         self.new_node_l = Tk.Label(root, self)
@@ -472,7 +482,7 @@ class DimSubmissionBox(object):
         width_data = self.e_width.get()
         data = (height_data, width_data)
         if data:
-            application.data = data
+            application.dimensions = data
             self.top.destroy()
         
             
