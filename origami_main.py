@@ -378,6 +378,11 @@ class Application(Tk.Frame):
         
         self.hi_there.pack()
         
+        self.bv2 = Tk.Button(root)
+        self.bv2['text'] = "New Model"
+        self.bv2['command'] = self.create_submission_box
+        self.bv2.pack()
+        
         self.new_model_data = self.new_model_button()
         #print self.get_dimensions()
        
@@ -386,16 +391,6 @@ class Application(Tk.Frame):
         
         #opens a box for putting in new model information
     def new_model_button(self):
-    
-        ##create button that calls submission box
-        #pass it the current instance of this class (self)
-        #within that class, have entry fields and a submission button for submitting height and width
-        #upon submission, call a function which modifies the dimensions variable of this top class
-        
-        #self.b_new = Tk.Button(root)
-        #self.b_new['text'] = 'New Model'
-        #self.b_new['command'] = lambda: DimSubmissionBox(root)
-        #self.b_new.pack()
         
         self.bv2 = Tk.Button(root)
         self.bv2['text'] = "New Model"
