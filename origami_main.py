@@ -370,7 +370,7 @@ class Application(Tk.Frame):
         self.hi_there.pack()
         
         self.new_model_data = self.new_model_button()
-        
+        self.draw_paper()
         
         #opens a box for putting in new model information
     def new_model_button(self):
@@ -380,18 +380,20 @@ class Application(Tk.Frame):
         #within that class, have entry fields and a submission button for submitting height and width
         #upon submission, call a function which modifies the dimensions variable of this top class
         
+        
         self.b_new = Tk.Button(root)
         self.b_new['text'] = 'New Model'
         self.b_new['command'] = lambda: DimSubmissionBox(root,self)
         self.b_new.pack()
         
-    def draw_rectangle(self):
+    def draw_paper(self):
+        border = self.frame_width/10
         frame_width = self.frame_width
         frame_height = self.frame_height
-        paper_height = self.dimensions[0]
-        paper_width = self.dimensions[1]
-        
-        paper 
+        paper_height = self.getDimensions[0]
+        paper_width = self.getDimensions[1]
+        #
+        #self.frame.create_rectangle(border,border,frame_width - border, frame_height - border, fill = "white")
         
         
         #input dimensions
@@ -416,10 +418,14 @@ class Application(Tk.Frame):
     def __init__(self, master = None):
         Tk.Frame.__init__(self,master)
         self.pack()
+        
+        self.dimensions = None
+
         self.create_frame()
         self.basic_widgets()
         
-        
+    def getDimensions(self):
+        return self.dimensions
         #after height and width data are returned in a touple from the dialog box
         #save the data to this class.
         
