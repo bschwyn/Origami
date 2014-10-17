@@ -341,7 +341,7 @@ import Tkinter as Tk
 
 class Application(Tk.Frame):
     
-    
+#initialze frame    
     def __init__(self, master = None):
         Tk.Frame.__init__(self,master)
         self.pack()
@@ -391,6 +391,10 @@ class Application(Tk.Frame):
         self.dimensions = inputDialog.dimensions
         print self.dimensions
         self.draw_paper()
+       # self.node_box()
+        
+    #after the submission there are other things that need to be done
+    #input boxes for adding new data to the gui
         
     #draws a square representing the paper
     def draw_paper(self):
@@ -400,14 +404,42 @@ class Application(Tk.Frame):
         paper_height = self.get_dimensions()[0]
         paper_width = self.get_dimensions()[1]
         
-        print type(paper_height)
-        print paper_height
         
-        
+        #this math is totally wrong and I should do it for real tomorrwo
         if paper_height > paper_width:
             self.frame.create_rectangle(border,border,(frame_width - border)*int(paper_width)/int(paper_height), frame_height - border, fill = "white")
         else:
-            self.frame.create_rectangle(border, border, frame_width - border, frame_width - border, fill = "white")
+            self.frame.create_rectangle(border, border, frame_width - border, (frame_width - border)*int(paper_height)/int(paper_width), fill = "white")
+        
+    def add_node_box(self):
+        nodebox = Nodebox(root,self)
+        self.wait_window(inputDialog.top)
+        self.dimensions = inputDialog.dimensions
+        
+        
+        self.l_source_node = Tk.Label(self)
+        self.l_source_node["text"] = "Source Node"
+        
+        self.l_xy = Tk.Label(self)
+        self.l_xy["text"] = "Coordinates (format = 'x,y')"
+        
+        self.e_source_node = Tk.Entry(self)
+        
+        self.e_coordinates = Tk.Entry(self)
+        
+        
+        #submits data
+        self.b_submit = Tk.Button(dialog)
+        self.b_submit["text"] = "Submit"
+        self.b_submit["command"] = lambda: self.submit_data()
+        self.b_submit.grid(row =2, columnspan = 2)
+
+        #cancel button    
+        self.b_cancel = Tk.Button(dialog)
+        self.b_cancel["text"] = "Cancel"
+        self.b_cancel["command"] = self.top.destroy
+        self.b_cancel.grid(row = 3,columnspan = 2)
+        
         
         
         #input dimensions
@@ -434,6 +466,23 @@ class Application(Tk.Frame):
     
     def say_hi(self):
         print "hello!"
+        
+class ObjectInformationBox(object):
+    
+    def __init__(self, parent):
+        top = self.top = Tk.Toplevel(parent)
+        #self.app = application
+        dialog = Tk.Frame(self.top)
+        dialog.grid()
+        
+
+    def submit_data(self):
+        height_data = self.e_height.get()
+        width_data = self.e_width.get()
+        data = (height_data, width_data)
+        if data:
+            self.dimensions = data
+            self.top.destroy()
         
 class DimSubmissionBox(object):
     
@@ -480,13 +529,7 @@ class DimSubmissionBox(object):
             self.dimensions = data
             self.top.destroy()
             
-#'''
-root = Tk.Tk()
-gui = Application(master = root)
 
-root.mainloop()
-root.destroy()    
-#'''        
 
 # ***///***/// TESTING ***///***///***        
         
@@ -601,6 +644,15 @@ if run_emu_example:
     print big_thing
     print big_thing.message
 
+
+#'''
+rungui=True
+if rungui:
+    root = Tk.Tk()
+    gui = Application(master = root)
+    root.mainloop()
+    root.destroy()    
+#'''        
 
 #there are 4 posible sets of coordinates that are correct
 #(x = .7321, y = 0, x = 0, y = .7321, x = 1, y = 1, scale = .5176)
