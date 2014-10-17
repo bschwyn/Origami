@@ -386,10 +386,9 @@ class Application(Tk.Frame):
         
     #create a dialog box, wait until the box is closed before acessing it's properties
     def submission_box(self):
-        inputDialog = DimSubmissionBox(root,self)
+        inputDialog = DimSubmissionBox(root)
         self.wait_window(inputDialog.top)
         self.dimensions = inputDialog.dimensions
-        print self.dimensions
         self.draw_paper()
        # self.node_box()
         
@@ -486,10 +485,10 @@ class ObjectInformationBox(object):
         
 class DimSubmissionBox(object):
     
-    def __init__(self,parent,application):
+    def __init__(self,parent):
         
         top = self.top = Tk.Toplevel(parent)
-        self.app = application
+
         
         dialog = Tk.Frame(self.top)
         dialog.grid()
