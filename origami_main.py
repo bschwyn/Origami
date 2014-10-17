@@ -390,7 +390,7 @@ class Application(Tk.Frame):
         self.wait_window(inputDialog.top)
         self.dimensions = inputDialog.dimensions
         self.draw_paper()
-       # self.node_box()
+        self.add_node_box()
         
     #after the submission there are other things that need to be done
     #input boxes for adding new data to the gui
@@ -402,53 +402,20 @@ class Application(Tk.Frame):
         frame_height = self.frame_height
         paper_height = self.get_dimensions()[0]
         paper_width = self.get_dimensions()[1]
+       
         
-        
-        #this math is totally wrong and I should do it for real tomorrwo
         if paper_height > paper_width:
-            self.frame.create_rectangle(border,border,(frame_width - border)*int(paper_width)/int(paper_height), frame_height - border, fill = "white")
+            self.frame.create_rectangle(border,border,(frame_width - border)*float(paper_width)/float(paper_height), frame_height - border, fill = "white")
         else:
-            self.frame.create_rectangle(border, border, frame_width - border, (frame_width - border)*int(paper_height)/int(paper_width), fill = "white")
+            self.frame.create_rectangle(border, border, frame_width - border, (frame_width - border)*float(paper_height)/float(paper_width), fill = "white")
         
     def add_node_box(self):
-        nodebox = Nodebox(root,self)
-        self.wait_window(inputDialog.top)
-        self.dimensions = inputDialog.dimensions
         
+        nodebox = NodeBox(root)
+        self.wait_window(nodebox.top)
+        #self.wait_window(inputDialog.top)
+        #self.dimensions = inputDialog.dimensions
         
-        self.l_source_node = Tk.Label(self)
-        self.l_source_node["text"] = "Source Node"
-        
-        self.l_xy = Tk.Label(self)
-        self.l_xy["text"] = "Coordinates (format = 'x,y')"
-        
-        self.e_source_node = Tk.Entry(self)
-        
-        self.e_coordinates = Tk.Entry(self)
-        
-        
-        #submits data
-        self.b_submit = Tk.Button(dialog)
-        self.b_submit["text"] = "Submit"
-        self.b_submit["command"] = lambda: self.submit_data()
-        self.b_submit.grid(row =2, columnspan = 2)
-
-        #cancel button    
-        self.b_cancel = Tk.Button(dialog)
-        self.b_cancel["text"] = "Cancel"
-        self.b_cancel["command"] = self.top.destroy
-        self.b_cancel.grid(row = 3,columnspan = 2)
-        
-        
-        
-        #input dimensions
-        #find the largest value width or height
-        
-        #if height is largest, then scale based on this
-            #base paper height off of frame height
-            #calculate paper width off of paper height
-        #if width is largest, then scale paper off of this
-            #do the same as height
         
     def model_widgets(self):
         self.new_node_l = Tk.Label(root, self)
@@ -465,17 +432,54 @@ class Application(Tk.Frame):
     
     def say_hi(self):
         print "hello!"
-        
-class ObjectInformationBox(object):
+
+#Nodebox is an object which has all the information for nodes and edges. It has the capabilities to add nodes to the model, and keep track of all the information, and update that info.
+
+class NodeBox(object):
+
+    #the initial nodebox should have a frame and add-node
     
     def __init__(self, parent):
         top = self.top = Tk.Toplevel(parent)
-        #self.app = application
-        dialog = Tk.Frame(self.top)
-        dialog.grid()
+        info = Tk.Frame(self.top)
+        info.grid()
+        self.add_node(info)
+    
+    #provides interface for adding node information
+    def add_node(self,info):
+        self.l_source_node = Tk.Label(info)
+        self.l_source_node["text"] = "Source Node"
         
+        self.l_xy = Tk.Label(info)
+        self.l_xy["text"] = "Coordinates (format = 'x,y')"
+        
+        self.e_source_node = Tk.Entry(info)
+        self.e_xy = Tk.Entry(info)
+        
+        self.l_source_node.grid(row = 0,column = 0)
+        self.e_source_node.grid(row = 0, column = 1)
+        self.l_xy.grid(row = 1, column = 0)
+        self.e_xy.grid(row = 1, column = 1)
+        
+        self.b_addnode = Tk.Button(info)
+        self.b_addnode['text'] = "Add Node"
+        self.grid(row = 2, columnspan = 2)
 
-    def submit_data(self):
+    #this creates a block of information on a node
+    #the info block contiains
+    #name of node
+    #coordinates
+    #neighbors
+    #
+    def add_node_info(self,node):
+        #labels and shit
+        
+        pass
+    
+        
+    
+
+    def callback(self):
         height_data = self.e_height.get()
         width_data = self.e_width.get()
         data = (height_data, width_data)
