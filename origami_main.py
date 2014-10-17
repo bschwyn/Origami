@@ -349,8 +349,9 @@ class Application(Tk.Frame):
         self.dimensions = None
         self.create_frame()
         self.first_widgets()
-      
     
+    def get_dimensions(self):
+        return self.dimensions      
     #makes basic frame size
     def create_frame(self):
         pixel_scale = 500
@@ -380,43 +381,33 @@ class Application(Tk.Frame):
         
         self.bv2 = Tk.Button(root)
         self.bv2['text'] = "New Model"
-        self.bv2['command'] = self.create_submission_box
+        self.bv2['command'] = self.submission_box
         self.bv2.pack()
         
-        self.new_model_data = self.new_model_button()
-        #print self.get_dimensions()
-       
-        #print "adsfasdf"
-        
-        
-        #opens a box for putting in new model information
-    def new_model_button(self):
-        
-        self.bv2 = Tk.Button(root)
-        self.bv2['text'] = "New Model"
-        self.bv2['command'] = self.create_submission_box
-        self.bv2.pack()
-  
     #create a dialog box, wait until the box is closed before acessing it's properties
-    def create_submission_box(self):
+    def submission_box(self):
         inputDialog = DimSubmissionBox(root,self)
         self.wait_window(inputDialog.top)
         self.dimensions = inputDialog.dimensions
         print self.dimensions
+        self.draw_paper()
+        
+    #draws a square representing the paper
+    def draw_paper(self):
+        border = self.frame_width/10
+        frame_width = self.frame_width
+        frame_height = self.frame_height
+        paper_height = self.get_dimensions()[0]
+        paper_width = self.get_dimensions()[1]
+        
+        print type(paper_height)
+        print paper_height
         
         
-    #def draw_paper(self):
-        
-    
-        #border = self.frame_width/10
-        #frame_width = self.frame_width
-        #frame_height = self.frame_height
-        #paper_height = self.get_dimensions()
-        #print paper_height
-        #paper_height = self.getDimensions()[0]
-        #paper_width = self.getDimensions()[1]
-        #
-        #self.frame.create_rectangle(border,border,frame_width - border, frame_height - border, fill = "white")
+        if paper_height > paper_width:
+            self.frame.create_rectangle(border,border,(frame_width - border)*int(paper_width)/int(paper_height), frame_height - border, fill = "white")
+        else:
+            self.frame.create_rectangle(border, border, frame_width - border, frame_width - border, fill = "white")
         
         
         #input dimensions
@@ -437,16 +428,7 @@ class Application(Tk.Frame):
         
         self.node_button = Tk.Button(self)
         self.node_button["text"] = 'enter new info'     
-            
-    def get_dimensions(self):
-        return self.dimensions 
-       #after height and width data are returned in a touple from the dialog box
-        #save the data to this class.
-        
-        #make a square
-        #input (h,w) touple
-        #use the draw function to draw a rectangle
-        #size should depend on the frame size
+      
         
         #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
     
@@ -459,12 +441,11 @@ class DimSubmissionBox(object):
         
         top = self.top = Tk.Toplevel(parent)
         self.app = application
-        #If this statement is True, then myDialog will create a dialog box and you can put entries into it. The entries will be saved as properties of the MyDialog box object in the dict_key (i think)
-        #if false, then the dictionary will be accessed and a neew dialog box will not be created.
         
         dialog = Tk.Frame(self.top)
         dialog.grid()
         
+        #height and width labels
         self.l_height = Tk.Label(dialog)
         self.l_height["text"] = "Height:"
         self.l_width = Tk.Label(dialog)
@@ -472,18 +453,20 @@ class DimSubmissionBox(object):
             
         self.l_height.grid(row = 0)
         self.l_width.grid(row = 1)
-                    
+        
+        #height and width entry boxes
         self.e_height = Tk.Entry(dialog)
         self.e_width = Tk.Entry(dialog)
         self.e_height.grid(row = 0, column = 1)
         self.e_width.grid(row = 1, column = 1)
         
+        #submits data
         self.b_submit = Tk.Button(dialog)
         self.b_submit["text"] = "Submit"
         self.b_submit["command"] = lambda: self.submit_data()
         self.b_submit.grid(row =2, columnspan = 2)
 
-            
+        #cancel button    
         self.b_cancel = Tk.Button(dialog)
         self.b_cancel["text"] = "Cancel"
         self.b_cancel["command"] = self.top.destroy
@@ -495,17 +478,7 @@ class DimSubmissionBox(object):
         data = (height_data, width_data)
         if data:
             self.dimensions = data
-            self.draw_paper(self.app)
             self.top.destroy()
-        
-    def draw_paper(self,application):
-        application.frame.create_rectangle(25,25,50,50)
-        #app = self.application
-        #app.frame.create_rectangle(25,25,50,50)
-        #border = self.frame_width/10
-        #frame_width = self.frame_width
-        #frame_height = self.frame_height
-        #paper_height = self.get_dimensions()
             
 #'''
 root = Tk.Tk()
@@ -753,99 +726,4 @@ def edge_opimization(graph):
     sigma * scale
 '''
      
-        
-"""class Application(Tk.Frame):
-    
-    def create_frame(self):
-        pixel_scale = 500
-        self.frame_width = pixel_scale
-        self.frame_height = pixel_scale
-        self.frame = Tk.Canvas(self, width = self.frame_width, height = self.frame_height)
-        self.frame.pack()
-        
-        #image = cool_image_from_file
-        #image.place location
-    
-    #creates the basic widgets for starting a new model, quit    
-    def basic_widgets(self):
-        #quits the program
-        self.QUIT = Tk.Button(self)
-        self.QUIT["text"] = "QUIT"
-        self.QUIT["fg"] = "red"
-        self.QUIT["command"] = self.quit
-  
-        self.QUIT.pack()
-        #test: says hello
-        self.hi_there = Tk.Button(self)
-        self.hi_there["text"] = "Hello",
-        self.hi_there["command"] = self.say_hi
-        
-        self.hi_there.pack()
-        
-        self.new_model_data = self.new_model_button()
-        self.draw_paper()
-        
-        #opens a box for putting in new model information
-    def new_model_button(self):
-    
-        ##create button that calls submission box
-        #pass it the current instance of this class (self)
-        #within that class, have entry fields and a submission button for submitting height and width
-        #upon submission, call a function which modifies the dimensions variable of this top class
-        
-        
-        self.b_new = Tk.Button(root)
-        self.b_new['text'] = 'New Model'
-        self.b_new['command'] = lambda: DimSubmissionBox(root,self)
-        self.b_new.pack()
-        
-    def draw_paper(self):
-        border = self.frame_width/10
-        frame_width = self.frame_width
-        frame_height = self.frame_height
-        paper_height = self.getDimensions[0]
-        paper_width = self.getDimensions[1]
-        #
-        #self.frame.create_rectangle(border,border,frame_width - border, frame_height - border, fill = "white")
-        
-        
-        #input dimensions
-        #find the largest value width or height
-        
-        #if height is largest, then scale based on this
-            #base paper height off of frame height
-            #calculate paper width off of paper height
-        #if width is largest, then scale paper off of this
-            #do the same as height
-        
-    def model_widgets(self):
-        self.new_node_l = Tk.Label(root, self)
-        self.new_node_l['text'] = 'new node information'
-        
-        self.node_entry = Tk.Entry(self)
-        self.node_entry["command"]
-        
-        self.node_button = Tk.Button(self)
-        self.node_button["text"] = 'enter new info'     
-            
-    def __init__(self, master = None):
-        Tk.Frame.__init__(self,master)
-        self.pack()
-        
-        self.dimensions = None
-
-        self.create_frame()
-        self.basic_widgets()
-        
-    def getDimensions(self):
-        return self.dimensions
-        #after height and width data are returned in a touple from the dialog box
-        #save the data to this class.
-        
-        #make a square
-        #input (h,w) touple
-        #use the draw function to draw a rectangle
-        #size should depend on the frame size
-        
-        #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
-"""
+   
