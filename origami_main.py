@@ -393,7 +393,7 @@ class Application(Tk.Frame):
         dimensions = inputDialog.entered_dimensions
         self.initialize_model(dimensions)
         self.draw_paper(dimensions)
-        self.add_node_box()
+        self.node_dialog_box()
         
     #create origami model object
     def initialize_model(self,paper_size):
@@ -416,10 +416,9 @@ class Application(Tk.Frame):
         else:
             self.frame.create_rectangle(border, border, frame_width - border, (frame_width - border)*float(paper_height)/float(paper_width), fill = "white")
         
-    def add_node_box(self):
+    def node_dialog_box(self):
         
         nodebox = NodeBox(root,self)
-        self.model
         #self.wait_window(inputDialog.top)
         #self.dimensions = inputDialog.dimensions ###not ture anymore
         
@@ -448,28 +447,28 @@ class NodeBox(object):
     
     def __init__(self, parent, application):
         top = self.top = Tk.Toplevel(parent)
-        info = Tk.Frame(self.top)
-        info.grid()
-        self.add_node_stuff(info)
+        dialog = Tk.Frame(self.top)
+        dialog.grid()
+        self.add_node_widgets(dialog)
         self.app = application
     
     #provides interface for adding node information
-    def add_node_stuff(self,info):
-        self.l_source_node = Tk.Label(info)
+    def add_node_widgets(self,dialog):
+        self.l_source_node = Tk.Label(dialog)
         self.l_source_node["text"] = "Source Node"
         
-        self.l_xy = Tk.Label(info)
+        self.l_xy = Tk.Label(dialog)
         self.l_xy["text"] = "Coordinates (format = 'x,y')"
         
-        self.e_source_node = Tk.Entry(info)
-        self.e_xy = Tk.Entry(info)
+        self.e_source_node = Tk.Entry(dialog)
+        self.e_xy = Tk.Entry(dialog)
         
         self.l_source_node.grid(row = 0,column = 0)
         self.e_source_node.grid(row = 0, column = 1)
         self.l_xy.grid(row = 1, column = 0)
         self.e_xy.grid(row = 1, column = 1)
         
-        self.b_addnode = Tk.Button(info)
+        self.b_addnode = Tk.Button(dialog)
         self.b_addnode['text'] = "Add Node"
         self.b_addnode['command'] = lambda: self.add_node_info(self.app)
         self.b_addnode.grid(row = 2, columnspan = 2)
@@ -492,11 +491,6 @@ class NodeBox(object):
         self.node_data = (source_node, x_coordinate, y_coordinate)
         
         
-        #labels and shit
-        #add the node with the info to Model
-        
-        #create widgets that represent the info
-
         
     #takes input string of the coordinates, returns a touple
     def coordinate_parse(self):
