@@ -12,6 +12,8 @@ import math
 import matplotlib.pyplot as plt
 import unittest
 import itertools
+import Tkinter as Tk
+import re
 
 # useless?
 
@@ -336,7 +338,7 @@ class Model:
 
 
     
-import Tkinter as Tk
+#import Tkinter as Tk
 #from Tkinter import *
 
 class Application(Tk.Frame):
@@ -443,10 +445,10 @@ class NodeBox(object):
         top = self.top = Tk.Toplevel(parent)
         info = Tk.Frame(self.top)
         info.grid()
-        self.add_node(info)
+        self.add_node_stuff(info)
     
     #provides interface for adding node information
-    def add_node(self,info):
+    def add_node_stuff(self,info):
         self.l_source_node = Tk.Label(info)
         self.l_source_node["text"] = "Source Node"
         
@@ -463,7 +465,10 @@ class NodeBox(object):
         
         self.b_addnode = Tk.Button(info)
         self.b_addnode['text'] = "Add Node"
-        self.grid(row = 2, columnspan = 2)
+        self.b_addnode['command'] = self.add_node_info
+        self.b_addnode.grid(row = 2, columnspan = 2)
+        
+    #def 
 
     #this creates a block of information on a node
     #the info block contiains
@@ -471,21 +476,29 @@ class NodeBox(object):
     #coordinates
     #neighbors
     #
-    def add_node_info(self,node):
+    
+    
+    def add_node_info(self):
+        source_node = self.e_source_node.get()
+        x_coordinate = self.coordinate_parse()[0]
+        y_coordinate = self.coordinate_parse()[1]
+        
+        node_data = (source_node, x_coordinate, y_coordinate)
         #labels and shit
+        #add the node with the info to Model
+        
+        #create widgets that represent the info
         
         pass
-    
         
-    
-
-    def callback(self):
-        height_data = self.e_height.get()
-        width_data = self.e_width.get()
-        data = (height_data, width_data)
-        if data:
-            self.dimensions = data
-            self.top.destroy()
+    #takes input string of the coordinates, returns a touple
+    def coordinate_parse(self):
+        coord_string = self.e_xy.get()
+        int_or_float= re.compile("\d+\.?\d*")
+        xy = re.findall(int_or_float, coord_string)
+        x = float(xy[0])
+        y = float(xy[1])
+        return (x,y)
         
 class DimSubmissionBox(object):
     
