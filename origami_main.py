@@ -394,16 +394,20 @@ class Application(Tk.Frame):
         self.draw_paper()
         self.add_node_box()
         
-    #after the submission there are other things that need to be done
-    #input boxes for adding new data to the gui
+    #create origami model object
+    def initialize_model(self):
+    
+        width = self.get_dimensions()[0]
+        height = self.get_dimensions()[1]
+        self.model = Model(width, height)
         
     #draws a square representing the paper
     def draw_paper(self):
         border = self.frame_width/10
         frame_width = self.frame_width
         frame_height = self.frame_height
-        paper_height = self.get_dimensions()[0]
-        paper_width = self.get_dimensions()[1]
+        paper_height = self.get_dimensions()[1]
+        paper_width = self.get_dimensions()[0]
        
         
         if paper_height > paper_width:
@@ -413,7 +417,7 @@ class Application(Tk.Frame):
         
     def add_node_box(self):
         
-        nodebox = NodeBox(root)
+        nodebox = NodeBox(root,self)
         self.wait_window(nodebox.top)
         #self.wait_window(inputDialog.top)
         #self.dimensions = inputDialog.dimensions
@@ -441,11 +445,12 @@ class NodeBox(object):
 
     #the initial nodebox should have a frame and add-node
     
-    def __init__(self, parent):
+    def __init__(self, parent, application):
         top = self.top = Tk.Toplevel(parent)
         info = Tk.Frame(self.top)
         info.grid()
         self.add_node_stuff(info)
+        self.app = application
     
     #provides interface for adding node information
     def add_node_stuff(self,info):
@@ -465,7 +470,7 @@ class NodeBox(object):
         
         self.b_addnode = Tk.Button(info)
         self.b_addnode['text'] = "Add Node"
-        self.b_addnode['command'] = self.add_node_info
+        self.b_addnode['command'] = lambda: self.add_node_info(self.app)
         self.b_addnode.grid(row = 2, columnspan = 2)
         
     #def 
@@ -478,12 +483,13 @@ class NodeBox(object):
     #
     
     
-    def add_node_info(self):
+    def add_node_info(self, application):
         source_node = self.e_source_node.get()
         x_coordinate = self.coordinate_parse()[0]
         y_coordinate = self.coordinate_parse()[1]
         
         node_data = (source_node, x_coordinate, y_coordinate)
+        
         #labels and shit
         #add the node with the info to Model
         
@@ -496,6 +502,8 @@ class NodeBox(object):
         coord_string = self.e_xy.get()
         int_or_float= re.compile("\d+\.?\d*")
         xy = re.findall(int_or_float, coord_string)
+        if len(xy)!=2:
+            print "ERROR: coordinates must have x and y"
         x = float(xy[0])
         y = float(xy[1])
         return (x,y)
@@ -540,7 +548,7 @@ class DimSubmissionBox(object):
     def submit_data(self):
         height_data = self.e_height.get()
         width_data = self.e_width.get()
-        data = (height_data, width_data)
+        data = (width_data, height_data)
         if data:
             self.dimensions = data
             self.top.destroy()
