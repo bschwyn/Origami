@@ -390,24 +390,25 @@ class Application(Tk.Frame):
     def submission_box(self):
         inputDialog = DimSubmissionBox(root)
         self.wait_window(inputDialog.top)
-        self.dimensions = inputDialog.dimensions
-        self.draw_paper()
+        dimensions = inputDialog.entered_dimensions
+        self.initialize_model(dimensions)
+        self.draw_paper(dimensions)
         self.add_node_box()
         
     #create origami model object
-    def initialize_model(self):
+    def initialize_model(self,paper_size):
     
-        width = self.get_dimensions()[0]
-        height = self.get_dimensions()[1]
+        width = paper_size[0]
+        height = paper_size[1]
         self.model = Model(width, height)
         
     #draws a square representing the paper
-    def draw_paper(self):
+    def draw_paper(self,dimensions):
         border = self.frame_width/10
         frame_width = self.frame_width
         frame_height = self.frame_height
-        paper_height = self.get_dimensions()[1]
-        paper_width = self.get_dimensions()[0]
+        paper_height = dimensions[1]
+        paper_width = dimensions[0]
        
         
         if paper_height > paper_width:
@@ -418,9 +419,9 @@ class Application(Tk.Frame):
     def add_node_box(self):
         
         nodebox = NodeBox(root,self)
-        self.wait_window(nodebox.top)
+        self.model
         #self.wait_window(inputDialog.top)
-        #self.dimensions = inputDialog.dimensions
+        #self.dimensions = inputDialog.dimensions ###not ture anymore
         
         
     def model_widgets(self):
@@ -488,14 +489,14 @@ class NodeBox(object):
         x_coordinate = self.coordinate_parse()[0]
         y_coordinate = self.coordinate_parse()[1]
         
-        node_data = (source_node, x_coordinate, y_coordinate)
+        self.node_data = (source_node, x_coordinate, y_coordinate)
+        
         
         #labels and shit
         #add the node with the info to Model
         
         #create widgets that represent the info
-        
-        pass
+
         
     #takes input string of the coordinates, returns a touple
     def coordinate_parse(self):
@@ -550,7 +551,7 @@ class DimSubmissionBox(object):
         width_data = self.e_width.get()
         data = (width_data, height_data)
         if data:
-            self.dimensions = data
+            self.entered_dimensions = data
             self.top.destroy()
             
 
