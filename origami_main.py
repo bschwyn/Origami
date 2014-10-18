@@ -6,7 +6,7 @@
 
 # *** libraries***
 import networkx as nx
-import numpy as np
+#import numpy as np
 from scipy.optimize import minimize
 import math
 import matplotlib.pyplot as plt
@@ -65,7 +65,7 @@ class Model:
             self.G.add_edge(new_node,source_node,length = length, strain = strain)
             self.node_counter +=1            
         else:
-            print "error"
+            print "Error: source not found"
 
 #deletes a  node and any related edges from the graph structure
             
@@ -194,7 +194,7 @@ class Model:
         
 
 # {scale * Sum[(1+strain_k)*length_k] for edge in all leaf paths - euclidian distance between nodes <= 0 } for all leaf paths
-# creates a list of inequalities in the correct format for numpy.optimize.minimize
+# creates a list of inequalities in the correct format for scipy.optimize.minimize
     def _scale_construct_constraints(self):
         leaf_nodes = self.all_leaf_nodes()
         constraints = []
@@ -422,6 +422,9 @@ class Application(Tk.Frame):
         #self.wait_window(inputDialog.top)
         #self.dimensions = inputDialog.dimensions ###not ture anymore
         
+    def add_node_to_model(self,source,x,y,length=1.0,strain=1.0):
+        self.model.add_node_to(source,x,y,length,strain)  
+    
         
     def model_widgets(self):
         self.new_node_l = Tk.Label(root, self)
@@ -487,9 +490,7 @@ class NodeBox(object):
         source_node = self.e_source_node.get()
         x_coordinate = self.coordinate_parse()[0]
         y_coordinate = self.coordinate_parse()[1]
-        
-        self.node_data = (source_node, x_coordinate, y_coordinate)
-        
+        application.add_node_to_model(source_node,x_coordinate,y_coordinate)
         
         
     #takes input string of the coordinates, returns a touple
