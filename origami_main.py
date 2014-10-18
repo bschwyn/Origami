@@ -15,20 +15,6 @@ import itertools
 import Tkinter as Tk
 import re
 
-# useless?
-
-class Node:
-    def __init__(self,key,x,y):
-        self.id = key
-        self.x = x
-        self.y = y
-
-#unecessecary
-
-class Rectangle:
-   def __init__(self,width,height):
-        self.width = width
-        self.height = height
 
 #contains data structure for origami model, modifying its structure, properties of the medium (paper size) that affects the design
 
