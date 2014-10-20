@@ -19,9 +19,9 @@ class Application(Tk.Frame):
         return self.dimensions      
     #makes basic frame size
     def create_frame(self):
-        pixel_scale = 500
-        self.frame_width = pixel_scale
-        self.frame_height = pixel_scale
+        self.pixel_scale = 500
+        self.frame_width = self.pixel_scale
+        self.frame_height = self.pixel_scale
         self.frame = Tk.Canvas(self, width = self.frame_width, height = self.frame_height)
         self.frame.pack()
         
@@ -106,15 +106,16 @@ class Application(Tk.Frame):
         radius = .5 #some number
         bounds = 2**.5 * radius
         #bounding box = 1.414*radius
-        model = self.model
+        
         if source is None:
-            origin = self.frame.create_circle(x - bounds, y - bounds, x + bounds, x + bounds)
+            origin_circle = self.frame.create_oval(x - bounds, y - bounds, x + bounds, x + bounds)
+            
         else:
-            model
-            new_node = self.frame.create_circle(x-bounds, y-bounds, x + bounds, x + bounds)
-            source_x = model.getNodeAttributes(source,"x")
-            source_y = model.getNodeAttributes(source, "y")
-            new_line = self.frame.create_line(source_x,source_y, x ,y)
+            
+            new_node = self.frame.create_oval(x-bounds, y-bounds, x + bounds, x + bounds)
+            source_x = self.model.getNodeAttributes(source,"x")
+            source_y = self.model.getNodeAttributes(source, "y")
+            new_line = self.frame.create_line(source_x, source_y, x, y)
         
             #draw circle at coordinates w/ radius
         #else
