@@ -20,6 +20,20 @@ class Model:
         #self.nodes = {}
         #self.paths = {}
         #self.leaf_vertices
+    
+    #returns a list of nodes
+    def getNodes(self):
+        return self.G.nodes()
+        
+    #get node attribute (such as coordinates)
+    def getNodeAttribute(self,node,attribute):
+        return self.G[node][attribute]
+        
+    def getEdgeAttribute(self,node1,node2,attribute):
+        return self.G[node1][node2][attribute]
+        
+   #change edge attributes with the networkx change_attributes function
+   #change coordinates through the same change_coordinates function
 
 
 #addes a node to the graph structure representing the origami model
@@ -59,6 +73,12 @@ class Model:
 
 #*** helper functions ***
 
+
+    #determines whether node is a leaf node (1 edge only)
+    def is_leaf_node(self,node):
+        leaf_nodes = self.all_leaf_nodes()
+        return node in leaf_nodes
+
 # leaf nodes are nodes with only one edge         
     def all_leaf_nodes(self):
         leaf_nodes = []
@@ -67,13 +87,12 @@ class Model:
                 leaf_nodes.append(node)
         return leaf_nodes
     
-    def is_leaf_node(self,node):
-        leaf_nodes = self.all_leaf_nodes()
-        return node in leaf_nodes
-        
+     
+    #returns a list of the shortest paths
     def all_shortest_paths(self):
         return all_pairs_shortest_path(self.G)
 
+    #returns a list of all edges connected to a leaf vertext
     def all_leaf_edges(self):
         leaf_edges = []
         for node in self.G:
