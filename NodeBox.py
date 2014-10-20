@@ -64,26 +64,31 @@ class NodeBox(object):
     #pass the node information to the application where the model is stored
     def add_node_info(self, application):
     
-        source_string = self.e_source_node.get() #in string form
-        x_coordinate = self.coordinate_parse()[0]
-        y_coordinate = self.coordinate_parse()[1]
-        length = self.e_length.get()
-        strain = self.e_strain.get()
-        
-        
-        #checks to see if this is the first node (should change to check box)
-        if source_node is "":
-            source_node = None
-        
-        #converte source_node from string to int
+        if self.e_source_node.get() is "":
+            source = None
         else:
-            source_int = int(source_node)
+            source = int(self.e_source_node.get())
+            
+        x_coordinate = self.xy_entry_to_float()[0]
+        y_coordinate = self.xy_entry_to_float()[1]
+        
+        if self.e_length.get() is "":
+            length = None
+        else:
+            length = float(self.e_length.get())
+            
+        if self.e_strain.get() is "":
+            strain = None
+        else:
+            strain = float(self.e_strain.get())
+        
+        
         #user input errors possible
-        application.add_node_to_model(source_int, x_coordinate, y_coordinate, length, strain)
-        application.draw_node(source_int, x_coordinate, y_coordinate, length, strain)
+        application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
+        application.draw_node(source, x_coordinate, y_coordinate, length, strain)
         
     #takes input string of the coordinates, returns a touple
-    def coordinate_parse(self):
+    def xy_entry_to_float(self):
         coord_string = self.e_xy.get()
         int_or_float= re.compile("\d+\.?\d*") #really want \d+\.?\d* OR \d*\.?\d+ first covers (1 and 1.0), second covers (.2, 1.0). \d*\.\d* would cover all of these and individual periods, which seems reasonable, but may also caputre periods by themselves need to test.
         xy = re.findall(int_or_float, coord_string)
