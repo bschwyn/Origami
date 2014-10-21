@@ -27,7 +27,8 @@ class Model:
         
     #get node attribute (such as coordinates)
     def getNodeAttribute(self,node,attribute):
-        return self.G[node][attribute]
+        return self.G.node[node][attribute]
+        
         
     def getEdgeAttribute(self,node1,node2,attribute):
         return self.G[node1][node2][attribute]
