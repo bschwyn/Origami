@@ -15,14 +15,12 @@ class Application(Tk.Frame):
         self.create_frame()
         self.first_widgets()
     
-    def get_dimensions(self):
+    def getDimensions(self):
         return self.dimensions      
     #makes basic frame size
     def create_frame(self):
-        self.pixel_scale = 500
-        self.frame_width = self.pixel_scale
-        self.frame_height = self.pixel_scale
-        self.frame = Tk.Canvas(self, width = self.frame_width, height = self.frame_height)
+        self.pixel_width = 500
+        self.frame = Tk.Canvas(self, width = self.pixel_width, height = self.pixel_width)
         self.frame.pack()
         
         #image = cool_image_from_file
@@ -54,6 +52,7 @@ class Application(Tk.Frame):
         inputDialog = dbox.DimSubmissionBox(self) #not sure whether this should be self or root that goes to dbox as the parent
         self.wait_window(inputDialog.top)
         dimensions = inputDialog.entered_dimensions
+        self.dimension = dimensions
         self.initialize_model(dimensions)
         self.draw_paper(dimensions)
         self.node_dialog_box()
@@ -67,11 +66,12 @@ class Application(Tk.Frame):
         
     #draws a square representing the paper
     def draw_paper(self,dimensions):
-        border = self.frame_width/10
-        frame_width = self.frame_width
-        frame_height = self.frame_height
+        border = self.border = self.pixel_width/10
+        frame_width = self.pixel_width
+        frame_height = self.pixel_width
         paper_height = dimensions[1]
         paper_width = dimensions[0]
+        self.dimensions = dimensions
        
         
         if paper_height > paper_width:
@@ -103,25 +103,48 @@ class Application(Tk.Frame):
         self.node_button["text"] = 'enter new info'     
 
     def draw_node(self, source, x, y, length, strain):
-        radius = .5 #some number
-        bounds = 2**.5 * radius
+        paper_edge_length = self.pixel_width - 2 * self.border
+        radius = self.pixel_width/10 #some number
+        #bounds = 2**.5 * radius
         #bounding box = 1.414*radius
         
+        paper_width = self.getDimensions()[0]
+        paper_height = self.getDimensions()[1]
+        
+        scaled_width = paper_edge_length/float(paper_width)
+        scaled_height = paper_edge_length/float(paper_height)
+        
+        x_coord = x * scaled_width
+        y_coord = y * scaled_height
+        
+        x_corner_dist = self.border + x_coord
+        y_corner_dist = self.border + y_coord
+        
+        if x > paper_width or y > paper_height:
+            return "Error: coordinate not in bounds"
+        
+        
         if source is None:
-            origin_circle = self.frame.create_oval(x - bounds, y - bounds, x + bounds, x + bounds)
-            
+            #origin_circle = self.frame.create_oval(x - bounds, y - bounds, x + bounds, x + bounds)
+            b = self.border
+            self.frame.create_oval(x_corner_dist - radius ,y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
         else:
             
-            new_node = self.frame.create_oval(x-bounds, y-bounds, x + bounds, x + bounds)
-            source_x = self.model.getNodeAttributes(source,"x")
-            source_y = self.model.getNodeAttributes(source, "y")
-            new_line = self.frame.create_line(source_x, source_y, x, y)
+            new_node = self.frame.create_oval(x_corner_dist - radius, y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
+           
+            source_x = self.model.getNodeAttribute(source,"x")
+            source_y = self.model.getNodeAttribute(source, "y")
+            
+            x_s_corner_dist = self.border + source_x * scaled_width
+            y_s_corner_dist = self.border + source_y * scaled_height
+            
+            new_line = self.frame.create_line(x_s_corner_dist, y_s_corner_dist, x_corner_dist, y_corner_dist)
         
             #draw circle at coordinates w/ radius
         #else
         #draw circle at coordinates
         #draw line from coordinates of source_node to new coordinates
-        #remove circle at source node, replace with dot
+        #aremove circle at source node, replace with dot
         
         
         #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
