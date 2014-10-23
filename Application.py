@@ -61,7 +61,7 @@ class Application(Tk.Frame):
             
         elif self.model.scale_optimization_ready():
             print "calling scale optimization"
-            self.model.scale_optimization
+            self.model.scale_optimization()
         else:
             print "Error: model not ready for scale optimization yet"
             
