@@ -13,7 +13,7 @@ class Application(Tk.Frame):
         
         self.dimensions = None
         self.create_frame()
-        self.first_widgets()
+        self.widgets()
     
     def getDimensions(self):
         return self.dimensions      
@@ -27,14 +27,15 @@ class Application(Tk.Frame):
         #image.place location
     
     #creates the basic widgets for starting a new model, quit    
-    def first_widgets(self):
+    def widgets(self):
         #quits the program
-        self.QUIT = Tk.Button(self)
-        self.QUIT["text"] = "QUIT"
-        self.QUIT["fg"] = "red"
-        self.QUIT["command"] = self.quit
+        self.b_QUIT = Tk.Button(self)
+        self.b_QUIT["text"] = "QUIT"
+        self.b_QUIT["fg"] = "red"
+        self.b_QUIT["command"] = self.quit
   
-        self.QUIT.pack()
+        self.b_QUIT.pack()
+        
         #test: says hello
         self.hi_there = Tk.Button(self)
         self.hi_there["text"] = "Hello",
@@ -42,10 +43,18 @@ class Application(Tk.Frame):
         
         self.hi_there.pack()
         
-        self.bv2 = Tk.Button(self)
-        self.bv2['text'] = "New Model"
-        self.bv2['command'] = self.submission_box
-        self.bv2.pack()
+        self.b_newmodel = Tk.Button(self)
+        self.b_newmodel['text'] = "New Model"
+        self.b_newmodel['command'] = self.submission_box
+        self.b_newmodel.pack()
+    
+     if model.scale_optimize_ready():
+            self.b_optimize = Tk.Button(self)
+            self.b_optimize["text"] = "scale optimization"
+            self.b_optimize["command"] = self.model.scale_optimization
+            self.b_optimize.pack()
+        else:
+            print "Error: model not ready for scale optimization yet"
         
     #create a dialog box, wait until the box is closed before acessing it's properties
     def submission_box(self):
@@ -148,6 +157,9 @@ class Application(Tk.Frame):
         
         
         #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
-    
+    def optimize_button(self):
+       
+            
+            
     def say_hi(self):
         print "hello!"
