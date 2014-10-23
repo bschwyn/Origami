@@ -3,6 +3,7 @@ from scipy.optimize import minimize
 import math
 import matplotlib.pyplot as plt
 import itertools
+import numpy as np
 
 
 class Model:
@@ -238,7 +239,9 @@ class Model:
         bnds = self._scale_construct_bounds()
         cons = self._scale_construct_constraints()
         
-        return minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
+        optimize = minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
+        print optimize
+        return optimize
     
 # ***functions for edge optimization***
 # http://www.langorigami.com/books/ODS1e_Algorithms.pdf

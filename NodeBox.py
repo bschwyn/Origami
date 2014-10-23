@@ -86,6 +86,7 @@ class NodeBox(object):
         #user input errors possible
         application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
         application.draw_node(source, x_coordinate, y_coordinate, length, strain)
+
         
     #takes input string of the coordinates, returns a touple
     def xy_entry_to_float(self):
