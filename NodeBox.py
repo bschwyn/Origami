@@ -73,12 +73,12 @@ class NodeBox(object):
         y_coordinate = self.xy_entry_to_float()[1]
         
         if self.e_length.get() is "":
-            length = None
+            length = 1.0
         else:
             length = float(self.e_length.get())
             
         if self.e_strain.get() is "":
-            strain = None
+            strain = 0.0
         else:
             strain = float(self.e_strain.get())
         
