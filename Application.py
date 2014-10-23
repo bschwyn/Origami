@@ -121,7 +121,11 @@ class Application(Tk.Frame):
         self.node_button = Tk.Button(self)
         self.node_button["text"] = 'enter new info'     
 
+
+#makes a visual representation of the node and it's connections
     def draw_node(self, source, x, y, length, strain):
+    
+        #width of square in pixels
         paper_edge_length = self.pixel_width - 2 * self.border
         radius = self.pixel_width/10 #some number
         #bounds = 2**.5 * radius
@@ -142,13 +146,15 @@ class Application(Tk.Frame):
         if x > paper_width or y > paper_height:
             return "Error: coordinate not in bounds"
         
-        
+        #only draw a circle
         if source is None:
             #origin_circle = self.frame.create_oval(x - bounds, y - bounds, x + bounds, x + bounds)
             b = self.border
             self.frame.create_oval(x_corner_dist - radius ,y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
-        else:
             
+        #draw a circle and a line
+        else:
+            #circle
             new_node = self.frame.create_oval(x_corner_dist - radius, y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
            
             source_x = self.model.getNodeAttribute(source,"x")
@@ -158,12 +164,6 @@ class Application(Tk.Frame):
             y_s_corner_dist = self.border + source_y * scaled_height
             
             new_line = self.frame.create_line(x_s_corner_dist, y_s_corner_dist, x_corner_dist, y_corner_dist)
-        
-            #draw circle at coordinates w/ radius
-        #else
-        #draw circle at coordinates
-        #draw line from coordinates of source_node to new coordinates
-        #aremove circle at source node, replace with dot
         
         
         #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
