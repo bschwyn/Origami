@@ -10,7 +10,7 @@ class Application(Tk.Frame):
     def __init__(self, master = None):
         Tk.Frame.__init__(self,master)
         self.pack()
-        
+        self.model = None
         self.dimensions = None
         self.create_frame()
         self.widgets()
@@ -47,14 +47,24 @@ class Application(Tk.Frame):
         self.b_newmodel['text'] = "New Model"
         self.b_newmodel['command'] = self.submission_box
         self.b_newmodel.pack()
-    
-     if model.scale_optimize_ready():
-            self.b_optimize = Tk.Button(self)
-            self.b_optimize["text"] = "scale optimization"
-            self.b_optimize["command"] = self.model.scale_optimization
-            self.b_optimize.pack()
+        
+        #does scale optimization when ready
+        self.b_optimize = Tk.Button(self)
+        self.b_optimize["text"] = "scale optimization"
+        self.b_optimize["command"] = self.scale_optimization_and_check
+        self.b_optimize.pack()
+ 
+    #calls optimization if ready
+    def scale_optimization_and_check(self):
+        if self.model == None:
+            print "Error: model not initialized yet"
+            
+        elif self.model.scale_optimization_ready():
+            print "calling scale optimization"
+            self.model.scale_optimization
         else:
             print "Error: model not ready for scale optimization yet"
+            
         
     #create a dialog box, wait until the box is closed before acessing it's properties
     def submission_box(self):
@@ -157,8 +167,7 @@ class Application(Tk.Frame):
         
         
         #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
-    def optimize_button(self):
-       
+    
             
             
     def say_hi(self):
