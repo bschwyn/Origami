@@ -138,8 +138,8 @@ class Model:
         while i < len(shortest_path)-1:
             node1 = shortest_path[i]
             node2 = shortest_path[i+1]
-            edge_length = graph[node1][node2]['length']
-            edge_strain = graph[node1][node2]['strain']
+            edge_length = graph.edge[node1][node2]['length']
+            edge_strain = graph.edge[node1][node2]['strain']
             strained_length = (1+edge_strain) * edge_length        
             sum_of_strained_length += strained_length
             i+=1
@@ -154,7 +154,7 @@ class Model:
         while i < len(shortest_path)-1:
             node1 = shortest_path[i]
             node2 = shortest_path[i+1]
-            edge_length = graph[node1][node2]['length']      
+            edge_length = graph.edge[node1][node2]['length']      
             sum_of_length += edge_length
             i+=1
         return sum_of_length
@@ -238,11 +238,20 @@ class Model:
         s_vector0 = self._scale_initial_guess()
         bnds = self._scale_construct_bounds()
         cons = self._scale_construct_constraints()
-        
         optimize = minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
-        print optimize
+        print optimize.message
         return optimize
     
+    #this determines whether or not a graph can be scale optimized
+    def scale_optimization_ready(self):
+        #this is a dummy return value
+        #the smallest graph has 4 nodes / 3 leaf nodes, but there may be more complex structure required
+        
+        if len(self.all_leaf_nodes()) >= 3: #for fun
+            print "scale_optimization_ready"
+            return True
+        else:
+            return False
 # ***functions for edge optimization***
 # http://www.langorigami.com/books/ODS1e_Algorithms.pdf
 # Section A.4. Edge Optimization
