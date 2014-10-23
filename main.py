@@ -10,17 +10,17 @@
 import Tkinter as Tk
 import re
 
-import Model
+import Model as model
 import Application as app
 import NodeBox
 import DimensionsBox
 import Test
 
 
-run_emu_example = False            
+run_emu_example = True           
 if run_emu_example:
     
-    emu = Model(1.0,1.0)
+    emu = model.Model(1.0,1.0)
     emu.draw()
     emu.add_node_to(source_node = None, x = 0.5, y = 0.5,) #creates node 1
     emu.draw()
@@ -41,7 +41,7 @@ if run_emu_example:
 
 
 #'''
-rungui=True
+rungui=False
 if rungui:
     root = Tk.Tk()
     gui = app.Application(master = root)
