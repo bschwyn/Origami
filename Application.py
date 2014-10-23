@@ -143,6 +143,8 @@ class Application(Tk.Frame):
         x_corner_dist = self.border + x_coord
         y_corner_dist = self.border + y_coord
         
+        dot = 2.5
+        
         if x > paper_width or y > paper_height:
             return "Error: coordinate not in bounds"
         
@@ -151,11 +153,14 @@ class Application(Tk.Frame):
             #origin_circle = self.frame.create_oval(x - bounds, y - bounds, x + bounds, x + bounds)
             b = self.border
             self.frame.create_oval(x_corner_dist - radius ,y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
+            self.frame.create_rectangle(x_corner_dist - dot, y_corner_dist - dot, x_corner_dist + dot, y_corner_dist + dot, fill = "blue")
             
         #draw a circle and a line
         else:
             #circle
             new_node = self.frame.create_oval(x_corner_dist - radius, y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
+            
+            self.frame.create_rectangle(x_corner_dist - dot, y_corner_dist - dot, x_corner_dist + dot, y_corner_dist + dot, fill = "black")
            
             source_x = self.model.getNodeAttribute(source,"x")
             source_y = self.model.getNodeAttribute(source, "y")
