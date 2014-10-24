@@ -34,6 +34,9 @@ class Model:
     def getEdgeAttribute(self,node1,node2,attribute):
         return self.G[node1][node2][attribute]
         
+    def getNodeCounter(self):
+        return self.node_counter
+        
    #change edge attributes with the networkx change_attributes function
    #change coordinates through the same change_coordinates function
 
@@ -239,7 +242,7 @@ class Model:
         bnds = self._scale_construct_bounds()
         cons = self._scale_construct_constraints()
         optimize = minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
-        print optimize.message
+        print optimize
         return optimize
     
     #this determines whether or not a graph can be scale optimized
