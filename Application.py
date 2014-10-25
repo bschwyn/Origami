@@ -123,7 +123,7 @@ class Application(Tk.Frame):
 
 
 #makes a visual representation of the node and it's connections
-    def draw_node(self, source, x, y, length, strain):
+    def draw_node(self, current_node, source, x, y, length, strain):
     
         #width of square in pixels
         paper_edge_length = self.pixel_width - 2 * self.border
@@ -148,17 +148,20 @@ class Application(Tk.Frame):
         if x > paper_width or y > paper_height:
             return "Error: coordinate not in bounds"
         
+        new_node = self.frame.create_oval(x_corner_dist - radius ,y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)   
+        self.frame.create_text(x_corner_dist + 10, y_corner_dist, text = "node" + str(current_node) + "\n" + "(" + str(x) + "," + str(y) + ")")  
+        
         #only draw a circle
         if source is None:
             #origin_circle = self.frame.create_oval(x - bounds, y - bounds, x + bounds, x + bounds)
             b = self.border
-            self.frame.create_oval(x_corner_dist - radius ,y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
-            self.frame.create_rectangle(x_corner_dist - dot, y_corner_dist - dot, x_corner_dist + dot, y_corner_dist + dot, fill = "blue")
+            
+            self.frame.create_rectangle(x_corner_dist - dot, y_corner_dist - dot, x_corner_dist + dot, y_corner_dist + dot, fill = "red")
             
         #draw a circle and a line
         else:
             #circle
-            new_node = self.frame.create_oval(x_corner_dist - radius, y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
+            #new_node = self.frame.create_oval(x_corner_dist - radius, y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
             
             self.frame.create_rectangle(x_corner_dist - dot, y_corner_dist - dot, x_corner_dist + dot, y_corner_dist + dot, fill = "black")
            
