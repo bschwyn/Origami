@@ -98,15 +98,6 @@ class NodeBox(object):
     #pass the node information to the application where the model is stored
     def add_node_info(self, application, dialog):
     
-    #Something which gets information from the radiobutton goes here.
-    #####
-        #have default source be none ---no button
-        #otherwise have source be from radiobutton
-    
-       # if self.e_source_node.get() is "":
-        #    source = None
-        #else:
-         #   source = int(self.e_source_node.get())
         #get source node from radiobutton 
         if self.rb_var.get() == 0:
             source = None
@@ -133,6 +124,7 @@ class NodeBox(object):
         application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
         application.draw_node(source, x_coordinate, y_coordinate, length, strain)
         
+        #gets the last node added to the model and makes a button for it
         node_list = application.model.getNodes()
         node = node_list[-1]
         button = Tk.Radiobutton(dialog, text = "node" + str(node), variable = self.rb_var, value = node)
@@ -151,23 +143,3 @@ class NodeBox(object):
         y = float(xy[1])
         return (x,y)
         
-       
-        """
-        #making a single radiobutton that goes
-        v = Tk.IntVar()
-        node_list = self.app.model.getNodes()
-        
-        
-        if len(node_list) == 1:
-            print "node lsit is 1"
-            self.rb_test = Tk.Radiobutton(dialog, text = "source", variable = v, value = 0).grid()
-        else:
-            print "node list not 1"
-        """
-    
-        #when "Add Node" is pressed, the new node is added to the model, it is drawn, and a new radio button should appear representing that node as a possible source.
-        #add radio button needs to get it's information for the name of the source from somewhere. it can either keep track here, or keep track with the same source as the names of the nodes: Model.
-        #after getting the node number from application
-        
-        #the number of radio buttons should be dependent on the model, as opposed ot anything within add_node_info. add_node_info should get info from the radio buttons, add information to the model, which radiobutton looks at to figure out how many radio buttons to draw.
-                
