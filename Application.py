@@ -105,6 +105,7 @@ class Application(Tk.Frame):
        
         self.frame.delete("all")
         
+        #draw a hamburger/hotdog rectangle of the same shape as the paper dimensions
         if paper_height > paper_width:
             paper_height_pixels = paper_long_edge_pixels
             paper_width_pixels = paper_shorter_edge_pixels = paper_width/paper_height * paper_long_edge_pixels
@@ -118,20 +119,20 @@ class Application(Tk.Frame):
        
         #hash markers every .25 size increments
         #width marks
-        marker_dist = 0.0
-        while marker_dist <= paper_width:
-            marker_incr_p = paper_width_pixels * marker_dist / paper_width
+        x_marker_dist = 0
+        while x_marker_dist <= paper_width:
+            marker_incr_p = paper_width_pixels * x_marker_dist / paper_width
             self.frame.create_line(border_p + marker_incr_p, border_p - 10, border_p + marker_incr_p, border_p - 3)
-            self.frame.create_text(border_p + marker_incr_p, border_p - 17, text = str(marker_dist))
-            marker_dist += .25
+            self.frame.create_text(border_p + marker_incr_p, border_p - 17, text = str(x_marker_dist))
+            x_marker_dist += .25
         
         #height marks
-        marker_dist = 0
-        while marker_dist <= paper_height:
-            marker_incr_p = paper_height_pixels * marker_dist / paper_height
+        y_marker_dist = 0
+        while y_marker_dist <= paper_height:
+            marker_incr_p = paper_height_pixels * y_marker_dist / paper_height
             self.frame.create_line(border_p - 10, border_p + marker_incr_p, border_p -3,  border_p +  marker_incr_p)
-            self.frame.create_text(border_p - 15, border_p + marker_incr_p, text = str(marker_dist)
-            marker_dist += .25
+            self.frame.create_text(border_p - 23, border_p + marker_incr_p, text = str(y_marker_dist))
+            y_marker_dist += .25
             
     
     
@@ -163,28 +164,34 @@ class Application(Tk.Frame):
     def draw_node(self, current_node, source, x, y, length, strain):
     
         #width of square in pixels
-        paper_long_edge = self.frame_pixels - 2 * self.border_pixels
+        paper_long_edge_pixels = self.frame_pixels - 2 * self.border_pixels
         radius = self.frame_pixels/10 #some number
         #bounds = 2**.5 * radius
         #bounding box = 1.414*radius
         
-        paper_width = self.getDimensions()[0]
-        paper_height = self.getDimensions()[1]
         
-        scaled_width = paper_long_edge/float(paper_width)
-        scaled_height = paper_long_edge/float(paper_height)
+        paper_width = float(self.getDimensions()[0])
+        paper_height = float(self.getDimensions()[1])
         
-        x_coord = x * scaled_width
-        y_coord = y * scaled_height
         
-        x_corner_dist = self.border_pixels + x_coord
-        y_corner_dist = self.border_pixels + y_coord
+        if paper_height > paper_width:
+            paper_height_pixels = paper_long_edge_pixels
+            paper_width_pixels = paper_shorter_edge_pixels = paper_width/paper_height * paper_long_edge_pixels
+        else:
+            paper_width_pixels = paper_long_edge_pixels
+            paper_height_pixels = paper_shorter_edge_pixels = paper_height / paper_width * paper_long_edge_pixels
+        
+        x_pixels = paper_width_pixels * x / paper_width
+        y_pixels = paper_height_pixels * y / paper_height   
+        
+        
+        x_corner_dist = self.border_pixels + x_pixels
+        y_corner_dist = self.border_pixels + y_pixels
         
         #size of rectangle at node location
         dot = 2.5
         
-        
-        
+          
         
         if x > paper_width or y > paper_height:
             return "Error: coordinate not in bounds"
