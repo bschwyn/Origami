@@ -89,12 +89,14 @@ class NodeBox(object):
         
         #user input errors possible
         application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
-        application.draw_node(source, x_coordinate, y_coordinate, length, strain)
+        
+        node_list = application.model.getNodes()
+        current_node = node_list[-1]
+        application.draw_node(current_node,source, x_coordinate, y_coordinate, length, strain)
         
         #gets the last node added to the model and makes a button for it
-        node_list = application.model.getNodes()
-        node = node_list[-1]
-        button = Tk.Radiobutton(dialog, text = "node" + str(node), variable = self.rb_var, value = node)
+        
+        button = Tk.Radiobutton(dialog, text = "node" + str(current_node), variable = self.rb_var, value = current_node)
         button.grid()
         
         
