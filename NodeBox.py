@@ -130,10 +130,12 @@ class NodeBox(object):
         
         
         #user input errors possible
-        new_node_number = application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
+        application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
         application.draw_node(source, x_coordinate, y_coordinate, length, strain)
-         
-        button = Tk.Radiobutton(dialog, text = "node" + str(new_node_number), variable = self.rb_var, value = new_node_number)
+        
+        node_list = application.model.getNodes()
+        node = node_list[-1]
+        button = Tk.Radiobutton(dialog, text = "node" + str(node), variable = self.rb_var, value = node)
         button.grid()
         
         
