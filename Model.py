@@ -47,15 +47,16 @@ class Model:
 
         #if this is the first node
         if len(self.G)==0 and source_node == None:
-            self.G.add_node(self.node_counter,x = x, y = y)
+            self.G.add_node(self.node_counter, x = x, y = y)
             self.node_counter +=1  
-                   
+            return self.node_counter       
         #adding attional nodes 
         elif source_node in self.G.nodes(): 
             new_node = self.node_counter
             self.G.add_node(new_node,x=x,y=y)
             self.G.add_edge(new_node,source_node,length = length, strain = strain)
-            self.node_counter +=1            
+            self.node_counter +=1
+            return self.node_counter           
         else:
             print "Error: source not found"
 
