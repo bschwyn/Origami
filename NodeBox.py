@@ -9,11 +9,14 @@ class NodeBox(object):
         top = self.top = Tk.Toplevel(parent)
         dialog = Tk.Frame(self.top)
         dialog.grid()
-        self.add_node_widgets(dialog)
         self.app = application
+        self.add_node_widgets(dialog)
     
     #provides interface for adding node information
     def add_node_widgets(self,dialog):
+        #self.cb_source_node = Tk.Radiobutton(master,
+        #radio button
+        
         self.l_source_node = Tk.Label(dialog)
         self.l_source_node["text"] = "Source Node:"
         self.l_source_node.grid(row = 0,column = 0)
@@ -51,7 +54,40 @@ class NodeBox(object):
         self.b_addnode.grid(columnspan = 2)
         
         
+        #making a single radiobutton that goes
+        v = Tk.IntVar()
+        node_list = self.app.say_hi()
         
+        
+        #if len(node_list) == 1:
+          #  self.rb_test = Tk.Radiobutton(dialog, text = "source", variable = v, value = 0).grid()
+    
+    
+        #when "Add Node" is pressed, the new node is added to the model, it is drawn, and a new radio button should appear representing that node as a possible source.
+        #add radio button needs to get it's information for the name of the source from somewhere. it can either keep track here, or keep track with the same source as the names of the nodes: Model.
+        #after getting the node number from application
+        
+        #the number of radio buttons should be dependent on the model, as opposed ot anything within add_node_info. add_node_info should get info from the radio buttons, add information to the model, which radiobutton looks at to figure out how many radio buttons to draw.
+        
+    def radiobutton(self, application):
+        
+        v = Tk.IntVar()
+        
+        #access the model through the application
+        node_list = Application.model.getNodes()
+        
+        if len(node_list) == 0:
+            self.rb_source = Radiobutton(dialog, text = "source", variable = v, value = 0)
+            self.rb_source.grid()
+        
+        else:
+            for node in node_list:
+                node_str = str(node)
+                Radiobutton(dialog, text = "node" + node_str, variable = v, value = node, command = lambda:self.setSource(node)).grid()
+                #for every node in the model, create a radio button
+                #get integer from node name
+                #the text should be node and the related integer, variable = v, value is the integer
+        #return source
     #def 
 
     #this creates a block of information on a node
@@ -61,14 +97,21 @@ class NodeBox(object):
     #neighbors
     #
     
+    #after entry boxes are filled:
+    
+
+    
     #pass the node information to the application where the model is stored
     def add_node_info(self, application):
     
+    #Something which gets information from the radiobutton goes here.
+    
+    #####
         if self.e_source_node.get() is "":
             source = None
         else:
             source = int(self.e_source_node.get())
-            
+    ####        
         x_coordinate = self.xy_entry_to_float()[0]
         y_coordinate = self.xy_entry_to_float()[1]
         
@@ -86,7 +129,7 @@ class NodeBox(object):
         #user input errors possible
         application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
         application.draw_node(source, x_coordinate, y_coordinate, length, strain)
-
+        
         
     #takes input string of the coordinates, returns a touple
     def xy_entry_to_float(self):
