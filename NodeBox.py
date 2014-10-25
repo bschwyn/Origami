@@ -11,6 +11,7 @@ class NodeBox(object):
         dialog.grid()
         self.app = application
         self.add_node_widgets(dialog)
+        self.rb_var = Tk.IntVar()
     
     #provides interface for adding node information
     def add_node_widgets(self,dialog):
@@ -52,26 +53,7 @@ class NodeBox(object):
         self.b_addnode['text'] = "Add Node"
         self.b_addnode['command'] = lambda: self.add_node_info(self.app, dialog)
         self.b_addnode.grid(columnspan = 2)
-        
-        """
-        #making a single radiobutton that goes
-        v = Tk.IntVar()
-        node_list = self.app.model.getNodes()
-        
-        
-        if len(node_list) == 1:
-            print "node lsit is 1"
-            self.rb_test = Tk.Radiobutton(dialog, text = "source", variable = v, value = 0).grid()
-        else:
-            print "node list not 1"
-        """
-    
-        #when "Add Node" is pressed, the new node is added to the model, it is drawn, and a new radio button should appear representing that node as a possible source.
-        #add radio button needs to get it's information for the name of the source from somewhere. it can either keep track here, or keep track with the same source as the names of the nodes: Model.
-        #after getting the node number from application
-        
-        #the number of radio buttons should be dependent on the model, as opposed ot anything within add_node_info. add_node_info should get info from the radio buttons, add information to the model, which radiobutton looks at to figure out how many radio buttons to draw.
-        
+ 
     def radiobutton(self, dialog):
         
         v = Tk.IntVar()
@@ -86,7 +68,7 @@ class NodeBox(object):
         #else:
             #print "something else"
         
-        node
+        #node
             
         if len(node_list) >=1:
             
@@ -110,10 +92,7 @@ class NodeBox(object):
     #name of node
     #coordinates
     #neighbors
-    #
-    
     #after entry boxes are filled:
-    
 
     
     #pass the node information to the application where the model is stored
@@ -124,14 +103,21 @@ class NodeBox(object):
         #have default source be none ---no button
         #otherwise have source be from radiobutton
     
-        if self.e_source_node.get() is "":
+       # if self.e_source_node.get() is "":
+        #    source = None
+        #else:
+         #   source = int(self.e_source_node.get())
+        #get source node from radiobutton 
+        if self.rb_var.get() == 0:
             source = None
         else:
-            source = int(self.e_source_node.get())
-    ####        
+            source = self.rb_var.get()
+        
+        #parse coordinate entry into x and y
         x_coordinate = self.xy_entry_to_float()[0]
         y_coordinate = self.xy_entry_to_float()[1]
         
+        #get length and strain entries
         if self.e_length.get() is "":
             length = 1.0
         else:
@@ -144,9 +130,12 @@ class NodeBox(object):
         
         
         #user input errors possible
-        application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
+        new_node_number = application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
         application.draw_node(source, x_coordinate, y_coordinate, length, strain)
-        self.radiobutton(dialog,source = None)
+         
+        button = Tk.Radiobutton(dialog, text = "node" + str(new_node_number), variable = self.rb_var, value = new_node_number)
+        button.grid()
+        
         
         
     #takes input string of the coordinates, returns a touple
@@ -159,3 +148,24 @@ class NodeBox(object):
         x = float(xy[0])
         y = float(xy[1])
         return (x,y)
+        
+       
+        """
+        #making a single radiobutton that goes
+        v = Tk.IntVar()
+        node_list = self.app.model.getNodes()
+        
+        
+        if len(node_list) == 1:
+            print "node lsit is 1"
+            self.rb_test = Tk.Radiobutton(dialog, text = "source", variable = v, value = 0).grid()
+        else:
+            print "node list not 1"
+        """
+    
+        #when "Add Node" is pressed, the new node is added to the model, it is drawn, and a new radio button should appear representing that node as a possible source.
+        #add radio button needs to get it's information for the name of the source from somewhere. it can either keep track here, or keep track with the same source as the names of the nodes: Model.
+        #after getting the node number from application
+        
+        #the number of radio buttons should be dependent on the model, as opposed ot anything within add_node_info. add_node_info should get info from the radio buttons, add information to the model, which radiobutton looks at to figure out how many radio buttons to draw.
+                
