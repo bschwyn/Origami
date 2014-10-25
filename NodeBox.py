@@ -54,38 +54,7 @@ class NodeBox(object):
         self.b_addnode['command'] = lambda: self.add_node_info(self.app, dialog)
         self.b_addnode.grid(columnspan = 2)
  
-    def radiobutton(self, dialog):
-        
-        v = Tk.IntVar()
-        
-        #access the model through the application
-        node_list = self.app.model.getNodes()
-        print node_list
-        
-        if len(node_list) >= 1:
-            button = Tk.Radiobutton(dialog, text = "source 1", variable = v, value = 1)
-            button.grid()
-        #else:
-            #print "something else"
-        
-        #node
-            
-        if len(node_list) >=1:
-            
-            for node in node_list:
-                node_str = str(node)
-                button = Tk.Radiobutton(dialog, text = "node" + node_str, variable = v, value = node)
-                button.grid()
-            
-       # else:
-       #     for node in node_list:
-       #         node_str = str(node)
-        #        Radiobutton(dialog, text = "node" + node_str, variable = v, value = node, command = lambda:self.setSource(node)).grid()
-                #for every node in the model, create a radio button
-                #get integer from node name
-                #the text should be node and the related integer, variable = v, value is the integer
-        #return source
-    #def 
+  
 
     #this creates a block of information on a node
     #the info block contiains
