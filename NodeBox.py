@@ -81,12 +81,15 @@ class NodeBox(object):
         print node_list
         
         if len(node_list) >= 1:
-            self.rb_source = Tk.Radiobutton(dialog, text = "source 1", variable = v, value = 1)
-            self.rb_source.grid()
-        else:
-            print "something else"
+            button = Tk.Radiobutton(dialog, text = "source 1", variable = v, value = 1)
+            button.grid()
+        #else:
+            #print "something else"
+        
+        node
             
         if len(node_list) >=1:
+            
             for node in node_list:
                 node_str = str(node)
                 button = Tk.Radiobutton(dialog, text = "node" + node_str, variable = v, value = node)
@@ -118,6 +121,9 @@ class NodeBox(object):
     
     #Something which gets information from the radiobutton goes here.
     #####
+        #have default source be none ---no button
+        #otherwise have source be from radiobutton
+    
         if self.e_source_node.get() is "":
             source = None
         else:
@@ -140,7 +146,7 @@ class NodeBox(object):
         #user input errors possible
         application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
         application.draw_node(source, x_coordinate, y_coordinate, length, strain)
-        self.radiobutton(dialog)
+        self.radiobutton(dialog,source = None)
         
         
     #takes input string of the coordinates, returns a touple
