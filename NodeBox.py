@@ -15,16 +15,14 @@ class NodeBox(object):
     
     #provides interface for adding node information
     def add_node_widgets(self,dialog):
-        #self.cb_source_node = Tk.Radiobutton(master,
-        #radio button
         
         self.l_source_node = Tk.Label(dialog)
         self.l_source_node["text"] = "Source Node:"
         self.l_source_node.grid(row = 0,column = 0)
         
         
-        self.e_source_node = Tk.Entry(dialog)
-        self.e_source_node.grid(row = 0, column = 1)
+       # self.e_source_node = Tk.Entry(dialog)
+       # self.e_source_node.grid(row = 0, column = 1)
         
         self.l_xy = Tk.Label(dialog)
         self.l_xy["text"] = "Coordinates:"
