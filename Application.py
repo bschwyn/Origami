@@ -106,37 +106,35 @@ class Application(Tk.Frame):
         self.frame.delete("all")
         
         if paper_height > paper_width:
-            paper_shorter_edge_pixels = paper_width/paper_height * paper_long_edge_pixels
+            paper_height_pixels = paper_long_edge_pixels
+            paper_width_pixels = paper_shorter_edge_pixels = paper_width/paper_height * paper_long_edge_pixels
             self.frame.create_rectangle(border_p,border_p,border_p + paper_shorter_edge_pixels, border_p + paper_long_edge_pixels, fill = "white")
         else:
-            paper_shorter_edge_pixels = paper_height / paper_width * paper_long_edge_pixels
+            paper_width_pixels = paper_long_edge_pixels
+            paper_height_pixels = paper_shorter_edge_pixels = paper_height / paper_width * paper_long_edge_pixels
             self.frame.create_rectangle(border_p, border_p, border_p + paper_long_edge_pixels, border_p + paper_shorter_edge_pixels, fill = "white")
             
        #draw hash marks / paper size
        
-        #create hash marker untl the end
-        #x axis
-        """
+        #hash markers every .25 size increments
+        #width marks
+        marker_dist = 0.0
+        while marker_dist <= paper_width:
+            marker_incr_p = paper_width_pixels * marker_dist / paper_width
+            self.frame.create_line(border_p + marker_incr_p, border_p - 10, border_p + marker_incr_p, border_p - 3)
+            self.frame.create_text(border_p + marker_incr_p, border_p - 17, text = str(marker_dist))
+            marker_dist += .25
+        
+        #height marks
         marker_dist = 0
-        while marker_dist < paper_height:
-            marker_incr = .25
-            marker_incr_pixels = 
-            self.frame.create_line(border_p + 
+        while marker_dist <= paper_height:
+            marker_incr_p = paper_height_pixels * marker_dist / paper_height
+            self.frame.create_line(border_p - 10, border_p + marker_incr_p, border_p -3,  border_p +  marker_incr_p)
+            self.frame.create_text(border_p - 15, border_p + marker_incr_p, text = str(marker_dist)
+            marker_dist += .25
             
-            
-            marker_dist += marker_incr
-            self.frame.create_line(border_p + marker_dist, border_p - 10, border_p + marker_dist, border_p - 10)
-            marker_dist + (frame_pixels - border_p)*float(paper_width)/float(paper_height)
-        """   
-       
-        #for distance in range(b_p, paper_height, marker):
-        #   self.frame.create(b_p- 10, b_p, b_p -3, b_p)
-        
-        #self.frame.create_line(b_p - 10, b_p, b_p-3, b_p)
-        #self.frame.create_line(b_p, b_p - 10, b_p, b_p - 3)  
-        
-        #self.frame.create_line(frame_width, b_p, b_p - 10, b_p, b_p - 1)     
-        
+    
+    
     def new_node_dialog_box(self):
         
         nodebox = nbox.NodeBox(self,self)
