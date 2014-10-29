@@ -4,16 +4,19 @@ import math
 import matplotlib.pyplot as plt
 import itertools
 import numpy as np
+import Application as app
 
 
 class Model:
     #initialize the properties of the medium (paper) that the origami model will use.
-    def __init__(self, width = 1.0, height = 1.0):
+    def __init__(self, application, width = 1.0, height = 1.0):
         self.width = width
         self.height = height
         self.scale = 1.0
         self.node_counter = 1
         self.G = nx.Graph()
+        self.stack = []
+        self.app = application
         #self.edges = {}
         #self.vertices = {}
         #self.vertex-node_indices = {}
@@ -44,19 +47,25 @@ class Model:
 #addes a node to the graph structure representing the origami model
     
     def add_node_to(self, source_node = None, x = 0.0, y = 0.0, length = 1.0, strain = 0.0):
-
+        
+        self.stack.append( [source_node,x,y,length,strain] )
         #if this is the first node
         if len(self.G)==0 and source_node == None:
             self.G.add_node(self.node_counter, x = x, y = y)
-            self.node_counter +=1       
+            self.app.draw_node(self.node_counter, source_node, x, y, length, strain)
+            self.node_counter +=1
         #adding attional nodes 
         elif source_node in self.G.nodes(): 
             new_node = self.node_counter
             self.G.add_node(new_node,x=x,y=y)
-            self.G.add_edge(new_node,source_node,length = length, strain = strain)
-            self.node_counter +=1        
+            self.G.add_edge(new_node,source_node,length = length, strain = strain)            
+            self.app.draw_node(self.node_counter, source_node, x, y, length, strain)
+            self.node_counter +=1
         else:
             print "Error: source not found"
+            
+    def undo(self):
+        self.stack.pop()
 
 #deletes a  node and any related edges from the graph structure
             
@@ -240,8 +249,9 @@ class Model:
         s_vector0 = self._scale_initial_guess()
         bnds = self._scale_construct_bounds()
         cons = self._scale_construct_constraints()
-        optimize = minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.0001})
-        print optimize
+        optimize = minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.01, "maxiter":50})
+        #print "SFLKSJLFKJSLDKFJSSF"
+        #print optimize.x
         return optimize
     
     #this determines whether or not a graph can be scale optimized
