@@ -167,15 +167,13 @@ class Application(Tk.Frame):
     
         #width of square in pixels
         paper_long_edge_pixels = self.frame_pixels - 2 * self.border_pixels
-        radius = self.frame_pixels/10 #some number
-        #bounds = 2**.5 * radius
-        #bounding box = 1.414*radius
-        
-        
+        radius = self.frame_pixels/10 #some number    
+            
+        #get paper size
         paper_width = float(self.getDimensions()[0])
         paper_height = float(self.getDimensions()[1])
         
-        
+        #
         if paper_height > paper_width:
             paper_height_pixels = paper_long_edge_pixels
             paper_width_pixels = paper_shorter_edge_pixels = paper_width/paper_height * paper_long_edge_pixels
@@ -183,10 +181,11 @@ class Application(Tk.Frame):
             paper_width_pixels = paper_long_edge_pixels
             paper_height_pixels = paper_shorter_edge_pixels = paper_height / paper_width * paper_long_edge_pixels
         
+        #distance in pixels from corner of "paper square" to node
         x_pixels = paper_width_pixels * x / paper_width
         y_pixels = paper_height_pixels * y / paper_height   
         
-        
+        #distance in pixels from corner of frame to node
         x_corner_dist = self.border_pixels + x_pixels
         y_corner_dist = self.border_pixels + y_pixels
         
@@ -198,8 +197,10 @@ class Application(Tk.Frame):
         if x > paper_width or y > paper_height:
             return "Error: coordinate not in bounds"
         
-        #circle
-        new_node = self.frame.create_oval(x_corner_dist - radius ,y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius) 
+        
+        #draw a circle
+        rad = length * radius
+        new_node = self.frame.create_oval(x_corner_dist - rad ,y_corner_dist - rad, x_corner_dist + rad, y_corner_dist + rad) 
         
         #node number and coordinates label 
         self.frame.create_text(x_corner_dist + 10, y_corner_dist, text = "node" + str(current_node) + "\n" + "(" + str(x) + "," + str(y) + ")")  
