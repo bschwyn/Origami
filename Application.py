@@ -8,17 +8,18 @@ class Application(Tk.Frame):
     
 #initialze frame    
     def __init__(self, master = None):
-        Tk.Frame.__init__(self,master)
+        button_frame = Tk.Frame.__init__(self,master)
         self.pack()
         self.model = None
         self.dimensions = None
-        self.create_frame()
+        self.create_canvas_frame()
         self.widgets()
     
     def getDimensions(self):
-        return self.dimensions      
+        return self.dimensions
+         
     #makes basic frame size
-    def create_frame(self):
+    def create_canvas_frame(self):
         self.frame_pixels = 500
         self.frame = Tk.Canvas(self, width = self.frame_pixels, height = self.frame_pixels)
         self.frame.pack()
@@ -61,7 +62,8 @@ class Application(Tk.Frame):
             
         elif self.model.scale_optimization_ready():
             print "calling scale optimization"
-            self.model.scale_optimization()
+            optimization = self.model.scale_optimization()
+            #draw new scale
         else:
             print "Error: model not ready for scale optimization yet"
             
@@ -196,10 +198,13 @@ class Application(Tk.Frame):
         if x > paper_width or y > paper_height:
             return "Error: coordinate not in bounds"
         
-        new_node = self.frame.create_oval(x_corner_dist - radius ,y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)   
+        #circle
+        new_node = self.frame.create_oval(x_corner_dist - radius ,y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius) 
+        
+        #node number and coordinates label 
         self.frame.create_text(x_corner_dist + 10, y_corner_dist, text = "node" + str(current_node) + "\n" + "(" + str(x) + "," + str(y) + ")")  
         
-        #only draw a circle
+        
         if source is None:
             #origin_circle = self.frame.create_oval(x - bounds, y - bounds, x + bounds, x + bounds)
             b = self.border_pixels
@@ -208,21 +213,34 @@ class Application(Tk.Frame):
             
         #draw a circle and a line
         else:
-            #circle
-            #new_node = self.frame.create_oval(x_corner_dist - radius, y_corner_dist - radius, x_corner_dist + radius, y_corner_dist + radius)
-            
+            #draw rectangle dot at node location
             self.frame.create_rectangle(x_corner_dist - dot, y_corner_dist - dot, x_corner_dist + dot, y_corner_dist + dot, fill = "black")
            
+            #draw line between nodes
             source_x = self.model.getNodeAttribute(source,"x")
             source_y = self.model.getNodeAttribute(source, "y")
             
-            x_s_corner_dist = self.border_pixels + source_x * scaled_width
-            y_s_corner_dist = self.border_pixels + source_y * scaled_height
+            x_s_corner_dist = self.border_pixels + source_x * paper_width_pixels / paper_width
+            y_s_corner_dist = self.border_pixels + source_y * paper_height_pixels / paper_height
             
             new_line = self.frame.create_line(x_s_corner_dist, y_s_corner_dist, x_corner_dist, y_corner_dist)
+            
+            
+            #draw label halfway for length and strain
+            x_halfway = self.border_pixels + (source_x + x) / 2 * paper_width_pixels / paper_width
+            y_halfway = self.border_pixels + (source_y + y) / 2 * paper_height_pixels / paper_height
+            
+            self.frame.create_text(x_halfway, y_halfway, text = "l = " + str(length) + "s = " + str(strain))
+            
+            
         
         
         #create a new set of widgets explicitely for adding and deleting new nodes, and accessing that information.
                
     def say_hi(self):
         print "hello!"
+        
+    def draw_scaled_model(self, optimize_return_object):
+        new_x_vector = optimize_return_objects.x
+        new_scale = new_x_vector[-1]
+        
