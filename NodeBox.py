@@ -69,11 +69,13 @@ class NodeBox(object):
     def add_node_info(self, application, frame):
     
         #get source node from radiobutton 
-        if self.rb_var.get() == 0:
-            source = None
-        else:
+        if self.rb_var.get() == 0 and len(application.model.getNodes()) == 0 :
+           source = None
+        elif self.rb_var.get() != 0:
             source = self.rb_var.get()
-        
+        else:
+            print "Error: node must have source"
+       
         #parse coordinate entry into x and y
         x_coordinate = self.xy_entry_to_float()[0]
         y_coordinate = self.xy_entry_to_float()[1]
@@ -93,11 +95,9 @@ class NodeBox(object):
         #user input errors possible
         application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
         
+        #bad form possibly, but an easy hack
         node_list = application.model.getNodes()
         current_node = node_list[-1]
-        application.draw_node(current_node,source, x_coordinate, y_coordinate, length, strain)
-        
-        #gets the last node added to the model and makes a button for it
         
         button = Tk.Radiobutton(frame, text = "node" + str(current_node), variable = self.rb_var, value = current_node)
         button.grid( columnspan = 2)
