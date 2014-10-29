@@ -7,49 +7,52 @@ class NodeBox(object):
     
     def __init__(self, parent, application):
         top = self.top = Tk.Toplevel(parent)
-        dialog = Tk.Frame(self.top)
-        dialog.grid()
+        top.config(background = "#CCFFCC")
+        top.wm_title("controller")
+        source_frame = Tk.Frame(self.top)
+        source_frame.grid(row = 0,column= 0)
+        
+        #self.wm_title("Title")
+        entry_frame = Tk.Frame(self.top)
+        entry_frame.grid(row = 1, column = 0, padx = 10, pady = 10)
+        
         self.app = application
-        self.add_node_widgets(dialog)
+        self.add_node_widgets(entry_frame, source_frame)
         self.rb_var = Tk.IntVar()
     
     #provides interface for adding node information
-    def add_node_widgets(self,dialog):
+    def add_node_widgets(self,entry_frame,source_frame):
         
-        self.l_source_node = Tk.Label(dialog)
+        self.l_source_node = Tk.Label(source_frame)
         self.l_source_node["text"] = "Source Node:"
         self.l_source_node.grid(row = 0,column = 0)
         
-        
-       # self.e_source_node = Tk.Entry(dialog)
-       # self.e_source_node.grid(row = 0, column = 1)
-        
-        self.l_xy = Tk.Label(dialog)
+        self.l_xy = Tk.Label(entry_frame)
         self.l_xy["text"] = "Coordinates:"
         self.l_xy.grid(row = 1, column = 0)
         
         
-        self.e_xy = Tk.Entry(dialog)
+        self.e_xy = Tk.Entry(entry_frame)
         self.e_xy.grid(row = 1, column = 1)
         
-        self.l_length = Tk.Label(dialog)
+        self.l_length = Tk.Label(entry_frame)
         self.l_length["text"] = "Length:"
         self.l_length.grid(row = 2, column = 0)
         
-        self.e_length = Tk.Entry(dialog)
+        self.e_length = Tk.Entry(entry_frame)
         self.e_length.grid(row = 2, column = 1)
          
-        self.l_strain = Tk.Label(dialog)
+        self.l_strain = Tk.Label(entry_frame)
         self.l_strain["text"] = "Strain:"
         self.l_strain.grid(row = 3, column = 0)
         
-        self.e_strain = Tk.Entry(dialog)
+        self.e_strain = Tk.Entry(entry_frame)
         self.e_strain.grid(row = 3, column = 1)
         
         
-        self.b_addnode = Tk.Button(dialog)
+        self.b_addnode = Tk.Button(entry_frame)
         self.b_addnode['text'] = "Add Node"
-        self.b_addnode['command'] = lambda: self.add_node_info(self.app, dialog)
+        self.b_addnode['command'] = lambda: self.add_node_info(self.app, source_frame)
         self.b_addnode.grid(columnspan = 2)
  
   
@@ -63,7 +66,7 @@ class NodeBox(object):
 
     
     #pass the node information to the application where the model is stored
-    def add_node_info(self, application, dialog):
+    def add_node_info(self, application, frame):
     
         #get source node from radiobutton 
         if self.rb_var.get() == 0:
@@ -96,8 +99,8 @@ class NodeBox(object):
         
         #gets the last node added to the model and makes a button for it
         
-        button = Tk.Radiobutton(dialog, text = "node" + str(current_node), variable = self.rb_var, value = current_node)
-        button.grid()
+        button = Tk.Radiobutton(frame, text = "node" + str(current_node), variable = self.rb_var, value = current_node)
+        button.grid( columnspan = 2)
         
         
         
