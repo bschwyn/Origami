@@ -84,7 +84,7 @@ class Application(Tk.Frame):
     
         width = paper_size[0]
         height = paper_size[1]
-        self.model = model.Model(width, height)
+        self.model = model.Model(self, width, height)
         
     #draws a square representing the paper
     def draw_new_paper(self,dimensions):
@@ -161,7 +161,7 @@ class Application(Tk.Frame):
         self.node_button = Tk.Button(self)
         self.node_button["text"] = 'enter new info'     
 
-
+    
 #makes a visual representation of the node and it's connections
     def draw_node(self, current_node, source, x, y, length, strain):
     
