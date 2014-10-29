@@ -15,8 +15,8 @@ class Model:
         self.scale = 1.0
         self.node_counter = 1
         self.G = nx.Graph()
-        self.stack = []
         self.app = application
+        self.Draw = Draw
         #self.edges = {}
         #self.vertices = {}
         #self.vertex-node_indices = {}
@@ -47,12 +47,12 @@ class Model:
 #addes a node to the graph structure representing the origami model
     
     def add_node_to(self, source_node = None, x = 0.0, y = 0.0, length = 1.0, strain = 0.0):
-        
-        self.stack.append( [source_node,x,y,length,strain] )
+       
         #if this is the first node
         if len(self.G)==0 and source_node == None:
             self.G.add_node(self.node_counter, x = x, y = y)
             self.app.draw_node(self.node_counter, source_node, x, y, length, strain)
+            self.
             self.node_counter +=1
         #adding attional nodes 
         elif source_node in self.G.nodes(): 
@@ -63,10 +63,7 @@ class Model:
             self.node_counter +=1
         else:
             print "Error: source not found"
-            
-    def undo(self):
-        self.stack.pop()
-
+  
 #deletes a  node and any related edges from the graph structure
             
     def delete_node(self, node):
@@ -352,4 +349,15 @@ class Model:
         return minimize(fun,e_vector0,method= 'SLSQP', bounds = bnds,
         constrains = cons, options = {"eps":0001})
 
-
+class AddNodeCommand(Model):
+    def __init__(self, source, x, y, length, strain):
+        self.source = source
+        self.x = x
+        self.y = y
+        self.length = length
+        self.strain = strain
+        add_node_to(self.source, self.x, self.y, self.length, self.strain)
+    
+    def undo(self):
+       # remove_node()
+       delete_node()
