@@ -31,7 +31,7 @@ class DimSubmissionBox(object):
         self.e_height = Tk.Entry(dialog)
         self.e_width = Tk.Entry(dialog)
         self.e_height.grid(row = 1, column = 1)
-        self.e_width.grid(row =0, column = 1)
+        self.e_width.grid(row =2, column = 1)
         
         #submits data
         self.b_submit = Tk.Button(dialog)
