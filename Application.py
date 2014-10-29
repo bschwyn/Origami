@@ -231,7 +231,7 @@ class Application(Tk.Frame):
             x_halfway = self.border_pixels + (source_x + x) / 2 * paper_width_pixels / paper_width
             y_halfway = self.border_pixels + (source_y + y) / 2 * paper_height_pixels / paper_height
             
-            self.frame.create_text(x_halfway, y_halfway, text = "l = " + str(length) + "s = " + str(strain))
+            self.frame.create_text(x_halfway, y_halfway, text = "Length = " + str(length) + "\n"+"Strain = " + str(strain))
             
             
         
