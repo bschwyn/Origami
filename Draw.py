@@ -83,10 +83,10 @@ class DrawCommand:
             
             self.edge_label = application.frame.create_text(x_halfway, y_halfway, text = "Length = " + str(length) + "\n"+"Strain = " + str(strain))
 
-    def undo(self):
-        self.delete(circle)
-        self.delete(dot)
-        self.delete(edge_label)
-        self.delete(node_label)
-        self.delete(new_line)
+    def undo(self, application):
+        application.frame.delete(circle)
+        application.frame.delete(dot)
+        application.frame.delete(edge_label)
+        application.frame.delete(node_label)
+        application.frame.delete(new_line)
      
