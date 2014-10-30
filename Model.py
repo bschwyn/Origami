@@ -55,14 +55,14 @@ class Model:
         #if this is the first node
         elif len(self.G)==0 and source_node == None:
             self.G.add_node(self.node_counter, x = x, y = y)
-            app.Draw(self.app, self.node_counter, source_node, x, y, length, strain)
+            app.DrawCommand(self.app, self.node_counter, source_node, x, y, length, strain)
             self.node_counter +=1
         #adding attional nodes 
         elif source_node in self.G.nodes(): 
             new_node = self.node_counter
             self.G.add_node(new_node,x=x,y=y)
             self.G.add_edge(new_node,source_node,length = length, strain = strain)        
-            app.Draw(self.app, self.node_counter, source_node, x, y, length, srain)
+            app.DrawCommand(self.app, self.node_counter, source_node, x, y, length, srain)
             self.node_counter +=1
         else:
             print "Error: source not found"
@@ -352,15 +352,3 @@ class Model:
         return minimize(fun,e_vector0,method= 'SLSQP', bounds = bnds,
         constrains = cons, options = {"eps":0001})
 
-class AddNodeCommand(Model):
-    def __init__(self, source, x, y, length, strain):
-        self.source = source
-        self.x = x
-        self.y = y
-        self.length = length
-        self.strain = strain
-        add_node_to(self.source, self.x, self.y, self.length, self.strain)
-    
-    def undo(self):
-       # remove_node()
-       delete_node()
