@@ -55,15 +55,13 @@ class Model:
         #if this is the first node
         elif len(self.G)==0 and source_node == None:
             self.G.add_node(self.node_counter, x = x, y = y)
-            #self.app.draw_node(self.node_counter, source_node, x, y, length, strain)
             app.Draw(self.app, self.node_counter, source_node, x, y, length, strain)
             self.node_counter +=1
         #adding attional nodes 
         elif source_node in self.G.nodes(): 
             new_node = self.node_counter
             self.G.add_node(new_node,x=x,y=y)
-            self.G.add_edge(new_node,source_node,length = length, strain = strain)            
-            #self.app.draw_node(self.node_counter, source_node, x, y, length, strain)
+            self.G.add_edge(new_node,source_node,length = length, strain = strain)        
             app.Draw(self.app, self.node_counter, source_node, x, y, length, srain)
             self.node_counter +=1
         else:
