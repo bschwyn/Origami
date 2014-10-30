@@ -43,29 +43,6 @@ class Model:
    #change coordinates through the same change_coordinates function
 
 
-#addes a node to the graph structure representing the origami model
-    
-    def add_node_to(self, source_node = None, x = 0.0, y = 0.0, length = 1.0, strain = 0.0):
-        
-        if x > self.width or y > self.height or x<0 or y <0:
-            print "Error: coordinates not in scope"
-        elif length < 0 or strain < 0:
-            print "Error: length and strian must be positive"
-             
-        #if this is the first node
-        elif len(self.G)==0 and source_node == None:
-            self.G.add_node(self.node_counter, x = x, y = y)
-            app.DrawCommand(self.app, self.node_counter, source_node, x, y, length, strain)
-            self.node_counter +=1
-        #adding attional nodes 
-        elif source_node in self.G.nodes(): 
-            new_node = self.node_counter
-            self.G.add_node(new_node,x=x,y=y)
-            self.G.add_edge(new_node,source_node,length = length, strain = strain)        
-            app.DrawCommand(self.app, self.node_counter, source_node, x, y, length, srain)
-            self.node_counter +=1
-        else:
-            print "Error: source not found"
   
 #deletes a  node and any related edges from the graph structure
             
