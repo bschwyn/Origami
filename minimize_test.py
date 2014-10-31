@@ -28,11 +28,13 @@ import math
 
 #x =(u1x,u1y,u3x,u3y,u4x,u4y,m)
 
+#expected (.26795,1)(0,0), (1,.26795) m = .5176, use eps .1, maxiter 50
+
 x0 = (.25,.75,.5,.25,.75,.75,1)
 
-bnds = ((0,1),(0,1),(0,1),(0,1),(0,1),(0,1),(0,1))
+bnds = ((0,1.0),(0,1.0),(0,1.0),(0,1.0),(0,1.0),(0,1.0),(0,1.0))
   
-f = lambda x: -x[6]
+f = lambda x: -x[-1]
 
 def dist(x1,x2,y1,y2):
     dist = math.sqrt( (x2 - x1)**2 + (y2 - y1)**2 )
@@ -42,14 +44,18 @@ cons1 = lambda x: -x[6]*2 + dist(x[0],x[2],x[1],x[3])
 cons2 = lambda x: -x[6]*2 + dist(x[0],x[4],x[1],x[5])
 cons3 = lambda x: -x[6]*2 + dist(x[2],x[4],x[3],x[5])
 
-cons = [{"type": "ineq", "fun": cons1}, {"type": "ineq", "fun": cons2}, {"type": "ineq", "fun": cons3}]
-
-#print minimize(f, x0, method = 'SLSQP', bounds = bnds, constraints = cons,options = { "eps":.1})
+cons_emu = [{"type": "ineq", "fun": cons1}, {"type": "ineq", "fun": cons2}, {"type": "ineq", "fun": cons3}]
+print "____emu____"
+print minimize(f, x0, method = 'SLSQP', bounds = bnds, constraints = cons_emu, options = { "eps":.1, "maxiter":50})
 
 x1 = (.25,.25,.25,.75,.75,.25,.75,.75,1)
 
+#expected (0,0) (1,0) (0,1), (1,1), m = .5
+
+g = lambda x: -x[-1]
 
 bndsc = ((0,1),(0,1),(0,1),(0,1),(0,1),(0,1),(0,1),(0,1),(0,1))
+
 cons1c = lambda x: -x[8]*2 + dist(x[0],x[2],x[1],x[3])
 cons2c = lambda x: -x[8]*2 + dist(x[0],x[4],x[1],x[5])
 cons3c = lambda x: -x[8]*2 + dist(x[0],x[6],x[1],x[7])
@@ -60,5 +66,7 @@ cons6c = lambda x: -x[8]*2 + dist(x[4],x[6],x[5],x[7])
 
 
 cons_crane = [{"type": "ineq", "fun": cons1c}, {"type": "ineq", "fun": cons2c}, {"type": "ineq", "fun": cons3c},{"type": "ineq", "fun": cons4c},{"type": "ineq", "fun": cons5c},{"type": "ineq", "fun": cons6c}]
+print "\n\n"
+print "____crane____"
+print minimize(g, x1, method = 'SLSQP', bounds = bndsc, constraints = cons_crane)
 
-print minimize(f, x1, method = 'SLSQP', bounds = bndsc, constraints = cons_crane, options = {"eps":.0001})
