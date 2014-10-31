@@ -54,7 +54,12 @@ class NodeBox(object):
         self.b_addnode['text'] = "Add Node"
         self.b_addnode['command'] = lambda: self.add_node_info(self.app, source_frame)
         self.b_addnode.grid(columnspan = 2)
- 
+        
+        self.b_undo = Tk.Button(entry_frame)
+        self.b_undo['text'] = "Undo"
+        self.b_undo['command'] = lambda: self.undo_add_node(self.app)
+        self.b_undo.grid(columnspan = 2)
+        
   
 
     #this creates a block of information on a node
@@ -93,7 +98,7 @@ class NodeBox(object):
         
         
         #user input errors possible
-        application.add_node_to_model(source, x_coordinate, y_coordinate, length, strain)
+        application.move_node_info_from_app_to_model(source, x_coordinate, y_coordinate, length, strain)
         
         #bad form possibly, but an easy hack
         node_list = application.model.getNodes()
@@ -101,7 +106,9 @@ class NodeBox(object):
         
         button = Tk.Radiobutton(frame, text = "node" + str(current_node), variable = self.rb_var, value = current_node)
         button.grid( columnspan = 2)
-        
+    
+    def undo_add_node(self, application):
+        application.model.add_node_undo(application)
         
         
     #takes input string of the coordinates, returns a touple
