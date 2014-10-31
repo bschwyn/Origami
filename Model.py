@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import itertools
 import numpy as np
 import Application as app
+import AddNodeCommand as addnodec
 
 
 class Model:
@@ -16,6 +17,7 @@ class Model:
         self.node_counter = 1
         self.G = nx.Graph()
         self.app = application
+        self.undo_stack = []
         #self.edges = {}
         #self.vertices = {}
         #self.vertex-node_indices = {}
@@ -23,6 +25,13 @@ class Model:
         #self.nodes = {}
         #self.paths = {}
         #self.leaf_vertices
+        
+    #add node information to the model. Can be passed information through NodeBox or directly
+    def add_node(self, source, x, y, length, strain):
+        self.undo_stack.append(addnodec.AddNodeCommand(self, source, x, y, length, strain))
+    
+    def add_node_undo(self, app):
+        self.undo_stack.pop().undo(app)
     
     #returns a list of nodes
     def getNodes(self):
