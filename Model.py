@@ -27,7 +27,7 @@ class Model:
         #self.leaf_vertices
         
     #add node information to the model. Can be passed information through NodeBox or directly
-    def add_node(self, source, x, y, length, strain):
+    def add_node_to(self, source, x, y, length = 1.0, strain = 0.0):
         self.undo_stack.append(addnodec.AddNodeCommand(self, source, x, y, length, strain))
     
     def add_node_undo(self, app):
@@ -190,7 +190,7 @@ class Model:
         leaf_nodes = self.all_leaf_nodes()
         constraints = []
         #all possible paths between two leaf nodes
-        for combo in itertools.combinations(leaf_nodes,2):
+        for combo in itertools.combinations(leaf_nodes, 2):
             source = combo[0]
             target = combo[1]
             sum_of_strained_lengths = self.sum_of_strained_lengths(source,target)
@@ -235,7 +235,7 @@ class Model:
         s_vector0 = self._scale_initial_guess()
         bnds = self._scale_construct_bounds()
         cons = self._scale_construct_constraints()
-        optimize = minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.01, "maxiter":50})
+        optimize = minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.1, "maxiter":50})
         #print "SFLKSJLFKJSLDKFJSSF"
         #print optimize.x
         return optimize
