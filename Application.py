@@ -13,8 +13,8 @@ class Application(Tk.Frame):
         self.model = None
         self.dimensions = None
         self.create_canvas_frame()
-        self.widgets()
-    
+        self.widgets()      
+            
     def getDimensions(self):
         return self.dimensions
          
@@ -146,9 +146,12 @@ class Application(Tk.Frame):
     
     
     #adds the information about the node recieved from the nodebox the model
-    def add_node_to_model(self, source,x,y,length=1.0,strain=1.0):
-        #self.model.add_node_to(source,x,y,length,strain)  
-        addnodec.AddNodeCommand(self.model, source, x, y, length, strain)
+    def move_node_info_from_app_to_model(self, source, x, y,length=1.0,strain=1.0):
+        self.model.add_node_to(source, x, y, length, strain)
+    
+    #undo add node
+    def add_node_undo(self):
+        self.undo_stack.pop().undo(self)
         
     #I'm pretty sure this needs to be discarded    
     def model_widgets(self):

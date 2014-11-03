@@ -207,8 +207,7 @@ class Model:
             #constraint function in form where cons >=0
             def cons(s_vector):
                 coord_distance = self.dist(s_vector[src_x], s_vector[src_y], s_vector[trg_x], s_vector[trg_y])
-                
-                return -s_vector[-1] + coord_distance/sum_of_strained_lengths
+                return -s_vector[-1]*sum_of_strained_lengths + coord_distance
 
             constraints.append({"type": "ineq", "fun": cons})
         return constraints

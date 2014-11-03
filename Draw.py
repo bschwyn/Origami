@@ -84,9 +84,9 @@ class DrawCommand:
             self.edge_label = application.frame.create_text(x_halfway, y_halfway, text = "Length = " + str(length) + "\n"+"Strain = " + str(strain))
 
     def undo(self, application):
-        application.frame.delete(circle)
-        application.frame.delete(dot)
-        application.frame.delete(edge_label)
-        application.frame.delete(node_label)
-        application.frame.delete(new_line)
-     
+        application.frame.delete(self.circle)
+        application.frame.delete(self.dot)        
+        application.frame.delete(self.node_label)
+        application.frame.delete(self.edge_label) #error shows up here:
+        application.frame.delete(self.new_line)
+

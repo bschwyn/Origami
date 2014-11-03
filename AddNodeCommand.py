@@ -1,5 +1,9 @@
-import Application as app
 
+import Draw as draws
+
+#when going from command line, comment out self.canvas elements
+
+#addes a node to the graph structure representing the origami model
 class AddNodeCommand:
     def __init__(self, model, source, x, y, length, strain):
         self.source = source
@@ -19,18 +23,18 @@ class AddNodeCommand:
         #if this is the first node
         elif len(model.G)==0 and source_node == None:
             model.G.add_node(model.node_counter, x = x, y = y)
-            app.DrawCommand(model.app, model.node_counter, source_node, x, y, length, strain)
+            #self.canvas_elements = draw.DrawCommand(model.app, model.node_counter, source_node, x, y, length, strain)
             model.node_counter +=1
         #adding attional nodes 
         elif source_node in model.G.nodes(): 
             new_node = model.node_counter
             model.G.add_node(new_node,x=x,y=y)
             model.G.add_edge(new_node,source_node,length = length, strain = strain)        
-            app.DrawCommand(model.app, model.node_counter, source_node, x, y, length, strain)
+            #self.canvas_elements = draw.DrawCommand(model.app, model.node_counter, source_node, x, y, length, strain)
             model.node_counter +=1
         else:
             print "Error: source not found"
     
-    def undo(self):
-       # remove_node()
-       delete_node()
+    def undo(self, application):
+        self.canvas_elements.undo(application)
+        #tomorrow work on creating undo for the graph structure

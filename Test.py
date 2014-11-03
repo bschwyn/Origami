@@ -1,18 +1,20 @@
 import unittest
+import Model as m
+import numpy as np
 
 class TestOrigami(unittest.TestCase):
     #run these tests by placing "unittest.main()" in my file
     
     def setUp(self): #create EMU graph
-        self.emu = Model(1.0,1.0)
-        self.emu.add_node_to(source_node = None, x = 0.5, y = 0.25) #creates node 1
+        self.emu = m.Model(1.0,1.0)
+        self.emu.add_node_to(source = None, x = 0.5, y = 0.25) #creates node 1
         self.emu.add_node_to(1,.5,.5) #creates node 2 attached to node1
         self.emu.add_node_to(2,.75,.75) #creates node 3 attached to node 2
         self.emu.add_node_to(2,.25,.75) #creates node 4 attached to node 2
     
-    def test_add_delete(self):
-        self.emu.add_node_to(3)
-        self.emu.delete_node(4)
+  #  def test_add_delete(self):
+   #     self.emu.add_node_to(3)
+  #      self.emu.delete_node(4)
     
     def test_draw(self):
         self.emu.draw()
@@ -60,7 +62,32 @@ class TestOrigami(unittest.TestCase):
             
     
     def test_construct_constraints(self):
-        self.emu._scale_construct_constraints()
+    #create an array of the constraint functions
+        cons_array = self.emu._scale_construct_constraints()
+        print cons_array
+        cons_array_functions = []
+        for dictionary in cons_array:
+            function = dictionary["fun"]
+            cons_array_functions.append(function)
+        x0 = self.emu._scale_initial_guess()
+        
+        
+        #test of the distance part
+        dist12 = self.emu.dist(x0[0], x0[2], x0[1], x0[3])
+        dist13 = self.emu.dist(x0[0],x0[4],x0[1],x0[5])
+        dist23 = self.emu.dist(x0[2],x0[4],x0[3],x0[5])
+        self.assertEqual(dist12, cons_array_functions[0](x0))
+        self.assertEqual(dist13,cons_array_functions[1](x0))
+        self.assertEqual(dist23, cons_array_functions[2](x0))
+        
+        
+        #cons1_value = -x0[6]*2 + self.emu.dist(x0[0],x0[2],x0[1],x0[3])
+        #cons2_value = -x0[6]*2 + self.emu.dist(x0[0],x0[4],x0[1],x0[5])
+        #cond3_value = -x0[6]*2 + self.emu.dist(x0[2],x0[4],x0[3],x0[5])
+        #self.assertEqual(cons1_value,cons_array_functions[0](x0))
+        #self.assertEqual(cons2_value, cons_array_functions[1](x0))
+        #self.assertEqual(cons3_value, cons_array_functions[2](x0))
+        
     
     
     def test_construct_bounds(self):

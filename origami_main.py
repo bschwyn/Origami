@@ -6,7 +6,7 @@
 
 # *** libraries***
 import networkx as nx
-#import numpy as np
+import numpy as np
 from scipy.optimize import minimize
 import math
 import matplotlib.pyplot as plt
@@ -628,7 +628,7 @@ class TestOrigami(unittest.TestCase):
 
 # everything below this is mostly crap----aka one time tests to try and figure stuff out.
   
-run_emu_example = False            
+run_emu_example = True            
 if run_emu_example:
     
     emu = Model(1.0,1.0)
@@ -652,7 +652,7 @@ if run_emu_example:
 
 
 #'''
-rungui=True
+rungui=False
 if rungui:
     root = Tk.Tk()
     gui = Application(master = root)
