@@ -200,15 +200,26 @@ class Model:
             
             #create a corresponding x and y index for each source and target index
             src_x = source_index * 2
-            src_y = (source_index + 1) * 2
-            trg_x = target_index * 2
-            trg_y = (target_index + 1) * 2
+            trg_x = (target_index) * 2
+            src_y = (source_index * 2) + 1
+            trg_y = (target_index * 2) + 1
             
+            print "in the for loop"
+            print src_x
+            print trg_x
+            print src_y
+            print trg_y
             #constraint function in form where cons >=0
             def cons(s_vector):
-                coord_distance = self.dist(s_vector[src_x], s_vector[src_y], s_vector[trg_x], s_vector[trg_y])
+                print "____"
+                print src_x
+                print trg_x
+                print src_y
+                print trg_y
+                coord_distance = self.dist(s_vector[src_x], s_vector[trg_x], s_vector[src_y], s_vector[trg_y])
+                
                 return -s_vector[-1]*sum_of_strained_lengths + coord_distance
-
+                
             constraints.append({"type": "ineq", "fun": cons})
         return constraints
         
@@ -234,9 +245,8 @@ class Model:
         s_vector0 = self._scale_initial_guess()
         bnds = self._scale_construct_bounds()
         cons = self._scale_construct_constraints()
-        optimize = minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.1, "maxiter":50})
-        #print "SFLKSJLFKJSLDKFJSSF"
-        #print optimize.x
+        optimize = minimize(fun,s_vector0,method='SLSQP', bounds=bnds, constraints=cons, options={ "eps":.1, "maxiter":50, "ftol":.0001})
+        
         return optimize
     
     #this determines whether or not a graph can be scale optimized
@@ -318,8 +328,10 @@ class Model:
             trg_x = target_index * 2
             trg_y = (target_index + 1) * 2
             
+            
             #constraint function in form where cons >=0
             def cons(e_vector):
+                
                 coord_distance = self.dist(e_vector[src_x],e_vector[src_y],e_vector[trg_x],e_vector[trg_y])
                 return -e_vector[-1] + (coord_distance - fixed_strained_edge_length)/selected_edge_lengths
 
