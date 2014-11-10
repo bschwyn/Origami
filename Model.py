@@ -34,7 +34,7 @@ class Model:
         self.undo_stack.pop().undo(app)
     
     #returns a list of nodes
-    def getNodes(self):
+    def getAllNodes(self):
         return self.G.nodes()
         
     #get node attribute (such as coordinates)
@@ -204,23 +204,10 @@ class Model:
             src_y = (source_index * 2) + 1
             trg_y = (target_index * 2) + 1
             
-            print "in the for loop"
-            print src_x
-            print trg_x
-            print src_y
-            print trg_y
-            #constraint function in form where cons >=0
-            def cons(s_vector):
-                print "____"
-                print src_x
-                print trg_x
-                print src_y
-                print trg_y
-                coord_distance = self.dist(s_vector[src_x], s_vector[trg_x], s_vector[src_y], s_vector[trg_y])
-                
-                return -s_vector[-1]*sum_of_strained_lengths + coord_distance
-                
-            constraints.append({"type": "ineq", "fun": cons})
+            def make_lambda(x1,x2,y1,y2):
+                return lambda x: -x[-1] * sum_of_strained_lengths + self.dist(x[x1], x[x2], x[y1], x[y2])
+            
+            constraints.append({"type": "ineq", "fun": make_lambda(src_x,trg_x,src_y,trg_y)})
         return constraints
         
 #returns a 2d array of the coordinates of all of the leaf vertices
