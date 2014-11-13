@@ -9,7 +9,121 @@ class DrawCommand:
         self.length = length
         self.strain = strain
         self.draw_node(application, self.current, self.source, self.x, self.y, self.length, self.strain)
+        self.draw_model(application)
     
+    def draw_model(self, application):
+    
+        #clear everything
+        application.frame.delete("all")
+        
+        #redraw
+        application.draw_new_paper()
+        
+        #do all the scale stuff
+        paper_long_edge_pixels = application.frame_pixels - 2 * application.border_pixels
+        radius = application.frame_pixels/10 # some number
+        
+        paper_width = float(application.getDimensions()[0])
+        paper_height = float(application.getDimensions()[1])
+        
+        if paper_height > paper_width:
+            paper_height_pixels = paper_long_edge_pixels
+            paper_width_pixels = paper_shorter_edge_pixels = paper_width/paper_height * paper_long_edge_pixels
+        else:
+            paper_width_pixels = paper_long_edge_pixels
+            paper_height_pixels = paper_shorter_edge_pixels = paper_height / paper_width * paper_long_edge_pixels
+        
+        #draw a dot w/ all the nodes
+        for node in application.model.getAllNodes():
+            #x = node["x"]
+            #y = node["y"]
+            #or....?
+            
+            x = application.model.getNodeAttribute(node,"x")
+            y = application.model.getNodeAttribute(node,"y")
+            #distance in pixels from corner of "paper square" to node
+            x_pixels = paper_width_pixels * x / paper_width
+            y_pixels = paper_height_pixels * y / paper_height
+        
+            #distance in pixels from corner of frame to node
+            x_corner_dist = application.border_pixels + x_pixels
+            y_corner_dist = application.border_pixels + y_pixels
+            
+            #draw dot
+            dot = 2.5
+            application.frame.create_rectangle(x_corner_dist - dot, y_corner_dist - dot, x_corner_dist + dot, y_corner_dist + dot, fill = "red")
+            #draw label
+            application.frame.create_text(x_corner_dist + 10, y_corner_dist, text = "node" + str(node) + "\n" + "(" + str(x) + "," + str(y) + ")") 
+        
+        #for all nodes:
+        #draw a dot w/ coordinates
+        
+        #for all leaf nodes
+        #draw a circle
+        for node in application.model.all_leaf_nodes():
+        
+            neighbor = application.model.G.neighbors(node)[0]
+            
+            length = application.model.getEdgeAttribute(node, neighbor,"length")
+            strain = application.model.getEdgeAttribute(node, neighbor, "strain")
+            
+            #coordinates of node in paper scale
+            x = application.model.getNodeAttribute(node,"x")
+            y = application.model.getNodeAttribute(node,"y")
+            #distance in pixels from corner of "paper square" to node
+            x_pixels = paper_width_pixels * x / paper_width
+            y_pixels = paper_height_pixels * y / paper_height
+        
+            #distance in pixels from corner of frame to node
+            x_corner_dist = application.border_pixels + x_pixels
+            y_corner_dist = application.border_pixels + y_pixels
+            
+            #draw a circle
+            rad = length * radius
+            application.frame.create_oval(x_corner_dist - rad ,y_corner_dist - rad, x_corner_dist + rad, y_corner_dist + rad)
+        
+        for edge in application.model.all_edges():
+        
+            
+            source = edge[0]
+            target = edge[1]
+            
+            
+            x = application.model.getNodeAttribute(target,"x")
+            y = application.model.getNodeAttribute(target,"y")
+            
+            length = application.model.getEdgeAttribute(edge[0], edge[1], "length")
+            strain = application.model.getEdgeAttribute(edge[0], edge[1], "strain")
+                
+            #draw line between nodes
+            source_x = application.model.getNodeAttribute(source,"x")
+            source_y = application.model.getNodeAttribute(source, "y")
+            
+            x_s_corner_dist = application.border_pixels + source_x * paper_width_pixels / paper_width
+            y_s_corner_dist = application.border_pixels + source_y * paper_height_pixels / paper_height
+            
+            #distance in pixels from corner of "paper square" to node
+            x_pixels = paper_width_pixels * x / paper_width
+            y_pixels = paper_height_pixels * y / paper_height   
+        
+            #distance in pixels from corner of frame to node
+            x_corner_dist = application.border_pixels + x_pixels
+            y_corner_dist = application.border_pixels + y_pixels
+        
+            
+            application.frame.create_line(x_s_corner_dist, y_s_corner_dist, x_corner_dist, y_corner_dist)
+            
+            
+            #draw label halfway for length and strain
+            x_halfway = application.border_pixels + (source_x + x) / 2 * paper_width_pixels / paper_width
+            y_halfway = application.border_pixels + (source_y + y) / 2 * paper_height_pixels / paper_height
+            
+            application.frame.create_text(x_halfway, y_halfway, text = "Length = " + str(length) + "\n"+"Strain = " + str(strain))
+        
+        
+            
+        #for all edges
+        #draw a line w/ some labels
 
 #makes a visual representation of the node and it's connections
     def draw_node(self, application, current_node, source, x, y, length, strain):
