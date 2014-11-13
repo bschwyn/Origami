@@ -74,9 +74,9 @@ class Application(Tk.Frame):
         inputDialog = dbox.DimSubmissionBox(self) #not sure whether this should be self or root that goes to dbox as the parent
         self.wait_window(inputDialog.top)
         dimensions = inputDialog.entered_dimensions
-        self.dimension = dimensions
+        self.dimensions = dimensions
         self.initialize_model(dimensions)
-        self.draw_new_paper(dimensions)
+        self.draw_new_paper()
         self.new_node_dialog_box()
         
     #create origami model object
@@ -87,7 +87,7 @@ class Application(Tk.Frame):
         self.model = model.Model(self, width, height)
         
     #draws a square representing the paper
-    def draw_new_paper(self,dimensions):
+    def draw_new_paper(self):
         #if a node submission box exists already, destroy it
         #1) check if box exists
         #2) destroy
@@ -96,12 +96,14 @@ class Application(Tk.Frame):
         #if self.nodebox:
         #    self.nodebox.destroy()
         
+        
+        dimensions = self.dimensions
+        
         #p means pixels
         border_p =  self.border_pixels = self.frame_pixels/10
         frame_pixels = self.frame_pixels
         paper_height = float(dimensions[1])
         paper_width = float(dimensions[0])
-        self.dimensions = dimensions
         
         paper_long_edge_pixels = frame_pixels - 2*border_p
        
