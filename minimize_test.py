@@ -46,7 +46,7 @@ cons3 = lambda x: -x[6]*2 + dist(x[2],x[4],x[3],x[5])
 
 cons_emu = [{"type": "ineq", "fun": cons1}, {"type": "ineq", "fun": cons2}, {"type": "ineq", "fun": cons3}]
 print "____emu____"
-print minimize(f, x0, method = 'SLSQP', bounds = bnds, constraints = cons_emu, options = { "eps":.1, "maxiter":50})
+print minimize(f, x0, method = 'SLSQP', bounds = bnds, constraints = cons_emu, options = { "eps":.1, "maxiter":50, "ftol":.0001})
 
 x1 = (.25,.25,.25,.75,.75,.25,.75,.75,1)
 
