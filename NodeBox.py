@@ -74,7 +74,7 @@ class NodeBox(object):
     def add_node_info(self, application, frame):
     
         #get source node from radiobutton 
-        if self.rb_var.get() == 0 and len(application.model.getNodes()) == 0 :
+        if self.rb_var.get() == 0 and len(application.model.getAllNodes()) == 0 :
            source = None
         elif self.rb_var.get() != 0:
             source = self.rb_var.get()
@@ -101,7 +101,7 @@ class NodeBox(object):
         application.move_node_info_from_app_to_model(source, x_coordinate, y_coordinate, length, strain)
         
         #bad form possibly, but an easy hack
-        node_list = application.model.getNodes()
+        node_list = application.model.getAllNodes()
         current_node = node_list[-1]
         
         button = Tk.Radiobutton(frame, text = "node" + str(current_node), variable = self.rb_var, value = current_node)
