@@ -61,9 +61,16 @@ class Application(Tk.Frame):
             print "Error: model not initialized yet"
             
         elif self.model.scale_optimization_ready():
-            print "calling scale optimization"
+            
             optimization = self.model.scale_optimization()
-            #draw new scale
+            newcoords = optimization.x
+            self.model.change_to_optimized_coordinates(newcoords)
+            print optimization
+            #redraw model
+            #get all of the new coordinates
+            #change the coordinates of the model so that nodes are at the optimized coordinates.
+            #draw circles at each x coordinate
+            
         else:
             print "Error: model not ready for scale optimization yet"
             
