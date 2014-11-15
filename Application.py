@@ -37,12 +37,12 @@ class Application(Tk.Frame):
   
         self.b_QUIT.pack()
         
-        #test: says hello
-        self.hi_there = Tk.Button(self)
-        self.hi_there["text"] = "Hello",
-        self.hi_there["command"] = self.say_hi
+        #test: print model
+        self.b_print = Tk.Button(self)
+        self.b_print["text"] = "Print Model"
+        self.b_print["command"] = self.print_model
         
-        self.hi_there.pack()
+        self.b_print.pack()
         
         self.b_newmodel = Tk.Button(self)
         self.b_newmodel['text'] = "New Model"
@@ -160,7 +160,7 @@ class Application(Tk.Frame):
     
     #undo add node
     def add_node_undo(self):
-        self.undo_stack.pop().undo(self)
+        self.model.add_node_undo()
         
     #I'm pretty sure this needs to be discarded    
     def model_widgets(self):
@@ -174,8 +174,11 @@ class Application(Tk.Frame):
         self.node_button["text"] = 'enter new info'     
 
     
-    def say_hi(self):
-        print "hello!"
+    def print_model(self):
+        print "Model Nodes"
+        print self.model.G.nodes(data = True)
+        print "Model Edges"
+        print self.model.G.edges(data = True)
         
     def draw_scaled_model(self, optimize_return_object):
         new_x_vector = optimize_return_objects.x
