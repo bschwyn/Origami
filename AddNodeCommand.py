@@ -35,6 +35,7 @@ class AddNodeCommand:
         else:
             print "Error: source not found"
     
-    def undo(self, application):
-        self.canvas_elements.undo(application)
-        #tomorrow work on creating undo for the graph structure
+    def undo(self, model):
+        model.node_counter -=1
+        model.G.remove_node(model.node_counter)
+        draw.DrawCommand(model.app)
