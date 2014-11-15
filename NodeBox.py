@@ -70,7 +70,7 @@ class NodeBox(object):
     #after entry boxes are filled:
 
     
-    #pass the node information to the application where the model is stored
+    #pass the node information from the user input box to the application (and from there to model)
     def add_node_info(self, application, frame):
     
         #get source node from radiobutton 
@@ -107,8 +107,8 @@ class NodeBox(object):
         button = Tk.Radiobutton(frame, text = "node" + str(current_node), variable = self.rb_var, value = current_node)
         button.grid( columnspan = 2)
     
-    def undo_add_node(self, application):
-        application.model.add_node_undo(application)
+    def undo_add_node(self,application):
+        application.add_node_undo()
         
         
     #takes input string of the coordinates, returns a touple
