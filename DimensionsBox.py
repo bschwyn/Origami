@@ -4,13 +4,15 @@ class DimSubmissionBox(object):
     
     def __init__(self,parent):
         
+        #create toplevel
         top = self.top = Tk.Toplevel(parent)
         top.wm_title("Initalize Model")
 
-        
+        #make new frame that above the background frame
         dialog = Tk.Frame(self.top)
         dialog.grid()
         
+        #create a title
         self.l_name = Tk.Label(dialog)
         self.l_name["text"] = "Name:"
         self.l_name.grid(row = 0, column = 0)
@@ -47,10 +49,13 @@ class DimSubmissionBox(object):
                         
     def submit_data(self):
         height_data = self.e_height.get()
-        width_data = self.e_width.get()
+        width_data = self.e_width.get()        
+        
         data = (width_data, height_data)
         
         name = self.e_name.get()
+        
         if data:
             self.entered_dimensions = data
+            self.name = name
             self.top.destroy()
