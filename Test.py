@@ -62,33 +62,39 @@ class TestOrigami(unittest.TestCase):
             
     
     def test_construct_constraints(self):
-    #create an array of the constraint functions
+    #create an array of the constraint functions, taken from the in-use construct_constrains function
         cons_array = self.emu._scale_construct_constraints()
-        print cons_array
         cons_array_functions = []
         for dictionary in cons_array:
             function = dictionary["fun"]
             cons_array_functions.append(function)
+            
+        #create functions to test in-use functions against
         x0 = self.emu._scale_initial_guess()
-        print x0
-        cons1_value = -x0[6]*2 + self.emu.dist(x0[0],x0[2],x0[1],x0[3])
-        cons2_value = -x0[6]*2 + self.emu.dist(x0[0],x0[4],x0[1],x0[5])
-        cons3_value = -x0[6]*2 + self.emu.dist(x0[2],x0[4],x0[3],x0[5])
-        print "test, initial guess based constraint value"
-        print cons1_value
-        print cons2_value
-        print cons3_value
-        print "test, next is constraint value pulled from"
+        value1_from_x0 = -x0[6]*2 + self.emu.dist(x0[0],x0[2],x0[1],x0[3])
+        value2_from_x0 = -x0[6]*2 + self.emu.dist(x0[0],x0[4],x0[1],x0[5])
+        value3_from_x0 = -x0[6]*2 + self.emu.dist(x0[2],x0[4],x0[3],x0[5])
+        
+        #different version, meant to be exactly like Model test:
+        
+        a = lambda x: -x[6]*2 + self.emu.dist(x[0],x[2],x[1],x[3])
+        #b = lambda x:
+        
+        print "test,  value calculated directly from initial guess and distance"
+        print value1_from_x0
+        print value2_from_x0
+        print value3_from_x0
+        print "test, constraint functions acting on initial guess"
         print cons_array_functions[0](x0)
         print cons_array_functions[1](x0)
         print cons_array_functions[2](x0)
-        print "aaaaaaaaaaa"
-        self.assertTrue(np.allclose(cons1_value,cons_array_functions[0](x0),atol = .001))
-        self.assertTrue(np.allclose(cons2_value, cons_array_functions[1](x0),atol = .001))
-        self.assertTrue(np.allclose(cons3_value, cons_array_functions[2](x0),atol = .001))
+        print "--------------"
+        self.assertTrue(np.allclose(value1_from_x0, cons_array_functions[0](x0),atol = .001))
+        self.assertTrue(np.allclose(value2_from_x0, cons_array_functions[1](x0),atol = .001))
+        self.assertTrue(np.allclose(value3_from_x0, cons_array_functions[2](x0),atol = .001))
 
 
-    def test_constraint_things(self):
+    def test_preliminary_constraints(self):
     
         x0 = self.emu._scale_initial_guess()
         a = -x0[6]*2 + self.emu.dist(.5,.75,.25,.75)
