@@ -1,5 +1,5 @@
 
-import Draw as draws
+import Draw as draw
 
 #when going from command line, comment out self.canvas elements
 
@@ -23,14 +23,14 @@ class AddNodeCommand:
         #if this is the first node
         elif len(model.G)==0 and source_node == None:
             model.G.add_node(model.node_counter, x = x, y = y)
-            #self.canvas_elements = draw.DrawCommand(model.app, model.node_counter, source_node, x, y, length, strain)
+            self.canvas_elements = draw.DrawCommand(model.app, model.node_counter, source_node, x, y, length, strain)
             model.node_counter +=1
         #adding attional nodes 
         elif source_node in model.G.nodes(): 
             new_node = model.node_counter
             model.G.add_node(new_node,x=x,y=y)
             model.G.add_edge(new_node,source_node,length = length, strain = strain)        
-            #self.canvas_elements = draw.DrawCommand(model.app, model.node_counter, source_node, x, y, length, strain)
+            self.canvas_elements = draw.DrawCommand(model.app, model.node_counter, source_node, x, y, length, strain)
             model.node_counter +=1
         else:
             print "Error: source not found"
