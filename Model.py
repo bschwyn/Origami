@@ -6,6 +6,7 @@ import itertools
 import numpy as np
 import Application as app
 import AddNodeCommand as addnodec
+import Draw as draw
 
 
 class Model:
@@ -25,13 +26,41 @@ class Model:
         #self.nodes = {}
         #self.paths = {}
         #self.leaf_vertices
+    
+    #for changing optimized coords to new coords
+    def change_node_attribute(self,node,attribute, new_value):
+        self.G.node[node][attribute] = new_value
+        
+    def change_to_optimized_coordinates(self, coords_array):
+        #the initial guess was constructed by appending an x and y for every leaf node
+        #to get the x0 x and y for each node
+        #get the x and the y
+        #change the coordinates of the node w/ the same index
+        
+        #decide upon node # itself, or node index
+        x0 = coords_array
+        leaf_nodes = self.all_leaf_nodes()
+        for node_index in range(len(leaf_nodes)):
+            #get x and y
+            x = x0[2*node_index]
+            y = x0[2*node_index + 1]
+            
+            node = leaf_nodes[node_index]
+            self.G.node[node]["x"] = x
+            self.G.node[node]["y"] = y
+        self.scale = -x0[-1]
+        draw.DrawCommand(self.app)
+        
+        #for all leaf nodes
+        #calculate the coordinate indices corresponding to the node
+        #
         
     #add node information to the model. Can be passed information through NodeBox or directly
     def add_node_to(self, source, x, y, length = 1.0, strain = 0.0):
         self.undo_stack.append(addnodec.AddNodeCommand(self, source, x, y, length, strain))
     
-    def add_node_undo(self, app):
-        self.undo_stack.pop().undo(app)
+    def add_node_undo(self):
+        self.undo_stack.pop().undo(self)
     
     #returns a list of nodes
     def getAllNodes(self):
@@ -43,7 +72,7 @@ class Model:
         
         
     def getEdgeAttribute(self,node1,node2,attribute):
-        return self.G[node1][node2][attribute]
+        return self.G.edge[node1][node2][attribute]
         
     def getNodeCounter(self):
         return self.node_counter
@@ -90,6 +119,9 @@ class Model:
     #returns a list of the shortest paths
     def all_shortest_paths(self):
         return all_pairs_shortest_path(self.G)
+        
+    def all_edges(self):
+        return self.G.edges()
 
     #returns a list of all edges connected to a leaf vertext
     def all_leaf_edges(self):
