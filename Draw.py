@@ -1,14 +1,7 @@
 
 
 class DrawCommand:
-    def __init__(self,application, current_node, source, x, y, length, strain):
-        self.current = current_node
-        self.source = source
-        self.x = x
-        self.y = y
-        self.length = length
-        self.strain = strain
-        self.draw_node(application, self.current, self.source, self.x, self.y, self.length, self.strain)
+    def __init__(self,application):
         self.draw_model(application)
     
     def draw_model(self, application):
@@ -79,9 +72,18 @@ class DrawCommand:
             y_corner_dist = application.border_pixels + y_pixels
             
             #draw a circle
-            rad = length * radius
-            application.frame.create_oval(x_corner_dist - rad ,y_corner_dist - rad, x_corner_dist + rad, y_corner_dist + rad)
-        
+            
+            
+            if application.model.scale == 1.0:
+                rad = length * radius
+                application.frame.create_oval(x_corner_dist - rad ,y_corner_dist - rad, x_corner_dist + rad, y_corner_dist + rad)
+            #after optimization
+            else:
+                
+                rad = paper_long_edge_pixels * application.model.scale * length
+                application.frame.create_oval(x_corner_dist - rad ,y_corner_dist - rad, x_corner_dist + rad, y_corner_dist + rad)
+           
+                
         for edge in application.model.all_edges():
         
             
@@ -198,9 +200,4 @@ class DrawCommand:
             self.edge_label = application.frame.create_text(x_halfway, y_halfway, text = "Length = " + str(length) + "\n"+"Strain = " + str(strain))
 
     def undo(self, application):
-        application.frame.delete(self.circle)
-        application.frame.delete(self.dot)        
-        application.frame.delete(self.node_label)
-        application.frame.delete(self.edge_label) #error shows up here:
-        application.frame.delete(self.new_line)
-
+        pass
