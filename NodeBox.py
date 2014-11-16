@@ -8,7 +8,7 @@ class NodeBox(object):
     def __init__(self, parent, application):
         top = self.top = Tk.Toplevel(parent)
         top.config(background = "#CCFFCC")
-        top.wm_title("controller")
+        top.wm_title("add nodes")
         source_frame = Tk.Frame(self.top)
         source_frame.grid(row = 0,column= 0)
         
@@ -18,6 +18,9 @@ class NodeBox(object):
         
         self.app = application
         self.add_node_widgets(entry_frame, source_frame)
+        
+        self.radiobuttonstack = []
+        #this is the storage variable for the radio_buttons
         self.rb_var = Tk.IntVar()
     
     #provides interface for adding node information
@@ -74,8 +77,10 @@ class NodeBox(object):
     def add_node_info(self, application, frame):
     
         #get source node from radiobutton 
+        #if there is noghting added to the model yet
         if self.rb_var.get() == 0 and len(application.model.getAllNodes()) == 0 :
            source = None
+        #get the node number from the radio button
         elif self.rb_var.get() != 0:
             source = self.rb_var.get()
         else:
@@ -106,10 +111,13 @@ class NodeBox(object):
         
         button = Tk.Radiobutton(frame, text = "node" + str(current_node), variable = self.rb_var, value = current_node)
         button.grid( columnspan = 2)
+        self.radiobuttonstack.append(button)
     
     def undo_add_node(self,application):
         application.add_node_undo()
-        
+        rb = self.radiobuttonstack.pop()
+        rb.destroy()
+        #undo add radio button
         
     #takes input string of the coordinates, returns a touple
     def xy_entry_to_float(self):
