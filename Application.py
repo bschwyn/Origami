@@ -9,9 +9,12 @@ class Application(Tk.Frame):
 #initialze frame    
     def __init__(self, master = None):
         button_frame = Tk.Frame.__init__(self,master)
+        self.master = master
+        master.title("untitled")
         self.pack()
         self.model = None
         self.dimensions = None
+        self.name = None
         self.create_canvas_frame()
         self.widgets()      
             
@@ -81,6 +84,8 @@ class Application(Tk.Frame):
         inputDialog = dbox.DimSubmissionBox(self) #not sure whether this should be self or root that goes to dbox as the parent
         self.wait_window(inputDialog.top)
         dimensions = inputDialog.entered_dimensions
+        self.name = inputDialog.name
+        self.master.title(self.name)
         self.dimensions = dimensions
         self.initialize_model(dimensions)
         self.draw_new_paper()
@@ -115,6 +120,10 @@ class Application(Tk.Frame):
         paper_long_edge_pixels = frame_pixels - 2*border_p
        
         self.frame.delete("all")
+        
+        #Title
+        if self.name:
+            self.frame.create_text(paper_long_edge_pixels / 2 + border_p, border_p/2 - 10, text = self.name.upper())
         
         #draw a hamburger/hotdog rectangle of the same shape as the paper dimensions
         if paper_height > paper_width:
