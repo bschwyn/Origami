@@ -15,8 +15,10 @@ class AddNodeCommand:
         
     def add_node_to(self, model, source_node = None, x = 0.0, y = 0.0, length = 1.0, strain = 0.0):
         
-        if x > model.width or y > model.height or x<0 or y <0:
+        if x > model.width or y > model.height:
             print "Error: coordinates not in scope"
+        elif  x<0 or y <0:
+            print "Error: coordinates must be positive"
         elif length < 0 or strain < 0:
             print "Error: length and strian must be positive"
              
