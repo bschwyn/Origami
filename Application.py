@@ -6,7 +6,7 @@ import AddNodeCommand as addnodec
 
 class Application(Tk.Frame):
     
-#initialze frame    
+#initialze frame
     def __init__(self, master = None):
         button_frame = Tk.Frame.__init__(self,master)
         self.master = master
@@ -21,7 +21,7 @@ class Application(Tk.Frame):
     def getDimensions(self):
         return self.dimensions
          
-    #makes basic frame size
+    #makes canvas  / frame size
     def create_canvas_frame(self):
         self.frame_pixels = 500
         self.frame = Tk.Canvas(self, width = self.frame_pixels, height = self.frame_pixels)
