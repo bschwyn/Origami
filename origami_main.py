@@ -4,6 +4,9 @@
 
 #9;11
 
+#This is an older version of the origami program, which had it's
+#components split up into separate files.
+
 # *** libraries***
 import networkx as nx
 import numpy as np
