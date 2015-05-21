@@ -29,3 +29,10 @@ one which largest ratio of flap length to the size of the paper results in the l
 For this model, the bird base is most efficient.
 
 Tutorial
+To run the GUI, make sure that rungui is set to 'true' in origami.main, and that running thexamples are set to 'false'.
+
+-make nodes, input cooridinates in format of '1.5, 2.0' or 0.5, but not .5
+- strain can be left empty, as it defaults to 1
+- -add nodes to form a tree
+- -optimize
+- -example
