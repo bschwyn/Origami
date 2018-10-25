@@ -55,7 +55,7 @@ class DrawCommand:
         #draw a circle
         for node in application.model.all_leaf_nodes():
         
-            neighbor = application.model.G.neighbors(node)[0]
+            neighbor = list(application.model.G.neighbors(node))[0]
             
             length = application.model.getEdgeAttribute(node, neighbor,"length")
             strain = application.model.getEdgeAttribute(node, neighbor, "strain")

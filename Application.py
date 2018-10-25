@@ -2,13 +2,14 @@ import Tkinter as Tk
 import DimensionsBox as dbox
 import NodeBox as nbox
 import Model as model
+import sys
 import AddNodeCommand as addnodec
 
 class Application(Tk.Frame):
     
-#initialze frame
+    #initialze frame
     def __init__(self, master = None):
-        button_frame = Tk.Frame.__init__(self,master)
+        button_frame = Tk.Frame.__init__(self, master)
         self.master = master
         master.title("untitled")
         self.pack()
@@ -75,7 +76,7 @@ class Application(Tk.Frame):
             #draw circles at each x coordinate
             
         else:
-            print "Error: model not ready for scale optimization yet"
+            print("Error: model not ready for scale optimization yet", sys.stderr)
             
         
     #create a dialog box, wait until the box is closed before acessing it's properties
@@ -110,13 +111,10 @@ class Application(Tk.Frame):
         
         
         dimensions = self.dimensions
-        
-        #p means pixels
         border_p =  self.border_pixels = self.frame_pixels/10
         frame_pixels = self.frame_pixels
         paper_height = float(dimensions[1])
         paper_width = float(dimensions[0])
-        
         paper_long_edge_pixels = frame_pixels - 2*border_p
        
         self.frame.delete("all")
@@ -136,7 +134,6 @@ class Application(Tk.Frame):
             self.frame.create_rectangle(border_p, border_p, border_p + paper_long_edge_pixels, border_p + paper_shorter_edge_pixels, fill = "white")
             
        #draw hash marks / paper size
-       
         #hash markers every .25 size increments
         #width marks
         x_marker_dist = 0
@@ -157,14 +154,13 @@ class Application(Tk.Frame):
     
     
     def new_node_dialog_box(self):
-        
         nodebox = nbox.NodeBox(self,self)
         #self.wait_window(inputDialog.top)
         #self.dimensions = inputDialog.dimensions ###not ture anymore
     
     
     #adds the information about the node recieved from the nodebox the model
-    def move_node_info_from_app_to_model(self, source, x, y,length=1.0,strain=1.0):
+    def move_node_info_from_app_to_model(self, source, x=0.5, y=0.5,length=1.0,strain=1.0):
         self.model.add_node_to(source, x, y, length, strain)
     
     #undo add node
@@ -184,10 +180,10 @@ class Application(Tk.Frame):
 
     
     def print_model(self):
-        print "Model Nodes"
-        print self.model.G.nodes(data = True)
-        print "Model Edges"
-        print self.model.G.edges(data = True)
+        print("Model Nodes", sys.stderr)
+        print(self.model.G.nodes(data = True),sys.stderr)
+        print("Model Edges", sys.stderr)
+        print(self.model.G.edges(data = True), sys.stderr)
         
     def draw_scaled_model(self, optimize_return_object):
         new_x_vector = optimize_return_objects.x

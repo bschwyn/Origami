@@ -18,7 +18,7 @@ import Test
 
 
 #emu example
-run_simple_examples = True
+run_simple_examples = False
 if run_simple_examples:
     print "Emu"
     emu = model.Model(1.0,1.0)
@@ -40,7 +40,7 @@ if run_simple_examples:
     opto = crane.scale_optimization()
     print opto 
     
-run_complex_examples = True
+run_complex_examples = False
 if run_complex_examples:
     print "pentagon"
     pentagon = model.Model(1.0, 1.0)
@@ -71,7 +71,7 @@ if run_complex_examples:
 
 
 #'''
-rungui= False
+rungui= True
 if rungui:
     root = Tk.Tk()
     gui = app.Application(master = root)

@@ -7,7 +7,7 @@ import numpy as np
 import Application as app
 import AddNodeCommand as addnodec
 import Draw as draw
-
+import sys
 
 class Model:
     #initialize the properties of the medium (paper) that the origami model will use.
@@ -18,7 +18,7 @@ class Model:
         self.node_counter = 1
         self.G = nx.Graph()
         self.app = application
-        self.undo_stack = []
+        self.undo_stack = [] #for keeping track of nodes in case they are undone
         #self.edges = {}
         #self.vertices = {}
         #self.vertex-node_indices = {}
@@ -72,7 +72,7 @@ class Model:
         
         
     def getEdgeAttribute(self,node1,node2,attribute):
-        return self.G.edge[node1][node2][attribute]
+        return self.G.get_edge_data(node1, node2)[attribute]
         
     def getNodeCounter(self):
         return self.node_counter
@@ -167,8 +167,8 @@ class Model:
         while i < len(shortest_path)-1:
             node1 = shortest_path[i]
             node2 = shortest_path[i+1]
-            edge_length = graph.edge[node1][node2]['length']
-            edge_strain = graph.edge[node1][node2]['strain']
+            edge_length = graph.get_edge_data(node1,node2)['length']
+            edge_strain = graph.get_edge_data(node1,node2)['strain']
             strained_length = (1+edge_strain) * edge_length        
             sum_of_strained_length += strained_length
             i+=1
@@ -183,7 +183,7 @@ class Model:
         while i < len(shortest_path)-1:
             node1 = shortest_path[i]
             node2 = shortest_path[i+1]
-            edge_length = graph.edge[node1][node2]['length']      
+            edge_length = graph.get_edge_data(node1,node2)['length']
             sum_of_length += edge_length
             i+=1
         return sum_of_length

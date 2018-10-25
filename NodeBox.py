@@ -1,5 +1,6 @@
 import Tkinter as Tk
 import re
+import sys
 
 class NodeBox(object):
 
@@ -62,6 +63,9 @@ class NodeBox(object):
         self.b_undo['text'] = "Undo"
         self.b_undo['command'] = lambda: self.undo_add_node(self.app)
         self.b_undo.grid(columnspan = 2)
+
+        print("Formatting: 'float, float' for coordinates, length and strain can be int or float, default to 1", sys.stderr)
+
         
   
 
@@ -75,17 +79,17 @@ class NodeBox(object):
     
     #pass the node information from the user input box to the application (and from there to model)
     def add_node_info(self, application, frame):
-    
+
         #get source node from radiobutton 
         #if there is noghting added to the model yet
-        if self.rb_var.get() == 0 and len(application.model.getAllNodes()) == 0 :
+        if self.rb_var.get() == 0 and len(application.model.getAllNodes()) == 0:
            source = None
         #get the node number from the radio button
         elif self.rb_var.get() != 0:
             source = self.rb_var.get()
         else:
-            print "Error: node must have source"
-       
+            print("Error: node must have source", sys.stderr)
+
         #parse coordinate entry into x and y
         x_coordinate = self.xy_entry_to_float()[0]
         y_coordinate = self.xy_entry_to_float()[1]
@@ -107,7 +111,7 @@ class NodeBox(object):
         
         #bad form possibly, but an easy hack
         node_list = application.model.getAllNodes()
-        current_node = node_list[-1]
+        current_node = list(node_list)[-1]
         
         button = Tk.Radiobutton(frame, text = "node" + str(current_node), variable = self.rb_var, value = current_node)
         button.grid( columnspan = 2)
@@ -125,7 +129,7 @@ class NodeBox(object):
         int_or_float= re.compile("\d+\.?\d*") #really want \d+\.?\d* OR \d*\.?\d+ first covers (1 and 1.0), second covers (.2, 1.0). \d*\.\d* would cover all of these and individual periods, which seems reasonable, but may also caputre periods by themselves need to test.
         xy = re.findall(int_or_float, coord_string)
         if len(xy)!=2:
-            print "ERROR: coordinates must have x and y"
+            print("ERROR: coordinates must have x and y", sys.stderr)
         x = float(xy[0])
         y = float(xy[1])
         return (x,y)

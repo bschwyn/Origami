@@ -1,5 +1,6 @@
 
 import Draw as draw
+import sys
 
 #when going from command line, comment out self.canvas elements
 
@@ -16,11 +17,11 @@ class AddNodeCommand:
     def add_node_to(self, model, source_node = None, x = 0.0, y = 0.0, length = 1.0, strain = 0.0):
         
         if x > model.width or y > model.height:
-            print "Error: coordinates not in scope"
+            print("Error: coordinates not in scope", sys.stderr)
         elif  x<0 or y <0:
-            print "Error: coordinates must be positive"
+            print("Error: coordinates must be positive", sys.stderr)
         elif length < 0 or strain < 0:
-            print "Error: length and strian must be positive"
+            print("Error: length and strian must be positive", sys.stderr)
              
         #if this is the first node
         elif len(model.G)==0 and source_node == None:
@@ -35,7 +36,7 @@ class AddNodeCommand:
             draw.DrawCommand(model.app)
             model.node_counter +=1
         else:
-            print "Error: source not found"
+            print("Error: source not found", sys.stderr)
     
     def undo(self, model):
         model.node_counter -=1
