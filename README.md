@@ -3,7 +3,7 @@
 The contents of this readme are:
 1. Introduction
 2. Program Walkthrough
-3. Circle Packing and Origami Mathematics
+3. Circle Packing, Origami Mathematics, and Origami Design
 
 ### Introduction
 
