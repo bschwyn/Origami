@@ -33,7 +33,7 @@ Unfortunately, math cannot do the rest. It's art!
 
 ![](images/origami-crane.png)
 
-### What about this program?
+### This Program
 
 The Origami Design Tool does one piece of this process. In the program you can build two important components, the representation of the paper, and the representation of the model, and the relationship between the two. The paper is represented as a coordinate system, with a max width and height of 1.0 for squares, though rectangles are possible. 
 
