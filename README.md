@@ -122,14 +122,14 @@ The overall scale of the tree is *m*.
 
 The scale optimization problem is the optimzation of the positition of all leaf vertices and the overall scale. It is a nonlinear constrained optimization problem, with these constraints:
 
-    ![](images/eqn1.gif)
+![](images/eqn1.gif)
 
-    The coordinates of every vertex must lie within the paper boundaries:
+The coordinates of every vertex must lie within the paper boundaries:
 
-    ![equation](images/eqn2.gif)
+![equation](images/eqn2.gif)
 
-    ![equation](images/eqn3.gif)
+![equation](images/eqn3.gif)
 
-    The separation between any two vertices on the square must be at least as large as the scaled length of the path between their corresponding two nodes as measured along the tree.
+The separation between any two vertices on the square must be at least as large as the scaled length of the path between their corresponding two nodes as measured along the tree.
 
-    ![equation](images/eqn4.gif)
+![equation](images/eqn4.gif)
