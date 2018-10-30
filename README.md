@@ -3,7 +3,13 @@
 The contents of this readme are:
 1. Introduction
 2. Program Walkthrough
+- 2.1 The Origami Design Tool
+- 2.2 Walkthrough
 3. Circle Packing, Origami Mathematics, and Origami Design
+- 3.1 The Circle-River Method of Origami Design
+- 3.2 Defining the Scale Optimization
+- 3.3 Definitions and Notation
+- 3.4 Scale Optimization
 
 ### 1. Introduction
 
@@ -70,7 +76,7 @@ Note the similarity to the crane crease diagram in the introduction!
 
 Let’s go through that in a bit more detail and highlight some vocabulary.
 
-#### 3.1. The circle-river method of origami design
+#### 3.1. The Circle-River Method of Origami Design
 
 Just as animals are made out of limbs with portions of body in between, an **origami model** can be described as being made out of hinged flaps attached by portions of paper. During the folding process a basic shape with the appropriate number of limbs and geometry is made. This is called a **base.** After the base is made to have the general shape of the animal, the rest of the folds are aesthetic details which make the origami model look real. Things like eyes, ears, thinning of limbs and the shaping of wings.
 
@@ -95,7 +101,7 @@ One of our goals is to build origami models that have the most efficient paper u
 
 This problem is called the scale optimization problem, and is one of several nonlinear constrained optimizations involved in origami design. It is the only one that this problem solves.
 
-#### 3.3. Defininitions and Notation
+#### 3.3. Definitions and Notation
 
 A **tree diagram** is a **graph** representation of the animal form that is having it’s folding pattern designed. It is a set of i **nodes**, and **edges** E.
 
