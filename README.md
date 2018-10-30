@@ -74,18 +74,24 @@ A **flap** is a hinged portion of paper folded into a thin limb, often in the sh
 
 ![](images/corner-circle.png)
 
+
+
+
+#### Defining the Scale Optimization
+
 One of our goals is to build origami models that have the most efficient paper usage, or the largest flap-size to paper size ratio. Since center flaps use four times the amount of paper that corner flaps use (edge flaps use twice the amount that corner flaps use), an important result is that most of the flaps should be centered on the edges or corners of the paper where possible.
+
 
 This problem is called the scale optimization problem, and is one of several nonlinear constrained optimizations involved in origami design. It is the only one that this problem solves.
 
-Given that, it’s time for some math:
+#### Defininitions and Notation
 
 A **tree diagram** is a **graph** representation of the animal form that is having it’s folding pattern designed. It is a set of i **nodes**, and **edges** E.
 
 A **node** of the graph can be a **leaf node** or a **branch node**, where leaf nodes are only connected to one edge and branch nodes are connected to multiple. 
 
 
-The graph **edges** contain two nodes, and have attributes **length** and **strain**. 
+The graph **edges** contain two nodes, and have attributes **length** l<sub>i</sub> and **strain** (fractional distortion) σ<sub>i</sub>. 
 
 The graph has a mapping to the paper and the coordinate system associated with it. After the mapping the nodes have a one to one relationship to a set of **vertices** **U**, where each vector vertex **u**<sub>i</sub> has coordinate variables u<sub>i,x</sub> and u<sub>i,y</sub>.
 
@@ -93,9 +99,15 @@ U<sup>t</sup> is the set of **leaf vertices** which correspond to leaf nodes.
 
  A **path** p<sub>ij</sub> is a sequence of edges which connect two nodes i and j. Define P to be the set of all paths, and P<sup>t</sup> to be the set of all **leaf paths**, or paths that connect two leaf nodes.
 
+Each path has a length l<sub>ij</sub>, given by the sum of the strained lengths of the edges in the path.
+
+
 The overall scale of the tree is *m*.
 
 *w* and *h* are the width and height of the paper.
+
+
+#### Scale Optimization
 
 The scale optimization problem is the optimzation of the positition of all leaf vertices and the overall scale. It is a nonlinear constrained optimization problem, with these constraints:
 
@@ -104,6 +116,7 @@ The scale optimization problem is the optimzation of the positition of all leaf 
 The coordinates of every vertex must lie within the paper boundaries:
 
 ![equation](images/eqn2.gif)
+
 ![equation](images/eqn3.gif)
 
 The separation between any two vertices on the square must be at least as large as the scaled length of the path between their corresponding two nodes as measured along the tree.
