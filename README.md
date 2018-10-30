@@ -102,7 +102,7 @@ A **tree diagram** is a **graph** representation of the animal form that is havi
 A **node** of the graph can be a **leaf node** or a **branch node**, where leaf nodes are only connected to one edge and branch nodes are connected to multiple. 
 
 
-The graph **edges** contain two nodes, and have attributes **length** l<sub>i</sub> and **strain** (fractional distortion) σ<sub>i</sub>. 
+The graph **edges** e<sub>i</sub> contain two nodes, and have attributes **length** l<sub>i</sub> and **strain** (fractional distortion) σ<sub>i</sub>. 
 
 The graph has a mapping to the paper and the coordinate system associated with it. After the mapping the nodes have a one to one relationship to a set of **vertices** **U**, where each vector vertex **u**<sub>i</sub> has coordinate variables u<sub>i,x</sub> and u<sub>i,y</sub>.
 
