@@ -5,7 +5,7 @@ The contents of this readme are:
 2. Program Walkthrough
 3. Circle Packing, Origami Mathematics, and Origami Design
 
-### Introduction
+### 1. Introduction
 
 The art of origami paperfolding has gone through enormous innovation in the past twenty years through an unlikely source – circle packing mathematics. Now it is possible not just to fold simple cranes and boxes, but complex, anatomically correct sculptures of arthropods, deer, and other forms with many branches, long limbs, and unusual body geometry. The process of designing these models is both art and engineering, and the design can done computationally.
 
@@ -33,13 +33,15 @@ Unfortunately, math cannot do the rest. It's art!
 
 ![](images/origami-crane.png)
 
-### This Program
+### 2. Program Waltkhrough
+
+#### 2.1 The Origami Design Tool
 
 The Origami Design Tool does one piece of this process. In the program you can build two important components, the representation of the paper, and the representation of the model, and the relationship between the two. The paper is represented as a coordinate system, with a max width and height of 1.0 for squares, though rectangles are possible. 
 
 To build the model representation, this is done by building a tree graph, where each edge has length and strain attribute. The mapping from the model to the paper is given by initial coordinates for each node on the graph. The purpose of the optimization is to find the coordinates for each node such that the distances between the nodes holds in a certain way (circle packing...) and so that the paper is used (covered by circles) in the most paper efficient manner. This is called a scale optimization, which is only one piece of the full number of mathematical tools involved for a complete crease pattern. What it does do is place the leaf nodes of the graph in the same locations as the tips of the limbs for an origami model. This is a significant insight into the structure of a model.
 
-### Walkthrough
+##### 2.2 Walkthrough
 
 To install, create a virtual environment with a python2 interpreter and run `pip install -r requirements.txt`.
 Make sure that the variables run_simple_examples and run_complex_examples are set to False and run_gui is set to True in the main.py file.
@@ -64,9 +66,11 @@ When the full tree diagram is drawn then you can click scale optimization. A suc
 Note the similarity to the crane crease diagram in the introduction!
 
 
-### Circle Packing and Origami Mathematics
+### 3. Circle Packing and Origami Mathematics
 
 Let’s go through that in a bit more detail and highlight some vocabulary.
+
+#### 3.1. The circle-river method of origami design
 
 Just as animals are made out of limbs with portions of body in between, an **origami model** can be described as being made out of hinged flaps attached by portions of paper. During the folding process a basic shape with the appropriate number of limbs and geometry is made. This is called a **base.** After the base is made to have the general shape of the animal, the rest of the folds are aesthetic details which make the origami model look real. Things like eyes, ears, thinning of limbs and the shaping of wings.
 
@@ -74,17 +78,24 @@ A **flap** is a hinged portion of paper folded into a thin limb, often in the sh
 
 ![](images/corner-circle.png)
 
+To design an origami base that can be folded into a particular figurine, the flaps of the model must be arranged on the the paper to be folded in a way that matches with the geometry. The adjacent limbs and features on the final model that correspond to different flaps need to have their circles be adjacent. So a head and two legs may be three different circles, two longer and one shorter that are all touching on the paper. Parts of the model that would not be limbs on a stick figure, such as the torso, must separate the circles on the paper. So there must be a distance of at least the length of the torso between, say, the rear and front pairs of legs. These portions of the model are called **rivers** and are the second piece in circle-river packing.
+
+![](images/lucanus_CP.jpg)
+
+Here is the circle-river packing diagram as seen on the crease pattern for a very complicated figurine 
+([lucanus cervus by brian chan](http://web.mit.edu/chosetec/www/origami/lucanus/)). 
 
 
 
-#### Defining the Scale Optimization
+
+#### 3.2. Defining the Scale Optimization
 
 One of our goals is to build origami models that have the most efficient paper usage, or the largest flap-size to paper size ratio. Since center flaps use four times the amount of paper that corner flaps use (edge flaps use twice the amount that corner flaps use), an important result is that most of the flaps should be centered on the edges or corners of the paper where possible.
 
 
 This problem is called the scale optimization problem, and is one of several nonlinear constrained optimizations involved in origami design. It is the only one that this problem solves.
 
-#### Defininitions and Notation
+#### 3.3. Defininitions and Notation
 
 A **tree diagram** is a **graph** representation of the animal form that is having it’s folding pattern designed. It is a set of i **nodes**, and **edges** E.
 
@@ -107,7 +118,7 @@ The overall scale of the tree is *m*.
 *w* and *h* are the width and height of the paper.
 
 
-#### Scale Optimization
+#### 3.4. Scale Optimization
 
 The scale optimization problem is the optimzation of the positition of all leaf vertices and the overall scale. It is a nonlinear constrained optimization problem, with these constraints:
 
