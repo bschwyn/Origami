@@ -139,3 +139,7 @@ The coordinates of every vertex must lie within the paper boundaries:
 The separation between any two vertices on the square must be at least as large as the scaled length of the path between their corresponding two nodes as measured along the tree.
 
 ![equation](images/eqn4.gif)
+
+To rewrite the equation a little more explicitly (moving the square root to the right hand side):
+
+(paper scale) *(the sum of: (the path length between nodes i and j (including strain) ) ) [is less than] (the sum of(the distance between nodes i an j on the paper)) for all the paths between leaf nodes.
