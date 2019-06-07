@@ -49,9 +49,11 @@ To build the model representation, this is done by building a tree graph, where 
 
 ##### 2.2 Walkthrough
 
-To install, create a virtual environment with a python2 interpreter and run `pip install -r requirements.txt`.
+To install, create a virtual environment with a python2 interpreter and run 
+```pip install -r requirements.txt```.
 Make sure that the variables run_simple_examples and run_complex_examples are set to False and run_gui is set to True in the main.py file.
-Run the program with `python main.py`
+Run the program with 
+```python main.py```
 
 In the gui click "New Model" and put in a name and the height/width of your paper.
 
