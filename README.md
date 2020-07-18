@@ -10,6 +10,7 @@ The contents of this readme are:
 - 3.2 Defining the Scale Optimization
 - 3.3 Definitions and Notation
 - 3.4 Scale Optimization
+4. References
 
 ### 1. Introduction
 
@@ -145,3 +146,7 @@ The separation between any two vertices on the square must be at least as large 
 To rewrite the equation a little more explicitly (moving the square root to the right hand side):
 
 (paper scale) *(the sum of: (the path length between nodes i and j (including strain) ) ) [is less than] (the sum of(the distance between nodes i an j on the paper)) for all the paths between leaf nodes.
+
+### 4. References
+
+This program is based on the algorithms designed by Robert J. Lang https://courses.csail.mit.edu/6.885/fall04/erik_notes/anydpi/L18_paper.pdf, his book Origami Design Secrets, and the software https://langorigami.com/article/treemaker/.
